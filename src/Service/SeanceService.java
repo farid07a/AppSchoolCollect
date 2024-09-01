@@ -134,7 +134,7 @@ public class SeanceService {
                 System.out.println("" + "nomber :" + nbrDay_betweenToday_daySeance
                         + "\n  day " + new_date.getDayOfWeek() + "\n :" + new_date);
             }
-
+//
             previeux_seance.setDate_sceance(new_date);
             // seance{ id , time, fiTime, date }
             System.out.println("-- next: " + previeux_seance.getDay_sceance() + " " + previeux_seance.getDate_sceance());
