@@ -1,1 +1,29 @@
 /build/
+# NetBeans specific
+nbproject/private/
+nbbuild/
+dist/
+build/
+
+# Ignore file with NetBeans project-specific settings
+nbproject/project.properties
+nbproject/project.xml
+
+# Ignore logs
+**/nbproject/private/*
+**/nbproject/private/*
+
+# Ignore NetBeans' default build output directories
+/build/
+/dist/
+/nbbuild/
+
+# Ignore library directories
+lib/
+libs/
+
+# If you have a specific directory for third-party libraries
+third_party_libs/
+
+# Ignore specific files, if necessary
+*.jar
