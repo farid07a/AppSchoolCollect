@@ -440,6 +440,7 @@ public class AddMatiereForm extends javax.swing.JDialog {
                 Matiere matiere = new Matiere(0, tab_matiere.getValueAt(row, 3).toString(), tab_matiere.getValueAt(row, 3).toString(),
                         prix, niveauEtude, categoreNiveau, enseignant,SceanceParSomaine,SceanceParSomaine*4);
                 if(matiereDAOImpl.save(matiere)>0){
+                    this.dispose();
                  this.message_validation.showMessage("تأكيد", "لقد تم الحفظ بنجاح");
                 }
 

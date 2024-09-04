@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -106,36 +107,25 @@ public class SeanceService {
         System.out.println("********************************************");
         Connection cnx = ConnectionDB.getConnection();
         seance_dao = new SeanceDAOImpl(cnx);
-        LocalDate new_date = LocalDate.now();
+        LocalDate date_now= LocalDate.now();
+        LocalDate new_date_seace = null;
     boolean sameday = false;
         for (Seance previeux_seance : previeux_seances) {
-//            if (previeux_seance.getNumSeance() == 1 && previeux_seance.getDate_sceance().getDayOfWeek() == LocalDate.now().getDayOfWeek()) {
-//                System.out.print("Before: " + previeux_seance.getDay_sceance() + " " + previeux_seance.getDate_sceance());
-//            }
-            int nbrDay_betweenToday_daySeance = (new_date.getDayOfWeek().getValue() -previeux_seance.getDate_sceance().getDayOfWeek().getValue()+7)%7;
-           
-            if (nbrDay_betweenToday_daySeance == 0) {
-                new_date = LocalDate.now();
+           // int nbrDay_betweenToday_daySeance = (date_now.getDayOfWeek().getValue() -previeux_seance.getDate_sceance().getDayOfWeek().getValue()+7)%7;         
+            if (previeux_seance.getDate_sceance().getDayOfWeek().getValue()==date_now.getDayOfWeek().getValue()) {
                 sameday=true;
             } 
             if(sameday){
-                JOptionPane.showMessageDialog(null, "nbrDay_betweenToday_daySeance >0   :" + nbrDay_betweenToday_daySeance);
-                new_date = new_date.plus(nbrDay_betweenToday_daySeance, ChronoUnit.DAYS);
-                JOptionPane.showMessageDialog(null, "nomber :" + nbrDay_betweenToday_daySeance
-                        + "\n  day " + new_date.getDayOfWeek() + "\n :" + new_date);
-                System.out.println("" + "nomber :" + nbrDay_betweenToday_daySeance
-                        + "\n  day " + new_date.getDayOfWeek() + "\n :" + new_date);
+              int    nbr_days= (previeux_seance.getDate_sceance().getDayOfWeek().getValue()- date_now.getDayOfWeek().getValue() +7)%7 ;  
+                 new_date_seace=   date_now.plusDays(nbr_days);
+                 System.out.print("-- Date: " + previeux_seance.getDay_sceance() + " " + previeux_seance.getDate_sceance());
             } else {
-                //( nbrDay_betweenToday_daySeance <0)
-                JOptionPane.showMessageDialog(null, "nbrDay_betweenToday_daySeance < 0    :" + nbrDay_betweenToday_daySeance);
-                new_date = new_date.minus(nbrDay_betweenToday_daySeance, ChronoUnit.DAYS);
-                JOptionPane.showMessageDialog(null, "nomber :" + nbrDay_betweenToday_daySeance
-                        + "\n  day " + new_date.getDayOfWeek() + "\n :" + new_date);
-                System.out.println("" + "nomber :" + nbrDay_betweenToday_daySeance
-                        + "\n  day " + new_date.getDayOfWeek() + "\n :" + new_date);
+               new_date_seace= getPreviousDayOfWeek(date_now, previeux_seance.getDate_sceance().getDayOfWeek());
+       System.out.print("-- Date: " + previeux_seance.getDay_sceance() + " " + previeux_seance.getDate_sceance());
+
             }
 //
-            previeux_seance.setDate_sceance(new_date);
+            previeux_seance.setDate_sceance(new_date_seace);
             // seance{ id , time, fiTime, date }
             System.out.println("-- next: " + previeux_seance.getDay_sceance() + " " + previeux_seance.getDate_sceance());
             int x = seance_dao.save(previeux_seance);
@@ -150,18 +140,39 @@ public class SeanceService {
         }
 
     }
+    
+    private static LocalDate getPreviousDayOfWeek(LocalDate date, DayOfWeek desiredDay) {
+        int daysToSubtract = (date.getDayOfWeek().getValue() - desiredDay.getValue() + 7) % 7;
+        if (daysToSubtract == 0) {
+            daysToSubtract = 7;
+        }
+       
+        return date.minusDays(daysToSubtract);
+    }
+    
+     private static LocalDate getNextDayOfWeek(LocalDate date, DayOfWeek desiredDay) {
+        int daysToAdd = (desiredDay.getValue() - date.getDayOfWeek().getValue() + 7) % 7;
+        if (daysToAdd == 0) {
+            daysToAdd = 7;
+        }
+
+        return date.plusDays(daysToAdd);
+     }
+     
+   
 
     public static void main(String[] args) {
         
-        LocalDate seance_dima=LocalDate.of(2024, 12, 1);
-        LocalDate seance_ven=LocalDate.of(2024, 12,6 );
-        LocalDate seance_sam=LocalDate.of(2024, 12,7 );
+        LocalDate seance_dima=LocalDate.of(2024, 9, 1);
+        LocalDate seance_mer=LocalDate.of(2024, 9,4 );
+        LocalDate seance_ven=LocalDate.of(2024, 9,6 );
+        LocalDate seance_sam=LocalDate.of(2024, 9,7 );
         List <LocalDate > date = new ArrayList<>();
        date.add(seance_dima);
+       date.add(seance_mer);
        date.add(seance_ven);  
        date.add(seance_sam);
-        LocalDate date_now = LocalDate.of(2024, 12, 21); //     
-        DayOfWeek targetDay = DayOfWeek.SATURDAY; 
+        LocalDate date_now = LocalDate.of(2024, 9, 15); //     
       boolean exist_pour_add=false;
         for(LocalDate seance : date){
         if(seance.getDayOfWeek().getValue()==date_now.getDayOfWeek().getValue())  {
@@ -169,13 +180,14 @@ public class SeanceService {
         } 
         int daysToSubtract =0;//= (date_now.getDayOfWeek().getValue()-seance.getDayOfWeek().getValue() ) ;
         if(exist_pour_add){
-         daysToSubtract= ( seance.getDayOfWeek().getValue()- date_now.getDayOfWeek().getValue()) ;  
+         daysToSubtract= (seance.getDayOfWeek().getValue()- date_now.getDayOfWeek().getValue() +7)%7 ;  
          System.out.println("if"+daysToSubtract);
         System.out.println(""+date_now.plusDays(daysToSubtract));
         } else{
-        daysToSubtract= (date_now.getDayOfWeek().getValue()-seance.getDayOfWeek().getValue()) ;  
+         //daysToSubtract= new SeanceService().getPreviousDayOfWeek(date_now, seance.getDayOfWeek());
+// daysToSubtract= (date_now.getDayOfWeek().getValue()-seance.getDayOfWeek().getValue()) ;  
         System.out.println("else"+daysToSubtract);
-        System.out.println(""+date_now.minusDays(daysToSubtract));
+        System.out.println(""+new SeanceService().getPreviousDayOfWeek(date_now, seance.getDayOfWeek()));
         }
        }
         

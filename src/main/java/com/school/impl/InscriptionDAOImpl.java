@@ -132,7 +132,7 @@ public class InscriptionDAOImpl extends AbstractDAO<Inscription> implements Insc
             InscriptionDAOImpl inscription_dao=new InscriptionDAOImpl(connection);
             
             try {
-                inscription_dao.findByMatiereId(1);
+               System.out.println(   inscription_dao.findByEtudiantId(2).get(0).getMatiere().getId() );
             } catch (Exception e) {
                 e.printStackTrace();
                 

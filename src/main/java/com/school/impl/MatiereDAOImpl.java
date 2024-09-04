@@ -8,7 +8,6 @@ package main.java.com.school.impl;
 import domaine.CategoreNiveau;
 import domaine.Matiere;
 import domaine.NiveauEtude;
-import guis.home;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 import main.java.com.school.DAO.AbstractDAO;
 import main.java.com.school.model.config.ConnectionDB;
 import main.java.com.school.model.config.DatabaseConnectionException;
@@ -124,7 +122,7 @@ public class MatiereDAOImpl extends AbstractDAO<Matiere> {
 
     public Matiere getMatiereNiveauOfCategory(String Matiere_n, String niveau, String Catego) {
 
-        Matiere matiere = new Matiere();
+        Matiere matiere = null;
 
         String SELECT_Matier_Niveau_Category = "SELECT matiere.id As matiere_id\n"
                 + "FROM niveau_etude,categore_niveau,matiere\n"
@@ -137,8 +135,9 @@ public class MatiereDAOImpl extends AbstractDAO<Matiere> {
 
         PreparedStatement statement;
         try {
-            statement = connection.prepareStatement(SELECT_Matier_Niveau_Category);
+        statement = connection.prepareStatement(SELECT_Matier_Niveau_Category);
             ResultSet resultSet = statement.executeQuery();
+       
             while (resultSet.next()) {
                 int id_matiere = resultSet.getInt("matiere_id");
                 matiere = findById(id_matiere);
@@ -178,6 +177,10 @@ public class MatiereDAOImpl extends AbstractDAO<Matiere> {
         return matieres;
     }
   
+    public static void main(String[] args) throws DatabaseConnectionException {
+        System.out.println( new MatiereDAOImpl(ConnectionDB.getConnection()).getMatiereNiveauOfCategory(
+                "رياضيات", "سنة أولى ابتدائي", "الابتدائي").getId());
+    }
 
     /* SELECT *
 FROM niveau_etude,categore_niveau,matiere

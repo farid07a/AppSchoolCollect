@@ -2,8 +2,8 @@ package guis;
 
 import DialogFram.ValidationMessageDialog;
 import Service.MatiereService;
+import Service.PresenceService;
 import Service.SeanceService;
-import com.sun.accessibility.internal.resources.accessibility;
 import com.sun.javafx.application.PlatformImpl;
 import domaine.CategoreNiveau;
 import domaine.Enseignant;
@@ -16,44 +16,29 @@ import domaine.Presence;
 import domaine.Seance;
 import domaine.Seance_Matiere;
 import java.awt.Color;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.Image;
 import java.awt.Insets;
-//import java.awt.SystemColor.desktop;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.stage.FileChooser;
-import javafx.util.converter.LocalDateStringConverter;
-import javafx.util.converter.LocalDateTimeStringConverter;
 import javax.imageio.ImageIO;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
@@ -67,8 +52,6 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
-import jdk.nashorn.internal.objects.NativeArray;
-import main.java.com.school.DAO.EnseignantDAO;
 import main.java.com.school.impl.CategoreNiveauDAOImpl;
 import main.java.com.school.impl.EnseignantDAOImpl;
 import main.java.com.school.impl.EtudiantDAOImpl;
@@ -86,7 +69,6 @@ import material.design.ScrollBar;
 import material.design.TableActionCellEditor;
 import material.design.TableActionCellRender;
 import material.design.TableActionEvent;
-import material.design.buttonRounder;
 import ui.card.Model_card;
 import ui.menufr.EventMenuSelected;
 import ui.table.TableCustom;
@@ -110,9 +92,9 @@ public class home extends javax.swing.JFrame {
     File image_file_mod = null;
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     FormPayement formPayement;
-    MatiereService matiere_service=new MatiereService();
-    SeanceService seance_service=new SeanceService();
-    List <Seance> list_seance_about_all_matieres=new ArrayList<>();
+    MatiereService matiere_service = new MatiereService();
+    SeanceService seance_service = new SeanceService();
+    List<Seance> list_seance_about_all_matieres = new ArrayList<>();
 
     public home() {
         initComponents();
@@ -130,7 +112,7 @@ public class home extends javax.swing.JFrame {
         inscriptionDAOImpl = new InscriptionDAOImpl(connection);
         payementDAOImpl = new PayementDAOImpl(connection);
         presenceDAOImpl = new PresenceDAOImpl(connection);
-
+        message_validation = new ValidationMessageDialog(this);
         setExtendedState(MAXIMIZED_BOTH);
         gbc.gridx = 0;
         gbc.gridy = GridBagConstraints.RELATIVE;
@@ -150,12 +132,14 @@ public class home extends javax.swing.JFrame {
         setDesignTable(table_seance_to_day, jScrollPane11);
         setDesignTable(tab_presence, jScrollPane12);
         SearchTable(tab_seance, searchText5);
+        preapareDashboard();
         customMenu1.addEventMenuSelected(new EventMenuSelected() {
             @Override
             public void selected(int index) {
                 switch (index) {
                     case 0:
                         setForm(pan_center, Dashboard);
+                        preapareDashboard();
 
                         break;
                     case 1:
@@ -185,14 +169,15 @@ public class home extends javax.swing.JFrame {
                         break;
 
                     case 4:
-                        setForm(pan_center, pan_presence);
-                        //Panel_PresenceUI pan_prsence=new Panel_PresenceUI();
-                      //setForm(pan_center,pan_prsence);
-                      try {
-                        prepareUIPresence();
-                    } catch (SQLException ex) {
-                        Logger.getLogger(home.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                        //pan_presence.setVisible(false);
+                        //setForm(pan_center, pan_presence);
+                        Panel_PresenceUI pan_prsence=new Panel_PresenceUI();
+                        setForm(pan_center,pan_prsence);
+                        try {
+                            prepareUIPresence();
+                        } catch (SQLException ex) {
+                            Logger.getLogger(home.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                         //getMatiereOfToDay2();
                         /// getMatiereOfToDay();
                         break;
@@ -256,70 +241,66 @@ public class home extends javax.swing.JFrame {
         PrepareUI();
     }
 
-    public void prepareUIPresence() throws SQLException{
-    
+    public void prepareUIPresence() throws SQLException {
+
         try {
             checkSeancesAndSaveNewSeance();
-           // setSeanceInTable();
-            this.list_seance_about_all_matieres.clear();
+            setSeanceInTable();
+            // this.list_seance_about_all_matieres.clear();
         } catch (DatabaseConnectionException ex) {
             Logger.getLogger(Panel_PresenceUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public void checkSeancesAndSaveNewSeance() throws DatabaseConnectionException, SQLException{
-        java.util.List<Matiere> list_matiere=matiere_service.getListMatierByDay();// get all Matiere for today 
-        List list_previeux=null;
+
+    public void checkSeancesAndSaveNewSeance() throws DatabaseConnectionException, SQLException {
+        java.util.List<Matiere> list_matiere = matiere_service.getListMatierByDay();// get all Matiere for today 
+        List list_previeux = null;
         // for test si seance exit update true= en cours sinon creation Number total of seance in month  
-        Seance scence_obj=null;
+        Seance scence_obj = null;
+        this.list_seance_about_all_matieres.clear();
         for (Matiere matiere : list_matiere) {
             // get seance of matiere today 
-            scence_obj=seance_service.GetSeanceByTody(matiere);
-            
-            
-            if(scence_obj!=null){
+            scence_obj = seance_service.GetSeanceByTody(matiere);
+
+            if (scence_obj != null) {
                 // 
                 list_seance_about_all_matieres.add(scence_obj);
                 System.out.println("Object != null success add ");
-            }else{
-                list_previeux=seance_service.getListAllSeancePrevieuSemaine(matiere); // list [sceance(1....30) ]
-                 System.out.println("Seance is Null AFter inser database change to :"+seance_service.GetSeanceByTody(matiere));
-                 //- get last seance si diference <=7
-                 JOptionPane.showMessageDialog(null, "null seance and matiere id =="  +matiere.getId());
-               JOptionPane.showMessageDialog(null, "existe vacance  : "+seance_service.ExistVacances(matiere) );
-                if (!seance_service.ExistVacances(matiere)){  //ExistVacances = false
-                seance_service.saveAllNextSeances(list_previeux);// save next seances about Matiere
-                list_seance_about_all_matieres.add(seance_service.GetSeanceByTody(matiere));   
-                 
-                }else
-                {    // disable all components and show add seance
-                 JOptionPane.showMessageDialog(null, "existe vacance . . . "+list_previeux.size());
-                seance_service.saveAllNextSeancesSiExistVacance(list_previeux);
-                System.out.println("Seance is Null AFter inser database change to :"+seance_service.GetSeanceByTody(matiere));
-                list_seance_about_all_matieres.add(seance_service.GetSeanceByTody(matiere));
-                 } 
+            } else {
+                list_previeux = seance_service.getListAllSeancePrevieuSemaine(matiere); // list [sceance(1....30) ]
+                System.out.println("Seance is Null AFter inser database change to :" + seance_service.GetSeanceByTody(matiere));
+                //- get last seance si diference <=7
+                JOptionPane.showMessageDialog(null, "null seance and matiere id ==" + matiere.getId());
+                JOptionPane.showMessageDialog(null, "existe vacance  : " + seance_service.ExistVacances(matiere));
+                if (!seance_service.ExistVacances(matiere)) {  //ExistVacances = false
+                    seance_service.saveAllNextSeances(list_previeux);// save next seances about Matiere
+                    list_seance_about_all_matieres.add(seance_service.GetSeanceByTody(matiere));
+
+                } else {    // disable all components and show add seance
+                    JOptionPane.showMessageDialog(null, "existe vacance . . . " + list_previeux.size());
+                    seance_service.saveAllNextSeancesSiExistVacance(list_previeux);
+                    System.out.println("Seance is Null AFter inser database change to :" + seance_service.GetSeanceByTody(matiere));
+                    list_seance_about_all_matieres.add(seance_service.GetSeanceByTody(matiere));
+                }
             }
         }
-        
-        
+
     }
-    
-    
-    public void setSeanceInTable(){       
-        DefaultTableModel df=(DefaultTableModel)table_seance_to_day.getModel();
-        df.setRowCount(0);      
-        System.out.println("List Befor Insert Data in Table "+list_seance_about_all_matieres);
+
+    public void setSeanceInTable() {
+        DefaultTableModel df = (DefaultTableModel) table_seance_to_day.getModel();
+        df.setRowCount(0);
+        System.out.println("List Befor Insert Data in Table " + list_seance_about_all_matieres);
         for (Seance seance_obj : list_seance_about_all_matieres) {
             System.out.println(seance_obj);
-            
-            Object[]args={seance_obj.getNumSeance(),seance_obj.getMatiere().getMatiereEtdAr(),seance_obj.getMatiere().getNiveau().getNiveauInitialAr(),
-                            seance_obj.getMatiere().getCategoreNiveau().getCategore_niveau_ar(),seance_obj.getMatiere().getId(),seance_obj.getId()};
+
+            Object[] args = {seance_obj.getNumSeance(), seance_obj.getMatiere().getMatiereEtdAr(), seance_obj.getMatiere().getNiveau().getNiveauInitialAr(),
+                seance_obj.getMatiere().getCategoreNiveau().getCategore_niveau_ar(), seance_obj.getMatiere().getId(), seance_obj.getId()};
             df.addRow(args);
         }
-        
+
     }
-    
-    
+
     public void PrepareUI() {
         // setInfoCategoreNiveauInCombox(com_catego_niveau, com_niveau);
 
@@ -436,17 +417,15 @@ public class home extends javax.swing.JFrame {
                 int nbr_seance = (int) tab_seance.getValueAt(exist_row, 0) + 1;
                 tab_seance.setValueAt(nbr_seance, exist_row, 0);
             } else {
-
                 String matiere_ar = matier.getMatiereEtdAr();
                 String catego_niveau = categoreNiveauDAOImpl.findById(matier.getCategoreNiveau().getId()).getCategore_niveau_ar();
                 String niveau = niveauEtudeDAOImpl.findById(matier.getNiveau().getId()).getNiveauInitialAr();
-                String enseignant_name="/";
+                String enseignant_name = "/";
 ///                Enseignant ensignat = enseignantDAOImpl.findById(matier.getEnseignant().getId());
-              //  if(ensignat !=null)
-              //  enseignant_name = ensignat.getNomAr() + "  " + ensignat.getPrenomAr();
+                //  if(ensignat !=null)
+                //  enseignant_name = ensignat.getNomAr() + "  " + ensignat.getPrenomAr();
 
                 model.addRow(new Object[]{1, "/", "/", catego_niveau, niveau, matiere_ar, matier.getId()});
-
             }
         }
 //      for (Seance_Matiere seance_Matiere : seance_Matieres) {
@@ -498,7 +477,6 @@ public class home extends javax.swing.JFrame {
                 jPanel14.add(p);
                 jPanel14.revalidate();
                 jPanel14.repaint();
-
             }
         }
         jLabel48.setText(tab_seance.getValueAt(tab_seance.getSelectedRow(), 3).toString());
@@ -507,16 +485,15 @@ public class home extends javax.swing.JFrame {
     }
 
     public void getMatiereOfToDay2() {
-        
+
         DefaultTableModel model = (DefaultTableModel) table_seance_to_day.getModel();
         model.setRowCount(0);
         //seance satu
-        List<Seance> seances = sceanceDAOImpl.findAll();       
+        List<Seance> seances = sceanceDAOImpl.findAll();
     }
 
     public void getMatiereOfToDay() {
         JOptionPane.showMessageDialog(null, "getMatiereOfToDay");
-
         String day = getday();
         DefaultTableModel model = (DefaultTableModel) table_seance_to_day.getModel();
         model.setRowCount(0);
@@ -528,7 +505,6 @@ public class home extends javax.swing.JFrame {
             if (seance.getDay_sceance().equals(day)) {
                 seances_to_day.add(seance);
                 JOptionPane.showMessageDialog(null, "add seance");
-
             }
         }
         LocalDate dat_seance_ma = LocalDate.now();
@@ -581,6 +557,21 @@ public class home extends javax.swing.JFrame {
 //                model.addRow(new Object[]{numSeance, seance_Matiere.getMatiere().getMatiereEtdAr(), seance_Matiere.getMatiere().getNiveau().getNiveauInitialAr(), seance_Matiere.getMatiere().getCategoreNiveau().getCategore_niveau_ar(), seance_Matiere.getMatiere().getId(), seance_Matiere.getId()});
 //            }
 //        }
+    }
+
+    public List<Seance> getSeanceOfTodayWithInscriptionEtud(List<Seance> Seances, Etudiant etudiant) {
+        List<Inscription> inscriptions = inscriptionDAOImpl.findByEtudiantId(etudiant.getId());
+        List<Seance> Seance_of_today = new ArrayList<>();
+        JOptionPane.showMessageDialog(null, "inscriptions : " + inscriptions.size());
+        for (Inscription inscription : inscriptions) { // list inscription of etudaint
+            for (Seance seance : Seances) { // list seance o to day
+                if (inscription.getMatiere().getId() == seance.getMatiere().getId()) { // etidaint <- inscription + matier (time 1)
+                    JOptionPane.showMessageDialog(null, "exist mod : " + seance.getMatiere().getId());
+                    Seance_of_today.add(seance); // liste seance etudieé to day
+                }
+            }
+        }
+        return Seance_of_today;
     }
 
     public String getday() {
@@ -640,6 +631,63 @@ public class home extends javax.swing.JFrame {
         }
     }
 
+    public void setInfoEtudiantInPanPresence(Etudiant etudiant) {
+        if (etudiant != null) {
+            cleanItemsPanPresence();
+            lab_icon_chech_cross.setIcon(null);
+            lab_nam_presence.setText(etudiant.getNom());
+            lab_prenom_presence.setText(etudiant.getPrenom());
+            lab_category_presence.setText(etudiant.getCtegore_niveau().getCategore_niveau_ar());
+            lab_niveau_presence.setText(etudiant.getNiveau().getNiveauInitialAr());
+            if (etudiant.getImage() != null) {
+                byte[] imag = etudiant.getImage();
+                ImageIcon imageIcon = new ImageIcon(new ImageIcon(imag).getImage().getScaledInstance(lab_imag_etud_presence.getWidth(), lab_imag_etud_presence.getHeight(), Image.SCALE_SMOOTH));
+                lab_imag_etud_presence.setIcon(imageIcon);
+            } else {
+                lab_imag_etud_presence.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/diplome (4).png")));
+            }
+        } else {
+            cleanItemsPanPresence();
+        }
+    }
+
+    public void cleanItemsPanPresence() {
+        lab_icon_chech_cross.setIcon(null);
+        lab_nam_presence.setText("");
+        lab_prenom_presence.setText("");
+        lab_category_presence.setText("");
+        lab_niveau_presence.setText("");
+        lab_imag_etud_presence.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/diplome (4).png")));
+    }
+
+    public void setInfoInTablePresence() {
+        
+        try {
+          List<Presence>  presences = new PresenceService().getPresenceOfToDay();
+            DefaultTableModel model = (DefaultTableModel) tab_presence.getModel();
+            for (Presence presence : presences) {
+                model.addRow(new Object[]{presence.getDatePresence(), presence.getMatiere().getMatiereEtdAr(),
+                    presence.getMatiere().getNiveau().getNiveauInitialAr(),
+                    presence.getMatiere().getCategoreNiveau().getCategore_niveau_ar(),
+                    presence.getEtudiant().getNom() + " " + presence.getEtudiant().getPrenom(),
+                    presence.getEtudiant().getId(), presence.getSeance().getId(), presence.getId()});
+            }
+        } catch (DatabaseConnectionException ex) {
+            Logger.getLogger(home.class.getName()).log(Level.SEVERE, null, ex);
+            
+        }
+    }
+    
+    public  void preapareDashboard(){
+     List<Etudiant> etudiants= etudiantDAOImpl.findAll();
+     List<Enseignant> enseignants=enseignantDAOImpl.findAll();
+     
+     CardEtudtaint.setData(new Model_card(new javax.swing.ImageIcon(getClass().getResource("/icon/graduation (2).png")),"الـطـلـبـة :"  ,   etudiants.size()+" "   , " "));
+     CardEnsigniant.setData(new Model_card(new javax.swing.ImageIcon(getClass().getResource("/icon/businessmen.png")),"الأسـاتذة  :",enseignants.size()+"" , ""));
+     CardEmployer.setData(new Model_card(new javax.swing.ImageIcon(getClass().getResource("/icon/employee (1).png")),"الـعـمـال :",00+"" , ""));
+
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -658,9 +706,9 @@ public class home extends javax.swing.JFrame {
         pan_dashbord = new javax.swing.JPanel();
         scrol_dashbord = new javax.swing.JScrollPane();
         pan_dashbord1 = new javax.swing.JPanel();
-        CardClients = new ui.card.Card();
-        CardRooms = new ui.card.Card();
-        CardReservations = new ui.card.Card();
+        CardEnsigniant = new ui.card.Card();
+        CardEtudtaint = new ui.card.Card();
+        CardEmployer = new ui.card.Card();
         costumChart1 = new chart.costumChart();
         jPanel11 = new javax.swing.JPanel();
         jPanel12 = new javax.swing.JPanel();
@@ -800,7 +848,6 @@ public class home extends javax.swing.JFrame {
         pan_presence = new javax.swing.JPanel();
         txt_cod_barr_presence = new javax.swing.JTextField();
         jButton6 = new javax.swing.JButton();
-        txt_matricul_presence = new javax.swing.JTextField();
         jButton7 = new javax.swing.JButton();
         tableScrollButton11 = new ui.table.TableScrollButton();
         jScrollPane11 = new javax.swing.JScrollPane();
@@ -825,6 +872,9 @@ public class home extends javax.swing.JFrame {
         tab_presence = new javax.swing.JTable();
         searchText6 = new material.design.SearchText();
         buttonRounder33 = new material.design.buttonRounder();
+        buttonRounder2 = new material.design.buttonRounder();
+        buttonRounder3 = new material.design.buttonRounder();
+        buttonRounder4 = new material.design.buttonRounder();
         pan_ensign = new javax.swing.JPanel();
         pan_prof = new javax.swing.JPanel();
         tableScrollButton9 = new ui.table.TableScrollButton();
@@ -917,17 +967,17 @@ public class home extends javax.swing.JFrame {
         pan_dashbord1.setBackground(new java.awt.Color(255, 255, 255));
         pan_dashbord1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        CardClients.setColor1(new java.awt.Color(255, 204, 204));
-        CardClients.setColor2(new java.awt.Color(153, 0, 153));
-        pan_dashbord1.add(CardClients, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 20, 260, 140));
+        CardEnsigniant.setColor1(new java.awt.Color(255, 204, 204));
+        CardEnsigniant.setColor2(new java.awt.Color(153, 0, 153));
+        pan_dashbord1.add(CardEnsigniant, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 20, 260, 140));
 
-        CardRooms.setColor1(new java.awt.Color(204, 204, 255));
-        CardRooms.setColor2(new java.awt.Color(51, 102, 255));
-        pan_dashbord1.add(CardRooms, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 20, 270, 140));
+        CardEtudtaint.setColor1(new java.awt.Color(204, 204, 255));
+        CardEtudtaint.setColor2(new java.awt.Color(51, 102, 255));
+        pan_dashbord1.add(CardEtudtaint, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 20, 270, 140));
 
-        CardReservations.setColor1(new java.awt.Color(204, 204, 255));
-        CardReservations.setColor2(new java.awt.Color(102, 0, 153));
-        pan_dashbord1.add(CardReservations, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 20, 250, 140));
+        CardEmployer.setColor1(new java.awt.Color(204, 204, 255));
+        CardEmployer.setColor2(new java.awt.Color(102, 0, 153));
+        pan_dashbord1.add(CardEmployer, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 20, 250, 140));
         pan_dashbord1.add(costumChart1, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 180, 840, 355));
 
         jPanel11.setBackground(new java.awt.Color(255, 255, 255));
@@ -2200,7 +2250,7 @@ public class home extends javax.swing.JFrame {
                     .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(pan_configLayout.createSequentialGroup()
                         .addComponent(pan_conf_inter, javax.swing.GroupLayout.PREFERRED_SIZE, 1160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 4, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         pan_configLayout.setVerticalGroup(
@@ -2226,7 +2276,7 @@ public class home extends javax.swing.JFrame {
                 txt_cod_barr_presenceActionPerformed(evt);
             }
         });
-        pan_presence.add(txt_cod_barr_presence, new org.netbeans.lib.awtextra.AbsoluteConstraints(844, 25, 290, 31));
+        pan_presence.add(txt_cod_barr_presence, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 60, 360, 31));
 
         jButton6.setText("jButton6");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
@@ -2234,10 +2284,7 @@ public class home extends javax.swing.JFrame {
                 jButton6ActionPerformed(evt);
             }
         });
-        pan_presence.add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 10, 125, -1));
-
-        txt_matricul_presence.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
-        pan_presence.add(txt_matricul_presence, new org.netbeans.lib.awtextra.AbsoluteConstraints(641, 25, 191, 31));
+        pan_presence.add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 590, 125, -1));
 
         jButton7.setText("payement par moin");
         jButton7.addActionListener(new java.awt.event.ActionListener() {
@@ -2245,7 +2292,7 @@ public class home extends javax.swing.JFrame {
                 jButton7ActionPerformed(evt);
             }
         });
-        pan_presence.add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 10, -1, 30));
+        pan_presence.add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 590, -1, 30));
 
         table_seance_to_day.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -2259,84 +2306,84 @@ public class home extends javax.swing.JFrame {
 
         tableScrollButton11.add(jScrollPane11, java.awt.BorderLayout.CENTER);
 
-        pan_presence.add(tableScrollButton11, new org.netbeans.lib.awtextra.AbsoluteConstraints(68, 45, 320, 290));
+        pan_presence.add(tableScrollButton11, new org.netbeans.lib.awtextra.AbsoluteConstraints(148, 15, 450, 290));
 
         jLabel47.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel47.setForeground(new java.awt.Color(102, 102, 102));
         jLabel47.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel47.setText("اللقب");
-        pan_presence.add(jLabel47, new org.netbeans.lib.awtextra.AbsoluteConstraints(913, 93, -1, -1));
+        pan_presence.add(jLabel47, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 130, -1, -1));
 
         jLabel49.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel49.setForeground(new java.awt.Color(102, 102, 102));
         jLabel49.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel49.setText("الاسم");
-        pan_presence.add(jLabel49, new org.netbeans.lib.awtextra.AbsoluteConstraints(1115, 85, -1, 25));
+        pan_presence.add(jLabel49, new org.netbeans.lib.awtextra.AbsoluteConstraints(1120, 120, -1, 25));
 
         jLabel50.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel50.setForeground(new java.awt.Color(102, 102, 102));
         jLabel50.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel50.setText("المستوى ");
-        pan_presence.add(jLabel50, new org.netbeans.lib.awtextra.AbsoluteConstraints(1096, 122, -1, -1));
+        pan_presence.add(jLabel50, new org.netbeans.lib.awtextra.AbsoluteConstraints(1100, 160, -1, -1));
 
         jLabel51.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel51.setForeground(new java.awt.Color(102, 102, 102));
         jLabel51.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel51.setText("القسم ");
-        pan_presence.add(jLabel51, new org.netbeans.lib.awtextra.AbsoluteConstraints(913, 129, -1, -1));
+        pan_presence.add(jLabel51, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 170, -1, -1));
 
         lab_category_presence.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         lab_category_presence.setForeground(new java.awt.Color(0, 0, 204));
         lab_category_presence.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lab_category_presence.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
-        pan_presence.add(lab_category_presence, new org.netbeans.lib.awtextra.AbsoluteConstraints(954, 122, 136, 24));
+        pan_presence.add(lab_category_presence, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 160, 136, 24));
 
         lab_niveau_presence.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         lab_niveau_presence.setForeground(new java.awt.Color(0, 0, 204));
         lab_niveau_presence.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lab_niveau_presence.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
-        pan_presence.add(lab_niveau_presence, new org.netbeans.lib.awtextra.AbsoluteConstraints(771, 122, 136, 24));
+        pan_presence.add(lab_niveau_presence, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 160, 136, 24));
 
         lab_nam_presence.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         lab_nam_presence.setForeground(new java.awt.Color(0, 0, 204));
         lab_nam_presence.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lab_nam_presence.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
-        pan_presence.add(lab_nam_presence, new org.netbeans.lib.awtextra.AbsoluteConstraints(954, 85, 136, 25));
+        pan_presence.add(lab_nam_presence, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 120, 136, 25));
 
         lab_prenom_presence.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         lab_prenom_presence.setForeground(new java.awt.Color(0, 0, 204));
         lab_prenom_presence.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lab_prenom_presence.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
-        pan_presence.add(lab_prenom_presence, new org.netbeans.lib.awtextra.AbsoluteConstraints(771, 84, 136, 26));
+        pan_presence.add(lab_prenom_presence, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 120, 136, 26));
 
         lab_imag_etud_presence.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lab_imag_etud_presence.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
-        pan_presence.add(lab_imag_etud_presence, new org.netbeans.lib.awtextra.AbsoluteConstraints(644, 84, 109, 104));
+        pan_presence.add(lab_imag_etud_presence, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 120, 109, 104));
 
         jLabel57.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel57.setForeground(new java.awt.Color(102, 102, 102));
         jLabel57.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel57.setText("المادة");
-        pan_presence.add(jLabel57, new org.netbeans.lib.awtextra.AbsoluteConstraints(1100, 160, 40, -1));
+        pan_presence.add(jLabel57, new org.netbeans.lib.awtextra.AbsoluteConstraints(1110, 200, 40, -1));
 
         lab_matiere_presence.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         lab_matiere_presence.setForeground(new java.awt.Color(0, 0, 204));
         lab_matiere_presence.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lab_matiere_presence.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
-        pan_presence.add(lab_matiere_presence, new org.netbeans.lib.awtextra.AbsoluteConstraints(954, 158, 136, 24));
+        pan_presence.add(lab_matiere_presence, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 200, 136, 24));
 
         jLabel59.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel59.setForeground(new java.awt.Color(102, 102, 102));
         jLabel59.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel59.setText("رقم الحصة");
-        pan_presence.add(jLabel59, new org.netbeans.lib.awtextra.AbsoluteConstraints(853, 158, -1, 24));
+        pan_presence.add(jLabel59, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 200, -1, 24));
 
         lab_num_seance_presence.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         lab_num_seance_presence.setForeground(new java.awt.Color(204, 0, 0));
         lab_num_seance_presence.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lab_num_seance_presence.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
-        pan_presence.add(lab_num_seance_presence, new org.netbeans.lib.awtextra.AbsoluteConstraints(771, 158, 70, 24));
-        pan_presence.add(lab_icon_chech_cross, new org.netbeans.lib.awtextra.AbsoluteConstraints(673, 194, 72, 64));
+        pan_presence.add(lab_num_seance_presence, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 200, 70, 24));
+        pan_presence.add(lab_icon_chech_cross, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 230, 72, 64));
 
         jButton8.setText("payemenrt par seance ");
         jButton8.addActionListener(new java.awt.event.ActionListener() {
@@ -2344,28 +2391,36 @@ public class home extends javax.swing.JFrame {
                 jButton8ActionPerformed(evt);
             }
         });
-        pan_presence.add(jButton8, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 10, 140, -1));
+        pan_presence.add(jButton8, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 600, 140, -1));
 
         tab_presence.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "المادة", "القسم", "المستوى", "الاسم و اللقب", "Id_etud", "Id_seance", "Title 7"
+                "التوقيت", "المادة", "القسم", "المستوى", "الاسم و اللقب", "Id_etud", "Id_seance", "id_presence"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane12.setViewportView(tab_presence);
 
         tableScrollButton12.add(jScrollPane12, java.awt.BorderLayout.CENTER);
 
-        pan_presence.add(tableScrollButton12, new org.netbeans.lib.awtextra.AbsoluteConstraints(541, 287, 610, 250));
+        pan_presence.add(tableScrollButton12, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 320, 1010, 250));
 
         searchText6.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
         searchText6.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        pan_presence.add(searchText6, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 250, 258, 27));
+        pan_presence.add(searchText6, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 290, 258, 27));
 
         buttonRounder33.setBackground(new java.awt.Color(153, 0, 153));
         buttonRounder33.addActionListener(new java.awt.event.ActionListener() {
@@ -2373,7 +2428,30 @@ public class home extends javax.swing.JFrame {
                 buttonRounder33ActionPerformed(evt);
             }
         });
-        pan_presence.add(buttonRounder33, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 250, 30, 30));
+        pan_presence.add(buttonRounder33, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 290, 30, 30));
+
+        buttonRounder2.setBackground(new java.awt.Color(0, 153, 153));
+        buttonRounder2.setForeground(new java.awt.Color(255, 255, 255));
+        buttonRounder2.setText("checkCard");
+        buttonRounder2.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        buttonRounder2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonRounder2ActionPerformed(evt);
+            }
+        });
+        pan_presence.add(buttonRounder2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1010, 10, 120, 30));
+
+        buttonRounder3.setBackground(new java.awt.Color(255, 158, 13));
+        buttonRounder3.setForeground(new java.awt.Color(255, 255, 255));
+        buttonRounder3.setText("الدفع");
+        buttonRounder3.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        pan_presence.add(buttonRounder3, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 10, 120, 30));
+
+        buttonRounder4.setBackground(new java.awt.Color(153, 153, 255));
+        buttonRounder4.setForeground(new java.awt.Color(255, 255, 255));
+        buttonRounder4.setText("معاينة");
+        buttonRounder4.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        pan_presence.add(buttonRounder4, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 10, 110, 30));
 
         pan_center.add(pan_presence, "card6");
 
@@ -2949,7 +3027,7 @@ public class home extends javax.swing.JFrame {
     }//GEN-LAST:event_first_name_client_txt18KeyPressed
 
     private void buttonRounder13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRounder13ActionPerformed
-        new AddEnseignantForm(this,true).setVisible(true);
+        new AddEnseignantForm(this, true).setVisible(true);
     }//GEN-LAST:event_buttonRounder13ActionPerformed
 
     private void buttonRounder14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRounder14ActionPerformed
@@ -2961,7 +3039,7 @@ public class home extends javax.swing.JFrame {
     }//GEN-LAST:event_buttonRounder15ActionPerformed
 
     private void btn_prof_confActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_prof_confActionPerformed
-       new AddEnseignantForm(this,true).setVisible(true);
+        new AddEnseignantForm(this, true).setVisible(true);
 
     }//GEN-LAST:event_btn_prof_confActionPerformed
 
@@ -3141,72 +3219,72 @@ public class home extends javax.swing.JFrame {
     }//GEN-LAST:event_tab_seanceMouseClicked
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        //matier of to day 
-        lab_icon_chech_cross.setIcon(null);
-        boolean exist_inscription = false;
-        String codbar = txt_cod_barr_presence.getText();
-        Etudiant etudiant = etudiantDAOImpl.getEtudiantByCodbar(codbar);// matier of today        
-        List<Inscription> inscriptions = inscriptionDAOImpl.findByEtudiantId(etudiant.getId());
-        lab_nam_presence.setText(etudiant.getNom());
-        lab_prenom_presence.setText(etudiant.getPrenom());
-        lab_category_presence.setText(etudiant.getCtegore_niveau().getCategore_niveau_ar());
-        lab_niveau_presence.setText(etudiant.getNiveau().getNiveauInitialAr());
-        if (etudiant.getImage() != null) {
-            byte[] imag = etudiant.getImage();
-            ImageIcon imageIcon = new ImageIcon(new ImageIcon(imag).getImage().getScaledInstance(lab_img_etu.getWidth(), lab_img_etu.getHeight(), Image.SCALE_SMOOTH));
-            lab_imag_etud_presence.setIcon(imageIcon);
-        } else {
-            lab_imag_etud_presence.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/diplome (4).png")));
-        }
 
-        for (Inscription inscription : inscriptions) {
-            for (int i = 0; i < table_seance_to_day.getRowCount(); i++) { // trie tabl 1 matier with time          
-                if (inscription.getMatiere().getId() == (int) table_seance_to_day.getValueAt(i, 4)) { // etidaint <- inscription + matier (time 1)
-                    Seance_Matiere seance_Matiere_cour = seanceMatiereDAOImpl.findById((int) table_seance_to_day.getValueAt(i, 5));
-                    if (seance_Matiere_cour.getSeance().getFinTime().isAfter(LocalTime.now())) {
-                        JOptionPane.showMessageDialog(null, " inscription etudiant --->test Time");
-                        lab_matiere_presence.setText(inscription.getMatiere().getMatiereEtdAr());
-                        lab_num_seance_presence.setText(seance_Matiere_cour.getSeance().getNumSeance() + "");
-                        boolean pyee = testPyementOfEtudiantSeance(etudiant, inscription.getMatiere(), seance_Matiere_cour);
-
-                        if (pyee) {
-                            JOptionPane.showMessageDialog(null, " Payeeeeeeeeeeeeeeee\n" + "seanse :" + seance_Matiere_cour.getId() + seance_Matiere_cour.getMatiere().getMatiereEtdAr() + "payée");
-                            lab_icon_chech_cross.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/check-mark.png")));
-                            //  Prese();
-                            if (presenceDAOImpl.getPresenceOetudiantInSeanceMatiere(etudiant, seance_Matiere_cour) != null) {
-
-                                JOptionPane.showMessageDialog(null, "l'etudiant :" + etudiant.getNom() + " " + etudiant.getPrenom() + " a une presence  ce jour");
-                            } else {
-                                Presence presence = new Presence(0, etudiant, inscription.getMatiere(), seance_Matiere_cour, LocalDate.now());
-                                presenceDAOImpl.save(presence);
-                            }
-                        } else {  // iscri mais no payee    
-                            formPayement = new FormPayement(this, true, etudiant, seance_Matiere_cour);
-                            lab_icon_chech_cross.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/cross.png")));
-                            JOptionPane.showMessageDialog(null, "Nooooooooooooo  Payeeeeeeeeeeeeeeee\n" + "seanse :" + seance_Matiere_cour.getSeance().getNumSeance() + seance_Matiere_cour.getMatiere().getMatiereEtdAr() + " non payee ");
-                            Matiere matiere = seance_Matiere_cour.getMatiere();
-                            double prix = matiere.getPrix();
-
-                            Payement payement = new Payement(0, etudiant, matiere, seance_Matiere_cour.getSeance(), "NO payee", 0.0, 0.0, prix, LocalDate.now());
-                            payementDAOImpl.save(payement);
-
-                            Presence presence = new Presence(0, etudiant, inscription.getMatiere(), seance_Matiere_cour, LocalDate.now());
-                            presenceDAOImpl.save(presence);
-
-                        }
-                        exist_inscription = true;
-
-                    } else {
-                        JOptionPane.showMessageDialog(null, "لقد تم انتهاء الحصة على الساعة  :  " + seance_Matiere_cour.getSeance().getFinTime());
-                    }
-
-                }
-            }
-            if (!exist_inscription) {
-                JOptionPane.showMessageDialog(null, " pas inscption avec matiere of today ");
-            }
-        }
-
+//        //matier of to day 
+//        lab_icon_chech_cross.setIcon(null);
+//        boolean exist_inscription = false;
+//        String codbar = txt_cod_barr_presence.getText();
+//        Etudiant etudiant = etudiantDAOImpl.getEtudiantByCodbar(codbar);// matier of today        
+//        List<Inscription> inscriptions = inscriptionDAOImpl.findByEtudiantId(etudiant.getId());
+//        lab_nam_presence.setText(etudiant.getNom());
+//        lab_prenom_presence.setText(etudiant.getPrenom());
+//        lab_category_presence.setText(etudiant.getCtegore_niveau().getCategore_niveau_ar());
+//        lab_niveau_presence.setText(etudiant.getNiveau().getNiveauInitialAr());
+//        if (etudiant.getImage() != null) {
+//            byte[] imag = etudiant.getImage();
+//            ImageIcon imageIcon = new ImageIcon(new ImageIcon(imag).getImage().getScaledInstance(lab_img_etu.getWidth(), lab_img_etu.getHeight(), Image.SCALE_SMOOTH));
+//            lab_imag_etud_presence.setIcon(imageIcon);
+//        } else {
+//            lab_imag_etud_presence.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/diplome (4).png")));
+//        }
+//
+//        for (Inscription inscription : inscriptions) {
+//            for (int i = 0; i < table_seance_to_day.getRowCount(); i++) { // trie tabl 1 matier with time          
+//                if (inscription.getMatiere().getId() == (int) table_seance_to_day.getValueAt(i, 4)) { // etidaint <- inscription + matier (time 1)
+//                    Seance_Matiere seance_Matiere_cour = seanceMatiereDAOImpl.findById((int) table_seance_to_day.getValueAt(i, 5));
+//                    if (seance_Matiere_cour.getSeance().getFinTime().isAfter(LocalTime.now())) {
+//                        JOptionPane.showMessageDialog(null, " inscription etudiant --->test Time");
+//                        lab_matiere_presence.setText(inscription.getMatiere().getMatiereEtdAr());
+//                        lab_num_seance_presence.setText(seance_Matiere_cour.getSeance().getNumSeance() + "");
+//                        boolean pyee = testPyementOfEtudiantSeance(etudiant, inscription.getMatiere(), seance_Matiere_cour);
+//
+//                        if (pyee) {
+//                            JOptionPane.showMessageDialog(null, " Payeeeeeeeeeeeeeeee\n" + "seanse :" + seance_Matiere_cour.getId() + seance_Matiere_cour.getMatiere().getMatiereEtdAr() + "payée");
+//                            lab_icon_chech_cross.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/check-mark.png")));
+//                            //  Prese();
+//                            if (presenceDAOImpl.getPresenceOetudiantInSeanceMatiere(etudiant, seance_Matiere_cour) != null) {
+//
+//                                JOptionPane.showMessageDialog(null, "l'etudiant :" + etudiant.getNom() + " " + etudiant.getPrenom() + " a une presence  ce jour");
+//                            } else {
+//                                Presence presence = new Presence(0, etudiant, inscription.getMatiere(), seance_Matiere_cour, LocalDate.now());
+//                                presenceDAOImpl.save(presence);
+//                            }
+//                        } else {  // iscri mais no payee    
+//                            formPayement = new FormPayement(this, true, etudiant, seance_Matiere_cour);
+//                            lab_icon_chech_cross.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/cross.png")));
+//                            JOptionPane.showMessageDialog(null, "Nooooooooooooo  Payeeeeeeeeeeeeeeee\n" + "seanse :" + seance_Matiere_cour.getSeance().getNumSeance() + seance_Matiere_cour.getMatiere().getMatiereEtdAr() + " non payee ");
+//                            Matiere matiere = seance_Matiere_cour.getMatiere();
+//                            double prix = matiere.getPrix();
+//
+//                            Payement payement = new Payement(0, etudiant, matiere, seance_Matiere_cour.getSeance(), "NO payee", 0.0, 0.0, prix, LocalDate.now());
+//                            payementDAOImpl.save(payement);
+//
+//                            Presence presence = new Presence(0, etudiant, inscription.getMatiere(), seance_Matiere_cour, LocalDate.now());
+//                            presenceDAOImpl.save(presence);
+//
+//                        }
+//                        exist_inscription = true;
+//
+//                    } else {
+//                        JOptionPane.showMessageDialog(null, "لقد تم انتهاء الحصة على الساعة  :  " + seance_Matiere_cour.getSeance().getFinTime());
+//                    }
+//
+//                }
+//            }
+//            if (!exist_inscription) {
+//                JOptionPane.showMessageDialog(null, " pas inscption avec matiere of today ");
+//            }
+//        }
         //  Payement payement = payementDAOImpl.findById(1);
     }//GEN-LAST:event_jButton6ActionPerformed
 
@@ -3260,6 +3338,26 @@ public class home extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_buttonRounder37ActionPerformed
 
+    private void buttonRounder2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRounder2ActionPerformed
+        if (!txt_cod_barr_presence.getText().isEmpty()) {
+            Etudiant etudiant = etudiantDAOImpl.getEtudiantByCodbar(txt_cod_barr_presence.getText());// matier of today                            
+
+            setInfoEtudiantInPanPresence(etudiant);
+            // Liste seance to day of etud 
+            List<Seance> Seance_of_today_for_etudtaint = getSeanceOfTodayWithInscriptionEtud(list_seance_about_all_matieres, etudiant);
+            if (Seance_of_today_for_etudtaint.size() != 0) {
+                // seance etudeé to day 1,2,3 
+                Matiere matier = matiere_service.getMatier_Of_TimNow_Etud(Seance_of_today_for_etudtaint);//
+                lab_matiere_presence.setText(matier.getMatiereEtdAr());
+              setInfoInTablePresence();   
+            } else {
+                lab_matiere_presence.setText("/");
+                message_validation.showMessage(null, "لا توجد حصة اليوم بالنسبة لهذا الطالب");
+            }
+        }
+       
+    }//GEN-LAST:event_buttonRounder2ActionPerformed
+
     public boolean testPyementOfEtudiantSeance(Etudiant etudiant, Matiere matiere, Seance_Matiere seance_Matiere) {
         List<Payement> payements = payementDAOImpl.findAll();
         boolean exist = false;
@@ -3287,12 +3385,14 @@ public class home extends javax.swing.JFrame {
                 new FileChooser.ExtensionFilter("PNG", "*.png")
         );
     }
+
     private void setForm(JComponent Center, JComponent com) {
         Center.removeAll();
         Center.add(com);
         Center.repaint();
         Center.revalidate();
     }
+
     public void setDesignTable(JTable tab, JScrollPane scrol) {
         TableCustom.apply(scrol, TableCustom.TableType.DEFAULT);
         //tab.getTableHeader().setFont(new Font("", Font.BOLD, 15));
@@ -3390,9 +3490,9 @@ public class home extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private ui.card.Card CardClients;
-    private ui.card.Card CardReservations;
-    private ui.card.Card CardRooms;
+    private ui.card.Card CardEmployer;
+    private ui.card.Card CardEnsigniant;
+    private ui.card.Card CardEtudtaint;
     private javax.swing.JPanel Dashboard;
     private material.design.Combobox Groupe3;
     private material.design.Combobox Groupe4;
@@ -3410,6 +3510,7 @@ public class home extends javax.swing.JFrame {
     private material.design.buttonRounder buttonRounder17;
     private material.design.buttonRounder buttonRounder18;
     private material.design.buttonRounder buttonRounder19;
+    private material.design.buttonRounder buttonRounder2;
     private material.design.buttonRounder buttonRounder20;
     private material.design.buttonRounder buttonRounder21;
     private material.design.buttonRounder buttonRounder22;
@@ -3419,6 +3520,7 @@ public class home extends javax.swing.JFrame {
     private material.design.buttonRounder buttonRounder26;
     private material.design.buttonRounder buttonRounder27;
     private material.design.buttonRounder buttonRounder28;
+    private material.design.buttonRounder buttonRounder3;
     private material.design.buttonRounder buttonRounder32;
     private material.design.buttonRounder buttonRounder33;
     private material.design.buttonRounder buttonRounder34;
@@ -3426,6 +3528,7 @@ public class home extends javax.swing.JFrame {
     private material.design.buttonRounder buttonRounder36;
     private material.design.buttonRounder buttonRounder37;
     private material.design.buttonRounder buttonRounder38;
+    private material.design.buttonRounder buttonRounder4;
     private material.design.buttonRounder buttonRounder8;
     private material.design.Combobox com_catego_niveau;
     private material.design.Combobox com_niveau;
@@ -3607,7 +3710,6 @@ public class home extends javax.swing.JFrame {
     private material.design.TextField textField9;
     private javax.swing.JTextField txt_cod_barr_presence;
     private material.design.TextField txt_dat_birth;
-    private javax.swing.JTextField txt_matricul_presence;
     private material.design.Combobox الدورات;
     private material.design.Combobox النوع;
     // End of variables declaration//GEN-END:variables

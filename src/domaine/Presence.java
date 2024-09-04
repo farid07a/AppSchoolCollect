@@ -15,17 +15,17 @@ public class Presence {
     private int id;
     private Etudiant Etudiant;
     private Matiere Matiere;
-    private Seance_Matiere Seance_matier;
+    private  Seance Seance;
     private LocalDate datePresence;
 
     public Presence() {
     }
 
-    public Presence(int id, Etudiant Etudiant, Matiere Matiere, Seance_Matiere Seance_matier, LocalDate datePresence) {
+    public Presence(int id, Etudiant Etudiant, Matiere Matiere, Seance Seance, LocalDate datePresence) {
         this.id = id;
         this.Etudiant = Etudiant;
         this.Matiere = Matiere;
-        this.Seance_matier = Seance_matier;
+        this.Seance = Seance;
         this.datePresence = datePresence;
     }
 
@@ -41,8 +41,8 @@ public class Presence {
         return Matiere;
     }
 
-    public Seance_Matiere getSeance_matier() {
-        return Seance_matier;
+    public Seance getSeance() {
+        return Seance;
     }
 
     public LocalDate getDatePresence() {
@@ -61,8 +61,8 @@ public class Presence {
         this.Matiere = Matiere;
     }
 
-    public void setSeance_matier(Seance_Matiere Seance_matier) {
-        this.Seance_matier = Seance_matier;
+    public void setSeance(Seance Seance) {
+        this.Seance = Seance;
     }
 
     public void setDatePresence(LocalDate datePresence) {
