@@ -196,6 +196,7 @@ public class Panel_PresenceUI extends javax.swing.JPanel {
         lab_category_presence.setText("");
         lab_niveau_presence.setText("");
         lab_imag_etud_presence.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/diplome (4).png")));
+    //
     }
 
     public void setInfoInTablePresence() {
