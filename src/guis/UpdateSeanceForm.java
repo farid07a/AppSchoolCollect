@@ -4,20 +4,16 @@
  */
 package guis;
 
+import Service.SeanceService;
 import domaine.CategoreNiveau;
 import domaine.Enseignant;
 import domaine.Matiere;
 import domaine.NiveauEtude;
 import domaine.Seance;
-import domaine.Seance_Matiere;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemListener;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
@@ -40,6 +36,7 @@ import javax.swing.JTable;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import main.java.com.school.impl.CategoreNiveauDAOImpl;
 import main.java.com.school.impl.EnseignantDAOImpl;
@@ -47,17 +44,17 @@ import main.java.com.school.impl.MatiereDAOImpl;
 import main.java.com.school.impl.MatiereEnseignantDAOImpl;
 import main.java.com.school.impl.NiveauEtudeDAOImpl;
 import main.java.com.school.impl.SeanceDAOImpl;
-import main.java.com.school.impl.SeanceMatiereDAOImpl;
 import main.java.com.school.model.config.ConnectionDB;
 import main.java.com.school.model.config.DatabaseConnectionException;
 import material.design.ScrollBar;
+import material.design.pan_time;
 import ui.table.TableCustom;
 
 /**
  *
  * @author client
  */
-public class AddSeanceForm extends javax.swing.JDialog {
+public class UpdateSeanceForm extends javax.swing.JDialog {
 
     home home;
     Connection connection;
@@ -68,7 +65,7 @@ public class AddSeanceForm extends javax.swing.JDialog {
     MatiereEnseignantDAOImpl MatiereEnseignat_dao_impl;
     int nomber_seance = 0;
 
-    public AddSeanceForm(java.awt.Frame parent, boolean modal) {
+    public UpdateSeanceForm(java.awt.Frame parent, boolean modal,Seance seance) {
         super(parent, modal);
         home = (home) parent;
         initComponents();
@@ -84,7 +81,7 @@ public class AddSeanceForm extends javax.swing.JDialog {
         enseignantDAOImpl = new EnseignantDAOImpl(connection);
         MatiereEnseignat_dao_impl = new MatiereEnseignantDAOImpl(connection);
         setLocationRelativeTo(this);
-
+        setDesignTable(TabSeance, jScrollPane1);
         PrepareUI();
 
         txt_dat_first_seance.getDocument().addDocumentListener(new DocumentListener() {
@@ -108,11 +105,286 @@ public class AddSeanceForm extends javax.swing.JDialog {
     }
 
     public void PrepareUI() {
-
-        setInfoCategoreNiveauInCombox();
-
+        setInfoCategoreNiveauInCombox();   
     }
+    
+    public void FullSeanceTable(Matiere matiere){
+        try {
+            SeanceService seance_service=new SeanceService();
+//            seance_service.getListAllSeancePrevieuSemaine(matiere);
+//            Connection connection =ConnectionDB.getConnection();
+//            SeanceDAOImpl seance_dao_imp=new SeanceDAOImpl(connection);
+//            List <Seance> list_seance=seance_dao_imp.findAll();
+            
+            List <Seance> list_seance = seance_service.getListAllSeancePrevieuSemaine(matiere);
+            DefaultTableModel df=(DefaultTableModel) TabSeance.getModel();
+            df.setRowCount(0);
+            for (Seance seance : list_seance) {
+                
+                if(matiere.getId()==seance.getMatiere().getId()){
+                Object [] arg={seance.getId(),seance.getNumSeance(),seance.getTimeSeance(),seance.getFinTime(),seance.getDay_sceance()
+                ,seance.getDate_sceance().toString(),seance.isTerminate(),"تحويل"};
+                df.addRow(arg);
+                }
+            }
+            
+            //TabSeance.setModel(df);
+            
+        } catch (DatabaseConnectionException ex) {
+            Logger.getLogger(UpdateFormSeance.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
+    public void SetInfoSeeancesInFormUpdate() throws DatabaseConnectionException {
+    Matiere matiere = matiereDAOImpl.getMatiereNiveauOfCategory(
+            com_matiere.getSelectedItem().toString(),
+            comb_niveau.getSelectedItem().toString(),
+            com_catego_niveau.getSelectedItem().toString()
+    );
 
+    SeanceService seanceService = new SeanceService();
+    
+    List<Seance> listSeance = seanceService.getListAllSeancePrevieuSemaine(matiere);
+    initializeAllSeances();
+    for (Seance seance : listSeance) {
+        System.out.println(seance);
+        String dayName = seance.getDay_sceance();
+        
+        System.out.println("dayName:"+dayName);
+        switch (dayName) {
+            case "الأحد":
+                setSeanceSund(seance);
+                break;
+            case "الاثنين":
+                System.out.println("I am in Mondy");
+                setSeanceMond(seance);
+                check_mond.setSelected(true);
+                
+                System.out.println("Success checked");
+                break;
+            case "الثلاثاء":
+                setSeancecheckTues(seance);
+                break;
+            case "الأربعاء":
+                setSeancecheckWend(seance);
+                break;
+            case "الخميس":
+                setSeancecheckThurs(seance);
+                break;
+            case "الجمعة":
+                setSeancecheckFrid(seance);
+                break;
+            case "السبت":
+                setSeancecheckSatur(seance);
+                break;
+            default:
+                System.out.println("No Day");
+                break;
+        }
+    }
+}
+
+private void initializeAllSeances() {
+    setInitSeanceSund();
+    setInitSeanceMond();
+    setInitSeanceTues();
+    setInitSeanceWend();
+    setInitSeanceThurs();
+    setInitSeanceFrid();
+    setInitSeanceSatur();
+}
+
+    
+//    public void SetInfoSeeancesInFormUpdate() throws DatabaseConnectionException{
+//        Matiere matiere = matiereDAOImpl.getMatiereNiveauOfCategory(com_matiere.getSelectedItem().toString(),
+//                    comb_niveau.getSelectedItem().toString(), com_catego_niveau.getSelectedItem().toString());
+//        SeanceService seance_service=new SeanceService();
+//        List <Seance> list_seance = seance_service.getListAllSeancePrevieuSemaine(matiere);
+//        
+//        for (Seance seance : list_seance) {
+//            String NameDay=seance.getDay_sceance();
+//            switch(NameDay){
+//                case "الأحد":
+//                    setSeanceSund(seance);
+//                    //setInitSeanceSund();
+//                    setInitSeanceMond();
+//                    setInitSeanceTues();
+//                    setInitSeanceWend();
+//                    setInitSeanceThurs();
+//                    setInitSeanceFrid();
+//                    setInitSeanceSatur();
+//                    
+//                    break;
+//                case "الاثنين":
+//                    setSeanceMond(seance);
+//                    setInitSeanceSund();
+//                    //setInitSeanceMond();
+//                    setInitSeanceTues();
+//                    setInitSeanceWend();
+//                    setInitSeanceThurs();
+//                    setInitSeanceFrid();
+//                    setInitSeanceSatur();
+//                    break;
+//                case "الثلاثاء":
+//                    setSeancecheckTues(seance);
+//                    setInitSeanceSund();
+//                    setInitSeanceMond();
+//                    //setInitSeanceTues();
+//                    setInitSeanceWend();
+//                    setInitSeanceThurs();
+//                    setInitSeanceFrid();
+//                    setInitSeanceSatur();
+//                    
+//                    break;
+//                case "الأربعاء":
+//                    setSeancecheckWend(seance);
+//                    setInitSeanceSund();
+//                    setInitSeanceMond();
+//                    setInitSeanceTues();
+//                    //setInitSeanceWend();
+//                    setInitSeanceThurs();
+//                    setInitSeanceFrid();
+//                    setInitSeanceSatur();
+//                    break;
+//                case "الخميس":
+//                    setSeancecheckThurs(seance);
+//                    setInitSeanceSund();
+//                    setInitSeanceMond();
+//                    setInitSeanceTues();
+//                    setInitSeanceWend();
+//                    //setInitSeanceThurs();
+//                    setInitSeanceFrid();
+//                    setInitSeanceSatur();
+//                    break;
+//                case "الجمعة":
+//                    setSeancecheckFrid(seance);
+//                    setInitSeanceSund();
+//                    setInitSeanceMond();
+//                    setInitSeanceTues();
+//                    setInitSeanceWend();
+//                    setInitSeanceThurs();
+//                    //setInitSeanceFrid();
+//                    setInitSeanceSatur();
+//                    break;
+//                case "السبت":
+//                    setSeancecheckSatur(seance);
+//                    setInitSeanceSund();
+//                    setInitSeanceMond();
+//                    setInitSeanceTues();
+//                    setInitSeanceWend();
+//                    setInitSeanceThurs();
+//                    setInitSeanceFrid();
+//                    //setInitSeanceSatur();
+//                    break;
+//                
+//                default:
+//                    System.out.println("No Day");
+//            }
+//            
+//        }
+//    }
+    
+    
+    
+    
+    public void setSeanceSund(Seance seance){
+        check_sund.setSelected(true);
+        pan_time_sund.setbignTime(seance.getTimeSeance().toString());
+        pan_time_sund.setfinTime(seance.getFinTime().toString());
+        lab_date_1.setText(seance.getDate_sceance().toString());
+    }
+    public void setSeanceMond(Seance seance){
+        check_mond.setSelected(true);
+        pan_time_mond.setbignTime(seance.getTimeSeance().toString());
+        pan_time_mond.setfinTime(seance.getFinTime().toString());
+        lab_date_2.setText(seance.getDate_sceance().toString());
+    }
+    
+    public void setSeancecheckTues(Seance seance){
+        check_tues.setSelected(true);
+        pan_time_tuesd.setbignTime(seance.getTimeSeance().toString());
+        pan_time_tuesd.setfinTime(seance.getFinTime().toString());
+        lab_date_3.setText(seance.getDate_sceance().toString());
+    }
+    
+    public void setSeancecheckWend(Seance seance){
+        check_wend.setSelected(true);
+        pan_time_wednesd.setbignTime(seance.getTimeSeance().toString());
+        pan_time_wednesd.setfinTime(seance.getFinTime().toString());
+        lab_date_4.setText(seance.getDate_sceance().toString());
+    }
+    
+    public void setSeancecheckThurs(Seance seance){
+        check_thurs.setSelected(true);
+        pan_time_theursd.setbignTime(seance.getTimeSeance().toString());
+        pan_time_theursd.setfinTime(seance.getFinTime().toString());
+        lab_date_5.setText(seance.getDate_sceance().toString());
+    }
+    
+    public void setSeancecheckFrid(Seance seance){
+        check_frid.setSelected(true);
+        pan_time_frid.setbignTime(seance.getTimeSeance().toString());
+        pan_time_frid.setfinTime(seance.getFinTime().toString());
+        lab_date_6.setText(seance.getDate_sceance().toString());
+    }
+    
+    public void setSeancecheckSatur(Seance seance){
+        check_satur.setSelected(true);
+        pan_time_saturd.setbignTime(seance.getTimeSeance().toString());
+        pan_time_saturd.setfinTime(seance.getFinTime().toString());
+        lab_date_7.setText(seance.getDate_sceance().toString());
+    }
+    /**
+     * @param seance***********************************************/
+    
+    public void setInitSeance(JCheckBox checkBox, pan_time timePanel, JLabel dateLabel) {
+    checkBox.setSelected(false);
+    timePanel.setbignTime("08:01");
+    timePanel.setfinTime("09:01");
+    dateLabel.setText("");
+}
+
+// Example usage:
+public void setInitSeanceSund() {
+    setInitSeance( check_sund, pan_time_sund, lab_date_1);
+}
+
+public void setInitSeanceMond() {
+    setInitSeance(check_mond, pan_time_mond, lab_date_2);
+}
+
+public void setInitSeanceTues() {
+    setInitSeance( check_tues, pan_time_tuesd, lab_date_3);
+}
+
+public void setInitSeanceWend() {
+    setInitSeance(check_wend, pan_time_wednesd, lab_date_4);
+}
+
+public void setInitSeanceThurs() {
+    setInitSeance(check_thurs, pan_time_theursd, lab_date_5);
+}
+
+public void setInitSeanceFrid() {
+    setInitSeance( check_frid, pan_time_frid, lab_date_6);
+}
+
+public void setInitSeanceSatur() {
+    setInitSeance( check_satur, pan_time_saturd, lab_date_7);
+}
+
+    
+    /**************************************************/
+    
+    public void EmptyFieldsUpdateSeamine(){
+        
+    
+    }
+    
+    
+    
+    
     public void setInfoCategoreNiveauInCombox() {
         List<CategoreNiveau> categoreNiveaus = categoreNiveauDAOImpl.findAll();
         for (CategoreNiveau categoreNiveau_obj : categoreNiveaus) {
@@ -292,6 +564,10 @@ public class AddSeanceForm extends javax.swing.JDialog {
      * WARNING: Do NOT modify this code. The content of this method is always
      * regenerated by the Form Editor.
      */
+    
+    
+    
+    
     public void setDesignTable(JTable tab, JScrollPane scrol) {
         TableCustom.apply(scrol, TableCustom.TableType.DEFAULT);
         tab.getTableHeader().setFont(new Font("", Font.BOLD, 15));
@@ -318,6 +594,9 @@ public class AddSeanceForm extends javax.swing.JDialog {
 
     }
 
+    
+    
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -333,7 +612,14 @@ public class AddSeanceForm extends javax.swing.JDialog {
         com_ensieng = new material.design.Combobox();
         jLabel9 = new javax.swing.JLabel();
         lab_nbr_seance = new javax.swing.JLabel();
-        jPanel3 = new javax.swing.JPanel();
+        comb_niveau = new material.design.Combobox();
+        jLabel1 = new javax.swing.JLabel();
+        lab_error_matier = new javax.swing.JLabel();
+        lab_error_check_day = new javax.swing.JLabel();
+        lab_error_dat = new javax.swing.JLabel();
+        NbrSeanceInSemaine_db = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        pan_week_updt = new javax.swing.JPanel();
         jSeparator2 = new javax.swing.JSeparator();
         jSeparator7 = new javax.swing.JSeparator();
         jSeparator8 = new javax.swing.JSeparator();
@@ -341,19 +627,12 @@ public class AddSeanceForm extends javax.swing.JDialog {
         jSeparator10 = new javax.swing.JSeparator();
         jSeparator11 = new javax.swing.JSeparator();
         check_sund = new material.design.JCheckBoxCustomfr();
-        chec_mond = new material.design.JCheckBoxCustomfr();
+        check_mond = new material.design.JCheckBoxCustomfr();
         check_tues = new material.design.JCheckBoxCustomfr();
-        check_wed = new material.design.JCheckBoxCustomfr();
+        check_wend = new material.design.JCheckBoxCustomfr();
         check_thurs = new material.design.JCheckBoxCustomfr();
         check_satur = new material.design.JCheckBoxCustomfr();
         check_frid = new material.design.JCheckBoxCustomfr();
-        buttonRounder3 = new material.design.buttonRounder();
-        buttonRounder4 = new material.design.buttonRounder();
-        buttonRounder6 = new material.design.buttonRounder();
-        buttonRounder7 = new material.design.buttonRounder();
-        buttonRounder8 = new material.design.buttonRounder();
-        buttonRounder9 = new material.design.buttonRounder();
-        buttonRounder10 = new material.design.buttonRounder();
         pan_time_frid = new material.design.pan_time();
         pan_time_sund = new material.design.pan_time();
         pan_time_mond = new material.design.pan_time();
@@ -368,12 +647,15 @@ public class AddSeanceForm extends javax.swing.JDialog {
         lab_date_5 = new javax.swing.JLabel();
         lab_date_6 = new javax.swing.JLabel();
         lab_date_7 = new javax.swing.JLabel();
-        comb_niveau = new material.design.Combobox();
-        jLabel1 = new javax.swing.JLabel();
-        lab_error_matier = new javax.swing.JLabel();
-        lab_error_check_day = new javax.swing.JLabel();
-        lab_error_dat = new javax.swing.JLabel();
-        NbrSeanceInSemaine_db = new javax.swing.JLabel();
+        pan_seance_updt = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        TabSeance = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        buttonRounder18 = new material.design.buttonRounder();
+        buttonRounder20 = new material.design.buttonRounder();
+        id_ens = new javax.swing.JLabel();
+        id_matiere = new javax.swing.JLabel();
 
         dateChooser.setName(""); // NOI18N
         dateChooser.setTextRefernce(txt_dat_first_seance);
@@ -478,182 +760,6 @@ public class AddSeanceForm extends javax.swing.JDialog {
         lab_nbr_seance.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lab_nbr_seance.setText("0");
 
-        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(150, 150, 150)), "الحصص الدراسية", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Times New Roman", 1, 16), new java.awt.Color(150, 150, 150))); // NOI18N
-        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jSeparator2.setBackground(new java.awt.Color(197, 197, 197));
-        jPanel3.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 810, 11));
-
-        jSeparator7.setBackground(new java.awt.Color(197, 197, 197));
-        jPanel3.add(jSeparator7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 141, 810, 10));
-
-        jSeparator8.setBackground(new java.awt.Color(197, 197, 197));
-        jPanel3.add(jSeparator8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, 810, 11));
-
-        jSeparator9.setBackground(new java.awt.Color(197, 197, 197));
-        jPanel3.add(jSeparator9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 261, 800, 10));
-
-        jSeparator10.setBackground(new java.awt.Color(197, 197, 197));
-        jPanel3.add(jSeparator10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 321, 810, 10));
-
-        jSeparator11.setBackground(new java.awt.Color(197, 197, 197));
-        jPanel3.add(jSeparator11, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 390, 800, 10));
-
-        check_sund.setBackground(new java.awt.Color(51, 204, 0));
-        check_sund.setText("الأحد");
-        check_sund.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
-        check_sund.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                check_sundActionPerformed(evt);
-            }
-        });
-        jPanel3.add(check_sund, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 50, 80, -1));
-
-        chec_mond.setBackground(new java.awt.Color(51, 204, 0));
-        chec_mond.setText("الاثنين");
-        chec_mond.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
-        chec_mond.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                chec_mondActionPerformed(evt);
-            }
-        });
-        jPanel3.add(chec_mond, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 110, 80, -1));
-
-        check_tues.setBackground(new java.awt.Color(51, 204, 0));
-        check_tues.setText("الثلاثاء");
-        check_tues.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
-        check_tues.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                check_tuesActionPerformed(evt);
-            }
-        });
-        jPanel3.add(check_tues, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 170, 74, -1));
-
-        check_wed.setBackground(new java.awt.Color(51, 204, 0));
-        check_wed.setText("الأربعاء");
-        check_wed.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
-        check_wed.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                check_wedActionPerformed(evt);
-            }
-        });
-        jPanel3.add(check_wed, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 230, 74, -1));
-
-        check_thurs.setBackground(new java.awt.Color(51, 204, 0));
-        check_thurs.setText("الخميس");
-        check_thurs.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
-        check_thurs.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                check_thursActionPerformed(evt);
-            }
-        });
-        jPanel3.add(check_thurs, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 290, 75, -1));
-
-        check_satur.setBackground(new java.awt.Color(51, 204, 0));
-        check_satur.setText("السبت");
-        check_satur.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
-        check_satur.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                check_saturActionPerformed(evt);
-            }
-        });
-        jPanel3.add(check_satur, new org.netbeans.lib.awtextra.AbsoluteConstraints(755, 410, 70, -1));
-
-        check_frid.setBackground(new java.awt.Color(51, 204, 0));
-        check_frid.setText("الجمعة");
-        check_frid.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
-        check_frid.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                check_fridActionPerformed(evt);
-            }
-        });
-        jPanel3.add(check_frid, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 350, 71, -1));
-
-        buttonRounder3.setBackground(new java.awt.Color(204, 204, 204));
-        buttonRounder3.setForeground(new java.awt.Color(255, 255, 255));
-        buttonRounder3.setText("+");
-        buttonRounder3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        buttonRounder3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jPanel3.add(buttonRounder3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 360, 40, 30));
-
-        buttonRounder4.setBackground(new java.awt.Color(204, 204, 204));
-        buttonRounder4.setForeground(new java.awt.Color(255, 255, 255));
-        buttonRounder4.setText("+");
-        buttonRounder4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        buttonRounder4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jPanel3.add(buttonRounder4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, 40, 27));
-
-        buttonRounder6.setBackground(new java.awt.Color(204, 204, 204));
-        buttonRounder6.setForeground(new java.awt.Color(255, 255, 255));
-        buttonRounder6.setText("+");
-        buttonRounder6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        buttonRounder6.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jPanel3.add(buttonRounder6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, 40, 30));
-
-        buttonRounder7.setBackground(new java.awt.Color(204, 204, 204));
-        buttonRounder7.setForeground(new java.awt.Color(255, 255, 255));
-        buttonRounder7.setText("+");
-        buttonRounder7.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        buttonRounder7.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jPanel3.add(buttonRounder7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, 40, 30));
-
-        buttonRounder8.setBackground(new java.awt.Color(204, 204, 204));
-        buttonRounder8.setForeground(new java.awt.Color(255, 255, 255));
-        buttonRounder8.setText("+");
-        buttonRounder8.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        buttonRounder8.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jPanel3.add(buttonRounder8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, 40, 30));
-
-        buttonRounder9.setBackground(new java.awt.Color(204, 204, 204));
-        buttonRounder9.setForeground(new java.awt.Color(255, 255, 255));
-        buttonRounder9.setText("+");
-        buttonRounder9.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        buttonRounder9.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jPanel3.add(buttonRounder9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 290, 40, 30));
-
-        buttonRounder10.setBackground(new java.awt.Color(204, 204, 204));
-        buttonRounder10.setForeground(new java.awt.Color(255, 255, 255));
-        buttonRounder10.setText("+");
-        buttonRounder10.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        buttonRounder10.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jPanel3.add(buttonRounder10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 410, 40, 30));
-        jPanel3.add(pan_time_frid, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 330, -1, 40));
-        jPanel3.add(pan_time_sund, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 30, -1, -1));
-        jPanel3.add(pan_time_mond, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 90, -1, -1));
-        jPanel3.add(pan_time_tuesd, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 150, -1, -1));
-        jPanel3.add(pan_time_wednesd, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 210, -1, 40));
-        jPanel3.add(pan_time_theursd, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 270, -1, 40));
-        jPanel3.add(pan_time_saturd, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 400, -1, 40));
-
-        lab_date_1.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        lab_date_1.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(153, 153, 153)));
-        jPanel3.add(lab_date_1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 30, 140, 30));
-
-        lab_date_2.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        lab_date_2.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(153, 153, 153)));
-        jPanel3.add(lab_date_2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 100, 140, 30));
-
-        lab_date_3.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        lab_date_3.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(153, 153, 153)));
-        jPanel3.add(lab_date_3, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 160, 140, 30));
-
-        lab_date_4.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        lab_date_4.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(153, 153, 153)));
-        jPanel3.add(lab_date_4, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 220, 140, 30));
-
-        lab_date_5.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        lab_date_5.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(153, 153, 153)));
-        jPanel3.add(lab_date_5, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 280, 140, 30));
-
-        lab_date_6.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        lab_date_6.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(153, 153, 153)));
-        jPanel3.add(lab_date_6, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 350, 140, 30));
-
-        lab_date_7.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        lab_date_7.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(153, 153, 153)));
-        jPanel3.add(lab_date_7, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 400, 140, 30));
-
         comb_niveau.setForeground(new java.awt.Color(51, 0, 153));
         comb_niveau.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
         comb_niveau.setLabeText("القسم");
@@ -686,54 +792,281 @@ public class AddSeanceForm extends javax.swing.JDialog {
         NbrSeanceInSemaine_db.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         NbrSeanceInSemaine_db.setText("00");
 
+        jPanel2.setLayout(new java.awt.CardLayout());
+
+        pan_week_updt.setBackground(new java.awt.Color(255, 255, 255));
+        pan_week_updt.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(150, 150, 150)), "الحصص الدراسية", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Times New Roman", 1, 16), new java.awt.Color(150, 150, 150))); // NOI18N
+        pan_week_updt.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jSeparator2.setBackground(new java.awt.Color(197, 197, 197));
+        pan_week_updt.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 810, 11));
+
+        jSeparator7.setBackground(new java.awt.Color(197, 197, 197));
+        pan_week_updt.add(jSeparator7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 141, 810, 10));
+
+        jSeparator8.setBackground(new java.awt.Color(197, 197, 197));
+        pan_week_updt.add(jSeparator8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, 810, 11));
+
+        jSeparator9.setBackground(new java.awt.Color(197, 197, 197));
+        pan_week_updt.add(jSeparator9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 261, 800, 10));
+
+        jSeparator10.setBackground(new java.awt.Color(197, 197, 197));
+        pan_week_updt.add(jSeparator10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 321, 810, 10));
+
+        jSeparator11.setBackground(new java.awt.Color(197, 197, 197));
+        pan_week_updt.add(jSeparator11, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 390, 800, 10));
+
+        check_sund.setBackground(new java.awt.Color(51, 204, 0));
+        check_sund.setText("الأحد");
+        check_sund.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
+        check_sund.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                check_sundActionPerformed(evt);
+            }
+        });
+        pan_week_updt.add(check_sund, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 50, 80, -1));
+
+        check_mond.setBackground(new java.awt.Color(51, 204, 0));
+        check_mond.setText("الاثنين");
+        check_mond.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
+        check_mond.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                check_mondActionPerformed(evt);
+            }
+        });
+        pan_week_updt.add(check_mond, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 110, 80, -1));
+
+        check_tues.setBackground(new java.awt.Color(51, 204, 0));
+        check_tues.setText("الثلاثاء");
+        check_tues.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
+        check_tues.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                check_tuesActionPerformed(evt);
+            }
+        });
+        pan_week_updt.add(check_tues, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 170, 74, -1));
+
+        check_wend.setBackground(new java.awt.Color(51, 204, 0));
+        check_wend.setText("الأربعاء");
+        check_wend.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
+        check_wend.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                check_wendActionPerformed(evt);
+            }
+        });
+        pan_week_updt.add(check_wend, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 230, 74, -1));
+
+        check_thurs.setBackground(new java.awt.Color(51, 204, 0));
+        check_thurs.setText("الخميس");
+        check_thurs.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
+        check_thurs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                check_thursActionPerformed(evt);
+            }
+        });
+        pan_week_updt.add(check_thurs, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 290, 75, -1));
+
+        check_satur.setBackground(new java.awt.Color(51, 204, 0));
+        check_satur.setText("السبت");
+        check_satur.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
+        check_satur.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                check_saturActionPerformed(evt);
+            }
+        });
+        pan_week_updt.add(check_satur, new org.netbeans.lib.awtextra.AbsoluteConstraints(755, 410, 70, -1));
+
+        check_frid.setBackground(new java.awt.Color(51, 204, 0));
+        check_frid.setText("الجمعة");
+        check_frid.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
+        check_frid.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                check_fridActionPerformed(evt);
+            }
+        });
+        pan_week_updt.add(check_frid, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 350, 71, -1));
+        pan_week_updt.add(pan_time_frid, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 330, -1, 40));
+        pan_week_updt.add(pan_time_sund, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 30, -1, -1));
+        pan_week_updt.add(pan_time_mond, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 90, -1, -1));
+        pan_week_updt.add(pan_time_tuesd, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 150, -1, -1));
+        pan_week_updt.add(pan_time_wednesd, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 210, -1, 40));
+        pan_week_updt.add(pan_time_theursd, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 270, -1, 40));
+        pan_week_updt.add(pan_time_saturd, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 400, -1, 40));
+
+        lab_date_1.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        lab_date_1.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(153, 153, 153)));
+        pan_week_updt.add(lab_date_1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 30, 140, 30));
+
+        lab_date_2.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        lab_date_2.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(153, 153, 153)));
+        pan_week_updt.add(lab_date_2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 100, 140, 30));
+
+        lab_date_3.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        lab_date_3.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(153, 153, 153)));
+        pan_week_updt.add(lab_date_3, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 160, 140, 30));
+
+        lab_date_4.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        lab_date_4.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(153, 153, 153)));
+        pan_week_updt.add(lab_date_4, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 220, 140, 30));
+
+        lab_date_5.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        lab_date_5.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(153, 153, 153)));
+        pan_week_updt.add(lab_date_5, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 280, 140, 30));
+
+        lab_date_6.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        lab_date_6.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(153, 153, 153)));
+        pan_week_updt.add(lab_date_6, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 350, 140, 30));
+
+        lab_date_7.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        lab_date_7.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(153, 153, 153)));
+        pan_week_updt.add(lab_date_7, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 400, 140, 30));
+
+        jPanel2.add(pan_week_updt, "card2");
+
+        TabSeance.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "id", "numSeance", "timeSeance", "Fin Seance", "day_sceance", "date_sceance", "terminate", "Reporter"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                true, true, true, false, true, true, true, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        TabSeance.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TabSeanceMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(TabSeance);
+
+        jButton1.setText("Update ");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("Report");
+
+        javax.swing.GroupLayout pan_seance_updtLayout = new javax.swing.GroupLayout(pan_seance_updt);
+        pan_seance_updt.setLayout(pan_seance_updtLayout);
+        pan_seance_updtLayout.setHorizontalGroup(
+            pan_seance_updtLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 830, Short.MAX_VALUE)
+            .addGroup(pan_seance_updtLayout.createSequentialGroup()
+                .addGap(112, 112, 112)
+                .addComponent(jButton1)
+                .addGap(94, 94, 94)
+                .addComponent(jButton2)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        pan_seance_updtLayout.setVerticalGroup(
+            pan_seance_updtLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pan_seance_updtLayout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(47, 47, 47)
+                .addGroup(pan_seance_updtLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2))
+                .addGap(0, 123, Short.MAX_VALUE))
+        );
+
+        jPanel2.add(pan_seance_updt, "card3");
+
+        buttonRounder18.setBackground(new java.awt.Color(255, 0, 51));
+        buttonRounder18.setForeground(new java.awt.Color(255, 255, 255));
+        buttonRounder18.setText("تعديل الاسبوع الحالي");
+        buttonRounder18.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
+        buttonRounder18.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonRounder18ActionPerformed(evt);
+            }
+        });
+
+        buttonRounder20.setBackground(new java.awt.Color(255, 0, 51));
+        buttonRounder20.setForeground(new java.awt.Color(255, 255, 255));
+        buttonRounder20.setText("تعديل الاسبوع القادم");
+        buttonRounder20.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
+        buttonRounder20.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonRounder20ActionPerformed(evt);
+            }
+        });
+
+        id_ens.setText("IDEns");
+
+        id_matiere.setText("ID Matiere");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(lab_nbr_seance, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(buttonRounder17, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(34, 34, 34)
-                        .addComponent(buttonRounder19, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(lab_error_check_day, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(49, 49, 49))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(32, 32, 32)
-                        .addComponent(NbrSeanceInSemaine_db, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(com_ensieng, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(com_matiere, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(comb_niveau, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lab_error_dat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(txt_dat_first_seance, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(com_catego_niveau, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(246, 246, 246)
+                                .addComponent(lab_error_matier, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(32, 32, 32)
+                                        .addComponent(NbrSeanceInSemaine_db, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(com_ensieng, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(com_matiere, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(comb_niveau, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(id_ens)
+                                        .addGap(43, 43, 43)
+                                        .addComponent(id_matiere)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(buttonRounder20, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(28, 28, 28)
+                                        .addComponent(buttonRounder18, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(206, 206, 206)))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lab_error_dat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(com_catego_niveau, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txt_dat_first_seance, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(11, 11, 11))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                .addGap(246, 246, 246)
-                                .addComponent(lab_error_matier, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 841, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 18, Short.MAX_VALUE)))
-                .addGap(11, 11, 11))
-            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(lab_nbr_seance, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(buttonRounder17, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(39, 39, 39)
+                                .addComponent(buttonRounder19, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(34, 34, 34)
+                                .addComponent(lab_error_check_day, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(41, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(com_catego_niveau, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -743,21 +1076,30 @@ public class AddSeanceForm extends javax.swing.JDialog {
                     .addComponent(comb_niveau, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(5, 5, 5)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txt_dat_first_seance, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lab_error_matier, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(1, 1, 1)
-                .addComponent(lab_error_dat, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(txt_dat_first_seance, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(1, 1, 1)
+                        .addComponent(lab_error_dat, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(lab_error_matier, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(buttonRounder18, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(buttonRounder20, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(id_matiere)
+                            .addComponent(id_ens))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 447, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lab_error_check_day, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(buttonRounder17, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(buttonRounder19, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(lab_nbr_seance, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING)))
+                        .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(lab_error_check_day, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(buttonRounder19, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(buttonRounder17, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
 
@@ -789,6 +1131,15 @@ public class AddSeanceForm extends javax.swing.JDialog {
             List<Seance> listSceance = new ArrayList<>();
 
             try {
+                String FullName = (String) com_ensieng.getSelectedItem();
+
+                String Nom = FullName.split("-")[0];
+                String Prenom = FullName.split("-")[1];
+
+                System.out.println(Nom + "  -- " + Prenom);
+
+                Enseignant enseignat = enseignantDAOImpl.findByFullName(Nom, Prenom);
+                
                 if (check_sund.isSelected()) {
                     LocalDate date = LocalDate.parse(lab_date_1.getText(), formatter);
 
@@ -799,7 +1150,7 @@ public class AddSeanceForm extends javax.swing.JDialog {
                     LocalTime end_seance = LocalTime.parse(pan_time_sund.getfinTime().substring(0, 5));
 
                     Seance seance_1 = new Seance(0, num_seance, start_seance, end_seance,
-                            check_sund.getText(), date, false, matiere);
+                            check_sund.getText(), date, false, matiere,enseignat);
                     if (sceanceDAOImpl.save(seance_1) > 0) {
                         listSceance.add(seance_1);
                     }
@@ -809,7 +1160,7 @@ public class AddSeanceForm extends javax.swing.JDialog {
 //                    new SeanceMatiereDAOImpl(connection).save(seance_Matiere);
                 }
                 // الاثين
-                if (chec_mond.isSelected()) {
+                if (check_mond.isSelected()) {
                     LocalDate date = LocalDate.parse(lab_date_2.getText(), formatter);
 
                     num_seance = num_seance + 1;
@@ -819,7 +1170,7 @@ public class AddSeanceForm extends javax.swing.JDialog {
                     LocalTime end_seance = LocalTime.parse(pan_time_sund.getfinTime().substring(0, 5));
 
                     Seance seance_2 = new Seance(0, num_seance, start_seance, end_seance,
-                            chec_mond.getText(), date, false, matiere);
+                            check_mond.getText(), date, false, matiere,enseignat);
 
                     //sceanceDAOImpl.save(seance_2);
                     if (sceanceDAOImpl.save(seance_2) > 0) {
@@ -839,7 +1190,7 @@ public class AddSeanceForm extends javax.swing.JDialog {
                     LocalTime end_seance = LocalTime.parse(pan_time_sund.getfinTime().substring(0, 5));
 
                     Seance seance_3 = new Seance(0, num_seance, start_seance, end_seance,
-                            check_tues.getText(), date, false, matiere);
+                            check_tues.getText(), date, false, matiere,enseignat);
                     sceanceDAOImpl.save(seance_3);
 
                     if (sceanceDAOImpl.save(seance_3) > 0) {
@@ -847,7 +1198,7 @@ public class AddSeanceForm extends javax.swing.JDialog {
                     }
 
                 }
-                if (check_wed.isSelected()) {
+                if (check_wend.isSelected()) {
                     LocalDate date = LocalDate.parse(lab_date_4.getText(), formatter);
 
                     num_seance = num_seance + 1;
@@ -857,7 +1208,7 @@ public class AddSeanceForm extends javax.swing.JDialog {
                     LocalTime end_seance = LocalTime.parse(pan_time_sund.getfinTime().substring(0, 5));
 
                     Seance seance_4 = new Seance(0, num_seance, start_seance, end_seance,
-                            check_wed.getText(), date, false, matiere);
+                            check_wend.getText(), date, false, matiere,enseignat);
                     //sceanceDAOImpl.save(seance_4);
                     if (sceanceDAOImpl.save(seance_4) > 0) {
                         listSceance.add(seance_4);
@@ -873,7 +1224,7 @@ public class AddSeanceForm extends javax.swing.JDialog {
                     LocalTime end_seance = LocalTime.parse(pan_time_sund.getfinTime().substring(0, 5));
 
                     Seance seance_5 = new Seance(0, num_seance, start_seance, end_seance,
-                            check_thurs.getText(), date, false, matiere);
+                            check_thurs.getText(), date, false, matiere,enseignat);
                     //sceanceDAOImpl.save(seance_5);
                     if (sceanceDAOImpl.save(seance_5) > 0) {
                         listSceance.add(seance_5);
@@ -888,7 +1239,7 @@ public class AddSeanceForm extends javax.swing.JDialog {
                     LocalTime start_seance = LocalTime.parse(pan_time_sund.getbignTime().substring(0, 5));
                     LocalTime end_seance = LocalTime.parse(pan_time_sund.getfinTime().substring(0, 5));
                     Seance seance_6 = new Seance(0, num_seance, start_seance, end_seance,
-                            check_frid.getText(), date, false, matiere);
+                            check_frid.getText(), date, false, matiere,enseignat);
                     if (sceanceDAOImpl.save(seance_6) > 0) {
                         listSceance.add(seance_6);
                     }
@@ -903,7 +1254,7 @@ public class AddSeanceForm extends javax.swing.JDialog {
                     LocalTime start_seance = LocalTime.parse(pan_time_sund.getbignTime().substring(0, 5));
                     LocalTime end_seance = LocalTime.parse(pan_time_sund.getfinTime().substring(0, 5));
                     Seance seance_6 = new Seance(0, num_seance, start_seance, end_seance,
-                            check_satur.getText(), date, false, matiere);
+                            check_satur.getText(), date, false, matiere,enseignat);
                     if (sceanceDAOImpl.save(seance_6) > 0) {
                         listSceance.add(seance_6);
                     }
@@ -922,7 +1273,9 @@ public class AddSeanceForm extends javax.swing.JDialog {
 //                    }
 //                }
             } catch (ParseException ex) {
-                Logger.getLogger(AddSeanceForm.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(UpdateSeanceForm.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException ex) {
+                Logger.getLogger(UpdateSeanceForm.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
             if (com_matiere.getSelectedIndex() == -1) {
@@ -946,13 +1299,19 @@ public class AddSeanceForm extends javax.swing.JDialog {
 
         if (com_matiere.getSelectedIndex() != -1 && comb_niveau.getSelectedIndex() != -1
                 && com_catego_niveau.getSelectedIndex() != -1) {
-            lab_error_matier.setText("");
-            Matiere matiere = matiereDAOImpl.getMatiereNiveauOfCategory(com_matiere.getSelectedItem().toString(),
-                    comb_niveau.getSelectedItem().toString(), com_catego_niveau.getSelectedItem().toString());
-
-            setInfoEnseignantByMatiere(matiere);
-            setNumbeSeanceInSemaineByMatiere(matiere);
-
+            try {
+                lab_error_matier.setText("");
+                Matiere matiere = matiereDAOImpl.getMatiereNiveauOfCategory(com_matiere.getSelectedItem().toString(),
+                        comb_niveau.getSelectedItem().toString(), com_catego_niveau.getSelectedItem().toString());
+                
+                setInfoEnseignantByMatiere(matiere);
+                setNumbeSeanceInSemaineByMatiere(matiere);
+                FullSeanceTable(matiere);
+                //initializeAllSeances();
+                SetInfoSeeancesInFormUpdate();
+            } catch (DatabaseConnectionException ex) {
+                Logger.getLogger(UpdateSeanceForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } else {
 
             com_ensieng.removeAllItems();
@@ -988,6 +1347,8 @@ public class AddSeanceForm extends javax.swing.JDialog {
 
     }
 
+    
+    
     private void com_matiereItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_com_matiereItemStateChanged
 
     }//GEN-LAST:event_com_matiereItemStateChanged
@@ -1005,7 +1366,24 @@ public class AddSeanceForm extends javax.swing.JDialog {
     }//GEN-LAST:event_com_ensiengItemStateChanged
 
     private void com_ensiengActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_com_ensiengActionPerformed
-        // TODO add your handling code here:
+         if (com_ensieng.getSelectedIndex()==-1) {
+            System.out.println("No Prof Affected To This Module");
+            NbrSeanceInSemaine_db.setText("00");
+            id_ens.setText("");
+            id_matiere.setText("");
+            return;
+        }
+        
+        try {
+            String FullName = (String) com_ensieng.getSelectedItem();
+            String Nom = FullName.split("-")[0];
+            String Prenom = FullName.split("-")[1];
+            System.out.println(Nom + "  -- " + Prenom);
+            Enseignant enseignat = enseignantDAOImpl.findByFullName(Nom, Prenom);
+            id_ens.setText(enseignat.getId() + "");
+        } catch (SQLException ex) {
+            Logger.getLogger(AddSeanceForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_com_ensiengActionPerformed
 
     private void comb_niveauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comb_niveauActionPerformed
@@ -1025,8 +1403,8 @@ public class AddSeanceForm extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_check_sundActionPerformed
 
-    private void chec_mondActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chec_mondActionPerformed
-        if (chec_mond.isSelected()) {
+    private void check_mondActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_check_mondActionPerformed
+        if (check_mond.isSelected()) {
             nomber_seance = nomber_seance + 1;
             lab_nbr_seance.setText(nomber_seance + "");
             lab_error_check_day.setText("");
@@ -1034,7 +1412,7 @@ public class AddSeanceForm extends javax.swing.JDialog {
             nomber_seance = nomber_seance - 1;
             lab_nbr_seance.setText(nomber_seance + "");
         }
-    }//GEN-LAST:event_chec_mondActionPerformed
+    }//GEN-LAST:event_check_mondActionPerformed
 
     private void check_tuesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_check_tuesActionPerformed
         if (check_tues.isSelected()) {
@@ -1047,8 +1425,8 @@ public class AddSeanceForm extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_check_tuesActionPerformed
 
-    private void check_wedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_check_wedActionPerformed
-        if (check_wed.isSelected()) {
+    private void check_wendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_check_wendActionPerformed
+        if (check_wend.isSelected()) {
             nomber_seance = nomber_seance + 1;
             lab_nbr_seance.setText(nomber_seance + "");
             lab_error_check_day.setText("");
@@ -1056,7 +1434,7 @@ public class AddSeanceForm extends javax.swing.JDialog {
             nomber_seance = nomber_seance - 1;
             lab_nbr_seance.setText(nomber_seance + "");
         }
-    }//GEN-LAST:event_check_wedActionPerformed
+    }//GEN-LAST:event_check_wendActionPerformed
 
     private void check_thursActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_check_thursActionPerformed
         if (check_thurs.isSelected()) {
@@ -1111,6 +1489,32 @@ public class AddSeanceForm extends javax.swing.JDialog {
 
     }//GEN-LAST:event_txt_dat_first_seancePropertyChange
 
+    private void TabSeanceMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TabSeanceMouseClicked
+         
+    }//GEN-LAST:event_TabSeanceMouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+      try {
+            int selcRow=TabSeance.getSelectedRow();
+            int id_Seance=(int) TabSeance.getValueAt(selcRow, 0);
+            Seance seance=new SeanceDAOImpl(ConnectionDB.getConnection()).findById(id_Seance);
+            UpdateFormSeance obj=new UpdateFormSeance(home, true, seance);
+            obj.setVisible(true);
+        } catch (DatabaseConnectionException ex) {
+            Logger.getLogger(UpdateSeanceForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void buttonRounder18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRounder18ActionPerformed
+       pan_week_updt.setVisible(false);
+       pan_seance_updt.setVisible(true);
+    }//GEN-LAST:event_buttonRounder18ActionPerformed
+
+    private void buttonRounder20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRounder20ActionPerformed
+         pan_week_updt.setVisible(true);
+       pan_seance_updt.setVisible(false);
+    }//GEN-LAST:event_buttonRounder20ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1128,14 +1532,22 @@ public class AddSeanceForm extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AddSeanceForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UpdateSeanceForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AddSeanceForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UpdateSeanceForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AddSeanceForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UpdateSeanceForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AddSeanceForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UpdateSeanceForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -1148,7 +1560,7 @@ public class AddSeanceForm extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                AddSeanceForm dialog = new AddSeanceForm(new home(), true);
+                UpdateSeanceForm dialog = new UpdateSeanceForm(new home(), true,null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -1162,31 +1574,32 @@ public class AddSeanceForm extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel NbrSeanceInSemaine_db;
-    private material.design.buttonRounder buttonRounder10;
+    private javax.swing.JTable TabSeance;
     private material.design.buttonRounder buttonRounder17;
+    private material.design.buttonRounder buttonRounder18;
     private material.design.buttonRounder buttonRounder19;
-    private material.design.buttonRounder buttonRounder3;
-    private material.design.buttonRounder buttonRounder4;
-    private material.design.buttonRounder buttonRounder6;
-    private material.design.buttonRounder buttonRounder7;
-    private material.design.buttonRounder buttonRounder8;
-    private material.design.buttonRounder buttonRounder9;
-    private material.design.JCheckBoxCustomfr chec_mond;
+    private material.design.buttonRounder buttonRounder20;
     private material.design.JCheckBoxCustomfr check_frid;
+    private material.design.JCheckBoxCustomfr check_mond;
     private material.design.JCheckBoxCustomfr check_satur;
     private material.design.JCheckBoxCustomfr check_sund;
     private material.design.JCheckBoxCustomfr check_thurs;
     private material.design.JCheckBoxCustomfr check_tues;
-    private material.design.JCheckBoxCustomfr check_wed;
+    private material.design.JCheckBoxCustomfr check_wend;
     private material.design.Combobox com_catego_niveau;
     private material.design.Combobox com_ensieng;
     private material.design.Combobox com_matiere;
     private material.design.Combobox comb_niveau;
     private datechooser.DateChooser dateChooser;
+    private javax.swing.JLabel id_ens;
+    private javax.swing.JLabel id_matiere;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator10;
     private javax.swing.JSeparator jSeparator11;
     private javax.swing.JSeparator jSeparator2;
@@ -1204,6 +1617,7 @@ public class AddSeanceForm extends javax.swing.JDialog {
     private javax.swing.JLabel lab_error_dat;
     private javax.swing.JLabel lab_error_matier;
     private javax.swing.JLabel lab_nbr_seance;
+    private javax.swing.JPanel pan_seance_updt;
     private material.design.pan_time pan_time_frid;
     private material.design.pan_time pan_time_mond;
     private material.design.pan_time pan_time_saturd;
@@ -1211,6 +1625,7 @@ public class AddSeanceForm extends javax.swing.JDialog {
     private material.design.pan_time pan_time_theursd;
     private material.design.pan_time pan_time_tuesd;
     private material.design.pan_time pan_time_wednesd;
+    private javax.swing.JPanel pan_week_updt;
     private timePcker.TimePicker timePicker1;
     private material.design.TextField txt_dat_first_seance;
     // End of variables declaration//GEN-END:variables

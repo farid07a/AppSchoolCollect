@@ -21,28 +21,35 @@ public class Seance {
     private LocalDate date_sceance ;
     private boolean terminate;
     private  Matiere matiere;
-    
-    
+    private Enseignant enseignant;
 
+    public Seance(int id, int numSeance, LocalTime timeSeance, LocalTime finTime, String day_sceance, LocalDate date_sceance, boolean terminate, Matiere matiere, Enseignant enseignant) {
+        this.id = id;
+        this.numSeance = numSeance;
+        this.timeSeance = timeSeance;
+        this.finTime = finTime;
+        this.day_sceance = day_sceance;
+        this.date_sceance = date_sceance;
+        this.terminate = terminate;
+        this.matiere = matiere;
+        this.enseignant = enseignant;
+    }
+
+    public Enseignant getEnseignant() {
+        return enseignant;
+    }
+
+    public void setEnseignant(Enseignant enseignant) {
+        this.enseignant = enseignant;
+    }
+    
+    
     public boolean isTerminate() {
         return terminate;
     }
 
     public void setTerminate(boolean terminate) {
         this.terminate = terminate;
-    }
-    
-
-    public Seance(int id, int numSeance, LocalTime timeSeance, LocalTime finTime,String day_sceance, LocalDate date_sceance,boolean termine, Matiere matiere ) {
-        this.id = id;
-        
-        this.numSeance = numSeance;
-        this.timeSeance = timeSeance;
-        this.finTime = finTime;
-        this.day_sceance = day_sceance;
-        this.date_sceance = date_sceance;
-        this.terminate=termine;
-        this.matiere=matiere;
     }
 
     public Seance() {
@@ -109,6 +116,5 @@ public class Seance {
     public String toString() {
         return "Seance{" + "id=" + id + ", numSeance=" + numSeance + ", timeSeance=" + timeSeance + ", finTime=" + finTime + ", day_sceance=" + day_sceance + ", date_sceance=" + date_sceance + ", terminate=" + terminate + ", matiere=" + matiere + '}';
     }
-    
-    
+       
 }

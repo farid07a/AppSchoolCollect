@@ -39,13 +39,13 @@ public class SeanceDAOImpl extends AbstractDAO<Seance> {
     @Override
     protected String getInsertQuery() {
         return "INSERT INTO sceance (num_sceance, time_sceance, fin_time, "
-                + "day_sceance,date_sceance,termine,id_matiere) VALUES (?,?,?,?,?,?,?)";
+                + "day_sceance,date_sceance,termine,id_matiere,id_enseignant) VALUES (?,?,?,?,?,?,?,?)";
     }
 
     @Override
     protected String getUpdateQuery() {
         return "UPDATE sceance SET num_sceance = ?, time_sceance = ?,fin_time = ?,"
-                + " day_sceance = ?,date_sceance=?,termine=?,id_matiere=? WHERE id = ?";
+                + " day_sceance = ?,date_sceance=?,termine=?,id_matiere=? , id_enseignant=? WHERE id = ?";
     }
 
     @Override
@@ -57,6 +57,7 @@ public class SeanceDAOImpl extends AbstractDAO<Seance> {
         statement.setDate(5,java.sql.Date.valueOf( entity.getDate_sceance()));
         statement.setBoolean(6, entity.isTerminate());
         statement.setInt(7, entity.getMatiere().getId());
+        statement.setInt(8, entity.getEnseignant().getId());
     }
   
     @Override
@@ -68,7 +69,8 @@ public class SeanceDAOImpl extends AbstractDAO<Seance> {
         statement.setDate(5, java.sql.Date.valueOf( entity.getDay_sceance()));
         statement.setBoolean(6, entity.isTerminate());
        statement.setInt(7, entity.getMatiere().getId());
-        statement.setInt(8, entity.getId());
+       statement.setInt(8, entity.getEnseignant().getId());
+        statement.setInt(9, entity.getId());
     }
 
     @Override
@@ -83,6 +85,8 @@ public class SeanceDAOImpl extends AbstractDAO<Seance> {
         seance.setTerminate(resultSet.getBoolean("termine"));
         MatiereDAOImpl matier_dao=new MatiereDAOImpl(connection);
         seance.setMatiere(matier_dao.findById(resultSet.getInt("id_matiere")));
+        EnseignantDAOImpl enseignant_impl=new EnseignantDAOImpl(connection);
+        seance.setEnseignant(enseignant_impl.findById(resultSet.getInt("id_enseignant")));
         return seance;
     }
     
@@ -123,7 +127,7 @@ public class SeanceDAOImpl extends AbstractDAO<Seance> {
         return seances;
     }
          
-     public List<Seance> getListPrevieuxSceanceWithMonthByMatiere(Matiere matiere){
+     public List<Seance> getListPrevieuxSceanceWithMonthByMatiereY(Matiere matiere){
          
          List<Seance> seances = new ArrayList<>();
         try {

@@ -23,7 +23,7 @@ public class ConnectionDB {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String DATABASE_DRIVER = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
-    private static final String DATABASE_URL = "jdbc:sqlserver://localhost:1433;databaseName=nihal_school_1";
+    private static final String DATABASE_URL = "jdbc:sqlserver://localhost:1433;databaseName=nihal_school";
     private static final String DATABASE_USER = "sa";
     private static final String DATABASE_PASSWORD = "farid";
 

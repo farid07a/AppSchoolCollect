@@ -132,6 +132,18 @@ public class MatiereDAOImpl extends AbstractDAO<Matiere> {
                 + "  and niveau_etude.categore_niveau_id= categore_niveau.id\n"
                 + "  and matiere.id_categore_niveau = categore_niveau.id and "
                 + "matiere.id_niveau=niveau_etude.id";
+        
+        SELECT_Matier_Niveau_Category = "SELECT matiere.id, matiere.matiere_etd_ar,"
+                + " matiere.matiere_etd_fr, matiere.prix, matiere.id_niveau, "
+                + " matiere.id_categore_niveau ,matiere.id_enseignant,"
+                + " matiere.num_sceance_semaine,matiere.num_sceance_moins \n"
+                + " FROM niveau_etude,categore_niveau,matiere\n"
+                + " WHERE niveau_etude.niveau_initial_ar = N'" + niveau + "'\n"
+                + " AND categore_niveau.categore_niveau_ar = N'" + Catego + "'\n"
+                + " and matiere.matiere_etd_ar=N'" + Matiere_n + "'\n"
+                + " and niveau_etude.categore_niveau_id= categore_niveau.id\n"
+                + " and matiere.id_categore_niveau = categore_niveau.id and "
+                + " matiere.id_niveau=niveau_etude.id";
 
         PreparedStatement statement;
         try {
@@ -139,8 +151,9 @@ public class MatiereDAOImpl extends AbstractDAO<Matiere> {
             ResultSet resultSet = statement.executeQuery();
        
             while (resultSet.next()) {
-                int id_matiere = resultSet.getInt("matiere_id");
-                matiere = findById(id_matiere);
+//                int id_matiere = resultSet.getInt("matiere_id");
+//                 matiere = findById(id_matiere);
+                matiere= mapResultSetToEntity(resultSet);
             }
 
         } catch (SQLException ex) {

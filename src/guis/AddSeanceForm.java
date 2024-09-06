@@ -9,15 +9,10 @@ import domaine.Enseignant;
 import domaine.Matiere;
 import domaine.NiveauEtude;
 import domaine.Seance;
-import domaine.Seance_Matiere;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemListener;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
@@ -30,7 +25,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -47,7 +41,6 @@ import main.java.com.school.impl.MatiereDAOImpl;
 import main.java.com.school.impl.MatiereEnseignantDAOImpl;
 import main.java.com.school.impl.NiveauEtudeDAOImpl;
 import main.java.com.school.impl.SeanceDAOImpl;
-import main.java.com.school.impl.SeanceMatiereDAOImpl;
 import main.java.com.school.model.config.ConnectionDB;
 import main.java.com.school.model.config.DatabaseConnectionException;
 import material.design.ScrollBar;
@@ -374,6 +367,8 @@ public class AddSeanceForm extends javax.swing.JDialog {
         lab_error_check_day = new javax.swing.JLabel();
         lab_error_dat = new javax.swing.JLabel();
         NbrSeanceInSemaine_db = new javax.swing.JLabel();
+        id_matiere = new javax.swing.JLabel();
+        id_ens = new javax.swing.JLabel();
 
         dateChooser.setName(""); // NOI18N
         dateChooser.setTextRefernce(txt_dat_first_seance);
@@ -686,6 +681,10 @@ public class AddSeanceForm extends javax.swing.JDialog {
         NbrSeanceInSemaine_db.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         NbrSeanceInSemaine_db.setText("00");
 
+        id_matiere.setText("ID Matiere");
+
+        id_ens.setText("IDEns");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -705,14 +704,21 @@ public class AddSeanceForm extends javax.swing.JDialog {
                         .addComponent(lab_error_check_day, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(49, 49, 49))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(32, 32, 32)
-                        .addComponent(NbrSeanceInSemaine_db, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(com_ensieng, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(com_matiere, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(comb_niveau, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(32, 32, 32)
+                                .addComponent(NbrSeanceInSemaine_db, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(com_ensieng, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(com_matiere, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(comb_niveau, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(140, 140, 140)
+                                .addComponent(id_ens)
+                                .addGap(43, 43, 43)
+                                .addComponent(id_matiere)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lab_error_dat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -744,7 +750,12 @@ public class AddSeanceForm extends javax.swing.JDialog {
                 .addGap(5, 5, 5)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txt_dat_first_seance, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lab_error_matier, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(lab_error_matier, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(id_matiere)
+                            .addComponent(id_ens))))
                 .addGap(1, 1, 1)
                 .addComponent(lab_error_dat, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -777,18 +788,29 @@ public class AddSeanceForm extends javax.swing.JDialog {
         }
 
         if (com_matiere.getSelectedIndex() != -1 && !txt_dat_first_seance.getText().isEmpty() && !lab_nbr_seance.getText().equals("0")) {
-            Matiere matiere = new MatiereDAOImpl(connection).getMatiereNiveauOfCategory(com_matiere.getSelectedItem().toString(),
-                    comb_niveau.getSelectedItem().toString(), com_catego_niveau.getSelectedItem().toString());
-            JOptionPane.showMessageDialog(null, "" + matiere.getId());
-            SeanceDAOImpl sceanceDAOImpl = new SeanceDAOImpl(connection);
-            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-            //  DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            java.util.Date debu_seance;
-            java.util.Date fin_seance;
-            int num_seance = 1;
-            List<Seance> listSceance = new ArrayList<>();
 
             try {
+                Matiere matiere = new MatiereDAOImpl(connection).getMatiereNiveauOfCategory(com_matiere.getSelectedItem().toString(),
+                        comb_niveau.getSelectedItem().toString(), com_catego_niveau.getSelectedItem().toString());
+
+                String FullName = (String) com_ensieng.getSelectedItem();
+
+                String Nom = FullName.split("-")[0];
+                String Prenom = FullName.split("-")[1];
+
+                System.out.println(Nom + "  -- " + Prenom);
+
+                Enseignant enseignat = enseignantDAOImpl.findByFullName(Nom, Prenom);
+
+                //JOptionPane.showMessageDialog(null, "" + matiere.getId());
+                SeanceDAOImpl sceanceDAOImpl = new SeanceDAOImpl(connection);
+                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+                //  DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                java.util.Date debu_seance;
+                java.util.Date fin_seance;
+                int num_seance = 1;
+                List<Seance> listSceance = new ArrayList<>();
+
                 if (check_sund.isSelected()) {
                     LocalDate date = LocalDate.parse(lab_date_1.getText(), formatter);
 
@@ -797,9 +819,9 @@ public class AddSeanceForm extends javax.swing.JDialog {
 
                     LocalTime start_seance = LocalTime.parse(pan_time_sund.getbignTime().substring(0, 5));
                     LocalTime end_seance = LocalTime.parse(pan_time_sund.getfinTime().substring(0, 5));
-
+                    //start_seance.to
                     Seance seance_1 = new Seance(0, num_seance, start_seance, end_seance,
-                            check_sund.getText(), date, false, matiere);
+                            check_sund.getText(), date, false, matiere, enseignat);
                     if (sceanceDAOImpl.save(seance_1) > 0) {
                         listSceance.add(seance_1);
                     }
@@ -819,7 +841,7 @@ public class AddSeanceForm extends javax.swing.JDialog {
                     LocalTime end_seance = LocalTime.parse(pan_time_sund.getfinTime().substring(0, 5));
 
                     Seance seance_2 = new Seance(0, num_seance, start_seance, end_seance,
-                            chec_mond.getText(), date, false, matiere);
+                            chec_mond.getText(), date, false, matiere, enseignat);
 
                     //sceanceDAOImpl.save(seance_2);
                     if (sceanceDAOImpl.save(seance_2) > 0) {
@@ -839,7 +861,7 @@ public class AddSeanceForm extends javax.swing.JDialog {
                     LocalTime end_seance = LocalTime.parse(pan_time_sund.getfinTime().substring(0, 5));
 
                     Seance seance_3 = new Seance(0, num_seance, start_seance, end_seance,
-                            check_tues.getText(), date, false, matiere);
+                            check_tues.getText(), date, false, matiere, enseignat);
                     sceanceDAOImpl.save(seance_3);
 
                     if (sceanceDAOImpl.save(seance_3) > 0) {
@@ -857,7 +879,7 @@ public class AddSeanceForm extends javax.swing.JDialog {
                     LocalTime end_seance = LocalTime.parse(pan_time_sund.getfinTime().substring(0, 5));
 
                     Seance seance_4 = new Seance(0, num_seance, start_seance, end_seance,
-                            check_wed.getText(), date, false, matiere);
+                            check_wed.getText(), date, false, matiere, enseignat);
                     //sceanceDAOImpl.save(seance_4);
                     if (sceanceDAOImpl.save(seance_4) > 0) {
                         listSceance.add(seance_4);
@@ -873,7 +895,7 @@ public class AddSeanceForm extends javax.swing.JDialog {
                     LocalTime end_seance = LocalTime.parse(pan_time_sund.getfinTime().substring(0, 5));
 
                     Seance seance_5 = new Seance(0, num_seance, start_seance, end_seance,
-                            check_thurs.getText(), date, false, matiere);
+                            check_thurs.getText(), date, false, matiere, enseignat);
                     //sceanceDAOImpl.save(seance_5);
                     if (sceanceDAOImpl.save(seance_5) > 0) {
                         listSceance.add(seance_5);
@@ -888,7 +910,7 @@ public class AddSeanceForm extends javax.swing.JDialog {
                     LocalTime start_seance = LocalTime.parse(pan_time_sund.getbignTime().substring(0, 5));
                     LocalTime end_seance = LocalTime.parse(pan_time_sund.getfinTime().substring(0, 5));
                     Seance seance_6 = new Seance(0, num_seance, start_seance, end_seance,
-                            check_frid.getText(), date, false, matiere);
+                            check_frid.getText(), date, false, matiere, enseignat);
                     if (sceanceDAOImpl.save(seance_6) > 0) {
                         listSceance.add(seance_6);
                     }
@@ -903,7 +925,7 @@ public class AddSeanceForm extends javax.swing.JDialog {
                     LocalTime start_seance = LocalTime.parse(pan_time_sund.getbignTime().substring(0, 5));
                     LocalTime end_seance = LocalTime.parse(pan_time_sund.getfinTime().substring(0, 5));
                     Seance seance_6 = new Seance(0, num_seance, start_seance, end_seance,
-                            check_satur.getText(), date, false, matiere);
+                            check_satur.getText(), date, false, matiere, enseignat);
                     if (sceanceDAOImpl.save(seance_6) > 0) {
                         listSceance.add(seance_6);
                     }
@@ -922,6 +944,8 @@ public class AddSeanceForm extends javax.swing.JDialog {
 //                    }
 //                }
             } catch (ParseException ex) {
+                Logger.getLogger(AddSeanceForm.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException ex) {
                 Logger.getLogger(AddSeanceForm.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
@@ -949,6 +973,7 @@ public class AddSeanceForm extends javax.swing.JDialog {
             lab_error_matier.setText("");
             Matiere matiere = matiereDAOImpl.getMatiereNiveauOfCategory(com_matiere.getSelectedItem().toString(),
                     comb_niveau.getSelectedItem().toString(), com_catego_niveau.getSelectedItem().toString());
+            id_matiere.setText(matiere.getId() + "");
 
             setInfoEnseignantByMatiere(matiere);
             setNumbeSeanceInSemaineByMatiere(matiere);
@@ -1005,7 +1030,26 @@ public class AddSeanceForm extends javax.swing.JDialog {
     }//GEN-LAST:event_com_ensiengItemStateChanged
 
     private void com_ensiengActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_com_ensiengActionPerformed
-        // TODO add your handling code here:
+        
+        if (com_ensieng.getSelectedIndex()==-1) {
+            System.out.println("No Prof Affected To This Module");
+            NbrSeanceInSemaine_db.setText("00");
+            id_ens.setText("");
+            id_matiere.setText("");
+            return;
+        }
+        
+        try {
+            String FullName = (String) com_ensieng.getSelectedItem();
+            String Nom = FullName.split("-")[0];
+            String Prenom = FullName.split("-")[1];
+            System.out.println(Nom + "  -- " + Prenom);
+            Enseignant enseignat = enseignantDAOImpl.findByFullName(Nom, Prenom);
+            id_ens.setText(enseignat.getId() + "");
+        } catch (SQLException ex) {
+            Logger.getLogger(AddSeanceForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }//GEN-LAST:event_com_ensiengActionPerformed
 
     private void comb_niveauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comb_niveauActionPerformed
@@ -1183,6 +1227,8 @@ public class AddSeanceForm extends javax.swing.JDialog {
     private material.design.Combobox com_matiere;
     private material.design.Combobox comb_niveau;
     private datechooser.DateChooser dateChooser;
+    private javax.swing.JLabel id_ens;
+    private javax.swing.JLabel id_matiere;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;

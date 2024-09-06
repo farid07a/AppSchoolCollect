@@ -11,15 +11,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
-import javax.xml.transform.Source;
-import main.java.com.school.impl.MatiereDAOImpl;
 import main.java.com.school.impl.SeanceDAOImpl;
 import main.java.com.school.model.config.ConnectionDB;
 import main.java.com.school.model.config.DatabaseConnectionException;
@@ -57,7 +51,7 @@ public class SeanceService {
 
     }
 
-    public java.util.List<Seance> getListAllSeancePrevieuSemaine(Matiere matiere) throws DatabaseConnectionException {
+    public java.util.List<Seance> getListAllSeancePrevieuSemaineT(Matiere matiere) throws DatabaseConnectionException {
         List<Seance> Reverse_list_previeux_seances = new SeanceDAOImpl(ConnectionDB.getConnection()).getListPrevieuxSceanceWithSemaineByMatiere(matiere);
         List list_previeux_seances = new ArrayList();
         for (int i = Reverse_list_previeux_seances.size() - 1; i >= 0; i--) {
