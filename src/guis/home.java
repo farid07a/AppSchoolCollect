@@ -275,7 +275,7 @@ public class home extends javax.swing.JFrame {
                 if (!seance_service.ExistVacances(matiere)) {  //ExistVacances = false
                     seance_service.saveAllNextSeances(list_previeux);// save next seances about Matiere
                     list_seance_about_all_matieres.add(seance_service.GetSeanceByTody(matiere));
-
+//
                 } else {    // disable all components and show add seance
                     JOptionPane.showMessageDialog(null, "existe vacance . . . " + list_previeux.size());
                     seance_service.saveAllNextSeancesSiExistVacance(list_previeux);
