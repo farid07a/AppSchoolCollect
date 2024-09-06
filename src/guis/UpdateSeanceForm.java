@@ -131,7 +131,7 @@ public class UpdateSeanceForm extends javax.swing.JDialog {
             //TabSeance.setModel(df);
             
         } catch (DatabaseConnectionException ex) {
-            Logger.getLogger(UpdateFormSeance.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UpdatSeanceInfo.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -1498,7 +1498,7 @@ public void setInitSeanceSatur() {
             int selcRow=TabSeance.getSelectedRow();
             int id_Seance=(int) TabSeance.getValueAt(selcRow, 0);
             Seance seance=new SeanceDAOImpl(ConnectionDB.getConnection()).findById(id_Seance);
-            UpdateFormSeance obj=new UpdateFormSeance(home, true, seance);
+            UpdatSeanceInfo obj=new UpdatSeanceInfo(home, true, seance);
             obj.setVisible(true);
         } catch (DatabaseConnectionException ex) {
             Logger.getLogger(UpdateSeanceForm.class.getName()).log(Level.SEVERE, null, ex);
