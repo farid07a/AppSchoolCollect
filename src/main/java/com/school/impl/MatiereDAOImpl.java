@@ -167,7 +167,7 @@ public class MatiereDAOImpl extends AbstractDAO<Matiere> {
     public List <Matiere> getMatieresNiveauOfCategory(CategoreNiveau Catego ,NiveauEtude niveau) {
      
         List <Matiere> matieres = new ArrayList<>();
-        String SELECT_Matier_Niveau_Category = "SELECT * FROM " +getTableName()+ "  WHERE   id_categore_niveau =?  and  id_niveau=? ";
+        String SELECT_Matier_Niveau_Category = "SELECT * FROM " +getTableName()+ "  WHERE   id_categore_niveau=?  AND  id_niveau=? ";
 
         PreparedStatement statement;
         try {

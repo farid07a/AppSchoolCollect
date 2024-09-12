@@ -212,7 +212,6 @@ public class ModifyEtudiant extends javax.swing.JDialog {
 
         txt_birth_date_mod.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         txt_birth_date_mod.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txt_birth_date_mod.setText("");
         txt_birth_date_mod.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
         txt_birth_date_mod.setPreferredSize(new java.awt.Dimension(100, 30));
         txt_birth_date_mod.addActionListener(new java.awt.event.ActionListener() {
@@ -362,7 +361,7 @@ public class ModifyEtudiant extends javax.swing.JDialog {
                 buttonRounder1ActionPerformed(evt);
             }
         });
-        jPanel6.add(buttonRounder1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 110, 20, 20));
+        jPanel6.add(buttonRounder1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 100, 20, 20));
 
         jLabel2.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(153, 153, 153));

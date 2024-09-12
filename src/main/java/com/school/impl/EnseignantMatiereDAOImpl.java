@@ -78,14 +78,13 @@ public class EnseignantMatiereDAOImpl extends AbstractDAO<EnseignantMatiere> imp
         int num_sceance_moins = resultSet.getInt("num_sceance_moins");
         return new EnseignantMatiere(id, enseignat, matiere, date_start, num_sceance_semaine, num_sceance_moins);
     }
-
+// t
     @Override
     public List<Enseignant> findEnseignantByMatiereId(Matiere Matiere) throws SQLException {
         String Query = "SELECT * from " + getTableName() + " WHERE id_matiere=?";
         List<Enseignant> list_enseignant = new ArrayList<>();
-
         PreparedStatement statement = connection.prepareStatement(Query);
-        statement.setInt(1, Matiere.getId());
+       statement.setInt(1, Matiere.getId());
 
         ResultSet resultSet = statement.executeQuery();
 

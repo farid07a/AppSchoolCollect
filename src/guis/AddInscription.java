@@ -56,7 +56,7 @@ public class AddInscription extends javax.swing.JDialog {
     public AddInscription(java.awt.Frame parent, boolean modal, Etudiant etudiant) {
         super(parent, modal);
         initComponents();
-        
+          setLocationRelativeTo(this);
         this.home = (home) parent;
         this.etudiant = etudiant;
         try {
@@ -81,14 +81,13 @@ public class AddInscription extends javax.swing.JDialog {
         lab_catego_niv.setText(etudiant.getCtegore_niveau().getCategore_niveau_ar());
         lab_niv.setText(etudiant.getNiveau().getNiveauInitialAr());
         //JOptionPane.showMessageDialog(null, etudiant.getCtegore_niveau().getId() + "*****" + etudiant.getNiveau().getId());
-        getMatieres_Niveau(etudiant.getCtegore_niveau(), etudiant.getNiveau());
+        setMatieres_NiveauInCombox(etudiant.getCtegore_niveau(), etudiant.getNiveau());
     
     
     }
 
-    public void getMatieres_Niveau(CategoreNiveau categoreNiveau, NiveauEtude niveauEtude) {
-        List<Matiere> matieres = matiereDAOImpl.getMatieresNiveauOfCategory(categoreNiveau, niveauEtude);
-        
+    public void setMatieres_NiveauInCombox(CategoreNiveau categoreNiveau, NiveauEtude niveauEtude) {
+        List<Matiere> matieres = matiereDAOImpl.getMatieresNiveauOfCategory(categoreNiveau, niveauEtude);     
         System.out.println("List Matiers :"+matieres);
         for (Matiere matiere : matieres) {
            JOptionPane.showMessageDialog(null, "add matiere niveau"+matiere.getId());
@@ -154,6 +153,7 @@ JOptionPane.showMessageDialog(null, "nULL");
         buttonRounder30 = new material.design.buttonRounder();
         ComboGroup = new material.design.Combobox();
         lab_error = new javax.swing.JLabel();
+        jLabel20 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -277,6 +277,9 @@ JOptionPane.showMessageDialog(null, "nULL");
         lab_error.setForeground(new java.awt.Color(255, 0, 51));
         jPanel1.add(lab_error, new org.netbeans.lib.awtextra.AbsoluteConstraints(497, 310, 170, 30));
 
+        jLabel20.setText("00.00");
+        jPanel1.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 210, -1, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -292,14 +295,29 @@ JOptionPane.showMessageDialog(null, "nULL");
     }// </editor-fold>//GEN-END:initComponents
 
     private void matiere_combActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_matiere_combActionPerformed
-        if (matiere_comb.getSelectedIndex() != -1 && !lab_catego_niv.getText().equals("")
-                && !lab_catego_niv.getText().equals("")) {
-            setInfoEnseignantByMatiere();
+ if (matiere_comb.getSelectedIndex() != -1 ) {
+            
+            Matiere matiere = matiereDAOImpl.getMatiereNiveauOfCategory(matiere_comb.getSelectedItem().toString(),
+                    lab_niv.getText(), lab_catego_niv.getText());
 
+            jLabel20.setText(matiere.getPrix() + "");
+            
+            setInfoEnseignantByMatiere();
+            
         } else {
+            jLabel20.setText("0.00");
             Enseignantcombo.removeAllItems();
-            ComboGroup.removeAllItems();
+           ComboGroup.removeAllItems();
         }
+
+//        if (matiere_comb.getSelectedIndex() != -1 && !lab_catego_niv.getText().equals("")
+//                && !lab_catego_niv.getText().equals("")) {
+//            setInfoEnseignantByMatiere();
+//
+//        } else {
+//            Enseignantcombo.removeAllItems();
+//            ComboGroup.removeAllItems();
+//        }
 
     }//GEN-LAST:event_matiere_combActionPerformed
 
@@ -314,10 +332,19 @@ JOptionPane.showMessageDialog(null, "nULL");
                 String Nom = FullName.split("-")[0];
                 String Prenom = FullName.split("-")[1];
                 Enseignant enseignat = enseignantDAOImpl.findByFullName(Nom, Prenom);
-
+                
                 if (enseignat != null) {
-                    List<Groupe> list_group_etude = groupeImpl.findGroupsByMatiereAndEnseignat(new EnseignantMatiere(0, enseignat, matiere, LocalDate.now()), CheckAllGroups.isSelected());
-
+                    
+              //      EnseignantMatiere enseignantMatiere=matiereEnseignantDAOImpl.
+                    
+                 List<Groupe> list_group_etude=groupeImpl.findGroupsByMatiereAndEnseignat(new EnseignantMatiere(0, enseignat, matiere, LocalDate.MAX,0,0),CheckAllGroups.isSelected());
+                System.out.println("List Groups :"+list_group_etude);
+           //  List<Groupe> list_group_etude = groupeImpl.findGroupsByMatiereAndEnseignat(
+            //                new EnseignantMatiere, rootPaneCheckingEnabled)
+                            
+                            //findGroupsByMatiereAndEnseignat(new EnseignantMatiere(0, enseignat, matiere, LocalDate.now()), CheckAllGroups.isSelected());
+                  
+                    //  List<Groupe> list_group_etude = groupeImpl.findGroupsByMatiereAndEnseignat(new EnseignantMatiere(0, enseignat, matiere, LocalDate.now()), CheckAllGroups.isSelected());
                     ComboGroup.removeAllItems();
                     for (Groupe groupe : list_group_etude) {
                         ComboGroup.addItem(groupe.getName_group());
@@ -408,6 +435,7 @@ JOptionPane.showMessageDialog(null, "nULL");
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;

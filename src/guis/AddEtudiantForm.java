@@ -108,8 +108,6 @@ public class AddEtudiantForm extends javax.swing.JDialog {
         MatiereEnseignat_dao_impl=new EnseignantMatiereDAOImpl(connection);
         GroupeMatiere_imp_dao=new GroupeMatiereDAOImpl(connection);
         group_dao_imp=new GroupeImpl(connection);
-        
-        setDesignTable(jTable1, jScrollPane1);
         int id_matricule=1;
         int code_bar=1;
         if (etudiantDAOImpl.getlast()!=null){
@@ -167,9 +165,6 @@ public class AddEtudiantForm extends javax.swing.JDialog {
 //                clculePrixTotal();
             }
         };
-        jTable1.getColumnModel().getColumn(0).setCellRenderer(new TableActionCellRender(new PanelAction()));
-        jTable1.getColumnModel().getColumn(0).setCellEditor(new TableActionCellEditor(event, jTable1, 1));
-
         PrepareUI();
     }
 
@@ -243,8 +238,6 @@ public class AddEtudiantForm extends javax.swing.JDialog {
 //            } else {
 //                jLabel18.setText("/");
 //            }
-        } else if (com_matier.getSelectedIndex() == -1) {
-            jLabel18.setText("");
         }
 
     }
@@ -274,8 +267,7 @@ public class AddEtudiantForm extends javax.swing.JDialog {
             Matiere matiere = matiereDAOImpl.getMatiereNiveauOfCategory(matiere_comb.getSelectedItem().toString(),
                     ClassInNiveau.getSelectedItem().toString(), NiveauCatg_Etude.getSelectedItem().toString());
             
-            
-            
+                
             System.out.println(matiere);
             
             List<Enseignant> list_enseignat= MatiereEnseignat_dao_impl.findEnseignantByMatiereId(matiere);
@@ -348,33 +340,9 @@ public class AddEtudiantForm extends javax.swing.JDialog {
         NiveauCatg_Etude = new material.design.Combobox();
         matiere_comb = new material.design.Combobox();
         jLabel9 = new javax.swing.JLabel();
-        buttonRounder9 = new material.design.buttonRounder();
         ClassInNiveau = new material.design.Combobox();
-        jLabel4 = new javax.swing.JLabel();
-        jTextField8 = new javax.swing.JTextField();
-        jPanel6 = new javax.swing.JPanel();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
-        jLabel15 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
-        jLabel16 = new javax.swing.JLabel();
-        jLabel17 = new javax.swing.JLabel();
-        jLabel18 = new javax.swing.JLabel();
-        NomEnseignant = new javax.swing.JLabel();
-        PrenomEnseignant = new javax.swing.JLabel();
-        jLabel19 = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
-        jSeparator1 = new javax.swing.JSeparator();
-        jLabel22 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jLabel24 = new javax.swing.JLabel();
-        jLabel23 = new javax.swing.JLabel();
-        jCheckBoxCustom7 = new material.design.JCheckBoxCustomfr();
-        jCheckBoxCustom8 = new material.design.JCheckBoxCustomfr();
-        jCheckBoxCustom6 = new material.design.JCheckBoxCustomfr();
         ComboGroup = new material.design.Combobox();
         Enseignantcombo = new material.design.Combobox();
         CheckAllGroups = new javax.swing.JCheckBox();
@@ -395,9 +363,6 @@ public class AddEtudiantForm extends javax.swing.JDialog {
         pan_day1 = new javax.swing.JPanel();
         buttonRounder5 = new material.design.buttonRounder();
         btn_retour = new material.design.buttonRounder();
-        tableScrollButton1 = new ui.table.TableScrollButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
 
         dateChooser.setName(""); // NOI18N
         dateChooser.setTextRefernce(txt_dat_birth);
@@ -489,17 +454,14 @@ public class AddEtudiantForm extends javax.swing.JDialog {
         panel_info_student.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(204, 204, 204)), "المعلومات الشخصية", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(150, 150, 150))); // NOI18N
 
         txt_name.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txt_name.setToolTipText("");
         txt_name.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
         txt_name.setLabelText("الاســم");
 
         txt_prenom.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txt_prenom.setToolTipText("");
         txt_prenom.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
         txt_prenom.setLabelText("الــلـقـب");
 
         txt_prenom_fr.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txt_prenom_fr.setToolTipText("");
         txt_prenom_fr.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
         txt_prenom_fr.setLabelText("Prénom");
         txt_prenom_fr.setLangue(1);
@@ -510,13 +472,11 @@ public class AddEtudiantForm extends javax.swing.JDialog {
         });
 
         txt_nom_fr.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txt_nom_fr.setToolTipText("");
         txt_nom_fr.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
         txt_nom_fr.setLabelText("Nom");
         txt_nom_fr.setLangue(1);
 
         txt_dat_birth.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txt_dat_birth.setToolTipText("");
         txt_dat_birth.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
         txt_dat_birth.setLabelText("تاريخ الميلاد");
         txt_dat_birth.addActionListener(new java.awt.event.ActionListener() {
@@ -530,7 +490,6 @@ public class AddEtudiantForm extends javax.swing.JDialog {
         txt_renseignementPe.setLabelText("اسم الأب");
 
         txt_adress.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txt_adress.setToolTipText("");
         txt_adress.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
         txt_adress.setLabelText("الـعنوان");
         txt_adress.addActionListener(new java.awt.event.ActionListener() {
@@ -575,9 +534,13 @@ public class AddEtudiantForm extends javax.swing.JDialog {
         jLabel7.setForeground(new java.awt.Color(150, 150, 150));
         jLabel7.setText("الـهاتف :");
 
+        txt_tel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
+
         jLabel8.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(150, 150, 150));
         jLabel8.setText("البريد الإلكتروني ");
+
+        txt_email.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
 
         javax.swing.GroupLayout panel_info_studentLayout = new javax.swing.GroupLayout(panel_info_student);
         panel_info_student.setLayout(panel_info_studentLayout);
@@ -593,7 +556,7 @@ public class AddEtudiantForm extends javax.swing.JDialog {
                     .addGroup(panel_info_studentLayout.createSequentialGroup()
                         .addGap(8, 8, 8)
                         .addComponent(txt_adress, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txt_dat_birth, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panel_info_studentLayout.createSequentialGroup()
                         .addGap(9, 9, 9)
@@ -629,18 +592,14 @@ public class AddEtudiantForm extends javax.swing.JDialog {
                     .addComponent(txt_name, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txt_prenom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panel_info_studentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panel_info_studentLayout.createSequentialGroup()
-                        .addGroup(panel_info_studentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txt_nom_fr, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txt_prenom_fr, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txt_adress, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(28, 28, 28))
-                    .addGroup(panel_info_studentLayout.createSequentialGroup()
-                        .addGap(68, 68, 68)
-                        .addComponent(txt_dat_birth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(panel_info_studentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txt_nom_fr, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txt_prenom_fr, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panel_info_studentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txt_adress, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txt_dat_birth, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(28, 28, 28)
                 .addComponent(txt_renseignementPe, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panel_info_studentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -700,7 +659,7 @@ public class AddEtudiantForm extends javax.swing.JDialog {
                     .addComponent(Code, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(panel_info_student, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(50, Short.MAX_VALUE)))
+                    .addContainerGap(53, Short.MAX_VALUE)))
         );
 
         jPanel5.add(pan_info_etudiant_insc, "card2");
@@ -711,10 +670,10 @@ public class AddEtudiantForm extends javax.swing.JDialog {
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(204, 204, 204)), "معلومات التخصص", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 1, 13), new java.awt.Color(204, 204, 204))); // NOI18N
         jPanel4.setForeground(new java.awt.Color(0, 51, 204));
 
-        CatCours.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "دروس خصوصية", "لغات", "دورات تكوينية", "" }));
+        CatCours.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "دروس خصوصية", "لغات", "دورات تكوينية", " " }));
         CatCours.setActionCommand("");
         CatCours.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
-        CatCours.setLabeText("Category");
+        CatCours.setLabeText("الـفــئـــة");
         CatCours.setPreferredSize(new java.awt.Dimension(64, 46));
         CatCours.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -746,7 +705,7 @@ public class AddEtudiantForm extends javax.swing.JDialog {
                 NiveauCatg_EtudeActionPerformed(evt);
             }
         });
-        pan_cour.add(NiveauCatg_Etude, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 1, 190, 40));
+        pan_cour.add(NiveauCatg_Etude, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 30, 190, 50));
 
         matiere_comb.setLabeText("المادة");
         matiere_comb.addActionListener(new java.awt.event.ActionListener() {
@@ -754,13 +713,8 @@ public class AddEtudiantForm extends javax.swing.JDialog {
                 matiere_combActionPerformed(evt);
             }
         });
-        pan_cour.add(matiere_comb, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 50, 120, -1));
+        pan_cour.add(matiere_comb, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 110, 190, 50));
         pan_cour.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(613, 161, 53, 35));
-
-        buttonRounder9.setBackground(new java.awt.Color(151, 151, 255));
-        buttonRounder9.setForeground(new java.awt.Color(255, 255, 255));
-        buttonRounder9.setText("اضافة مادة أخرى");
-        pan_cour.add(buttonRounder9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 280, 150, 30));
 
         ClassInNiveau.setLabeText("القسم");
         ClassInNiveau.addActionListener(new java.awt.event.ActionListener() {
@@ -768,197 +722,27 @@ public class AddEtudiantForm extends javax.swing.JDialog {
                 ClassInNiveauActionPerformed(evt);
             }
         });
-        pan_cour.add(ClassInNiveau, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 1, 190, 40));
-
-        jLabel4.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel4.setText("الفــوج");
-        pan_cour.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 120, 40, 30));
-
-        jTextField8.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jTextField8.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTextField8.setText("G 01");
-        jTextField8.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(150, 150, 150)));
-        pan_cour.add(jTextField8, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 120, 60, 30));
-
-        jPanel6.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(204, 204, 204)), "الوقت و الأستاذ", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(204, 204, 204))); // NOI18N
-
-        jLabel10.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jLabel10.setForeground(new java.awt.Color(150, 150, 150));
-        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel10.setText(" التوقيت :");
-
-        jLabel11.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(150, 150, 150));
-        jLabel11.setText("من");
-
-        jLabel13.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jLabel13.setForeground(new java.awt.Color(150, 150, 150));
-        jLabel13.setText("مدة الحصة :");
-
-        jLabel15.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel15.setText("00 : 00");
-
-        jLabel12.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jLabel12.setForeground(new java.awt.Color(150, 150, 150));
-        jLabel12.setText("الى");
-
-        jLabel14.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-        jLabel14.setForeground(new java.awt.Color(255, 0, 0));
-        jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel14.setText("0 ساعة");
-
-        jLabel16.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel16.setText("00 : 00");
-
-        jLabel17.setText("أستاذ المادة");
-
-        jLabel18.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-
-        NomEnseignant.setText("Nom");
-
-        PrenomEnseignant.setText("Prenm");
-
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(jPanel6Layout.createSequentialGroup()
-                            .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jLabel17))
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel6Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel10)
-                                    .addGroup(jPanel6Layout.createSequentialGroup()
-                                        .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel12)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel11))))
-                            .addGroup(jPanel6Layout.createSequentialGroup()
-                                .addGap(50, 50, 50)
-                                .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel13))))
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(NomEnseignant, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(PrenomEnseignant, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addComponent(jLabel10)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel11)
-                    .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel12))
-                .addGap(3, 3, 3)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel17))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(NomEnseignant, javax.swing.GroupLayout.DEFAULT_SIZE, 18, Short.MAX_VALUE)
-                    .addComponent(PrenomEnseignant, javax.swing.GroupLayout.DEFAULT_SIZE, 18, Short.MAX_VALUE)))
-        );
-
-        pan_cour.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 160, 160));
-
-        jLabel19.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
-        jLabel19.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel19.setText("الدفــع :");
-        pan_cour.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 190, 40, 30));
+        pan_cour.add(ClassInNiveau, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 30, 190, 50));
 
         jLabel20.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel20.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel20.setText("2000");
         jLabel20.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
-        pan_cour.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 110, 110, 50));
+        pan_cour.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 250, 110, 50));
 
         jLabel21.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
         jLabel21.setForeground(new java.awt.Color(150, 150, 150));
         jLabel21.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel21.setText("المبلغ الشهري");
-        pan_cour.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 120, 80, 40));
+        pan_cour.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 260, 80, 40));
 
-        jSeparator1.setForeground(new java.awt.Color(153, 153, 153));
-        pan_cour.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 170, 580, -1));
-
-        jLabel22.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jLabel22.setForeground(new java.awt.Color(51, 51, 51));
-        jLabel22.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel22.setText("00");
-        jLabel22.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
-        pan_cour.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 230, 120, 40));
-
-        jTextField1.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jTextField1.setForeground(new java.awt.Color(51, 51, 51));
-        jTextField1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        pan_cour.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, 120, 40));
-
-        jLabel24.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jLabel24.setForeground(new java.awt.Color(51, 51, 51));
-        jLabel24.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel24.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
-        pan_cour.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 230, 120, 40));
-
-        jLabel23.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel23.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/payment (6).png"))); // NOI18N
-        pan_cour.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 180, 30, 40));
-
-        jCheckBoxCustom7.setBackground(new java.awt.Color(4, 181, 4));
-        jCheckBoxCustom7.setText("تسديد المبلغ كاملا");
-        jCheckBoxCustom7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBoxCustom7ActionPerformed(evt);
-            }
-        });
-        pan_cour.add(jCheckBoxCustom7, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 190, -1, 30));
-
-        jCheckBoxCustom8.setText("المبلغ الذي تم تسديده أوليا");
-        jCheckBoxCustom8.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBoxCustom8ActionPerformed(evt);
-            }
-        });
-        pan_cour.add(jCheckBoxCustom8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, 160, 30));
-
-        jCheckBoxCustom6.setBackground(new java.awt.Color(255, 0, 51));
-        jCheckBoxCustom6.setText("لم يتم دفع المبلغ");
-        jCheckBoxCustom6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBoxCustom6ActionPerformed(evt);
-            }
-        });
-        pan_cour.add(jCheckBoxCustom6, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 190, -1, 30));
-
-        ComboGroup.setLabeText("Group N°");
+        ComboGroup.setLabeText("الفوج");
         ComboGroup.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ComboGroupActionPerformed(evt);
             }
         });
-        pan_cour.add(ComboGroup, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 50, 70, -1));
+        pan_cour.add(ComboGroup, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 110, 100, 50));
 
         Enseignantcombo.setLabeText("استاذ المادة");
         Enseignantcombo.addActionListener(new java.awt.event.ActionListener() {
@@ -966,12 +750,14 @@ public class AddEtudiantForm extends javax.swing.JDialog {
                 EnseignantcomboActionPerformed(evt);
             }
         });
-        pan_cour.add(Enseignantcombo, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 50, 130, -1));
+        pan_cour.add(Enseignantcombo, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 110, 200, 50));
 
+        CheckAllGroups.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        CheckAllGroups.setForeground(new java.awt.Color(153, 153, 153));
         CheckAllGroups.setText("الكل");
         CheckAllGroups.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         CheckAllGroups.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        pan_cour.add(CheckAllGroups, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 60, -1, -1));
+        pan_cour.add(CheckAllGroups, new org.netbeans.lib.awtextra.AbsoluteConstraints(4, 130, 50, 30));
 
         pan_catego.add(pan_cour, "card2");
 
@@ -1091,7 +877,7 @@ public class AddEtudiantForm extends javax.swing.JDialog {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(CatCours, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(CatCours, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pan_catego, javax.swing.GroupLayout.PREFERRED_SIZE, 319, Short.MAX_VALUE))
         );
@@ -1106,22 +892,6 @@ public class AddEtudiantForm extends javax.swing.JDialog {
             }
         });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jTable1.setSelectionBackground(new java.awt.Color(235, 235, 235));
-        jScrollPane1.setViewportView(jTable1);
-
-        tableScrollButton1.add(jScrollPane1, java.awt.BorderLayout.CENTER);
-
         javax.swing.GroupLayout pan_etud_cour_inscLayout = new javax.swing.GroupLayout(pan_etud_cour_insc);
         pan_etud_cour_insc.setLayout(pan_etud_cour_inscLayout);
         pan_etud_cour_inscLayout.setHorizontalGroup(
@@ -1134,25 +904,15 @@ public class AddEtudiantForm extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btn_retour, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
-            .addGroup(pan_etud_cour_inscLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(pan_etud_cour_inscLayout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(tableScrollButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 610, Short.MAX_VALUE)
-                    .addContainerGap()))
         );
         pan_etud_cour_inscLayout.setVerticalGroup(
             pan_etud_cour_inscLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pan_etud_cour_inscLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 115, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 107, Short.MAX_VALUE)
                 .addComponent(btn_retour, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
-            .addGroup(pan_etud_cour_inscLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pan_etud_cour_inscLayout.createSequentialGroup()
-                    .addContainerGap(407, Short.MAX_VALUE)
-                    .addComponent(tableScrollButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(45, Short.MAX_VALUE)))
         );
 
         jPanel5.add(pan_etud_cour_insc, "card3");
@@ -1287,33 +1047,7 @@ public class AddEtudiantForm extends javax.swing.JDialog {
                 Inscription inscription = new Inscription(0, newEtudiant, matiere, LocalDate.now());
                 inscriptionDAOImpl.save(inscription);
                 JOptionPane.showMessageDialog(null, "  after iscripton ");
-               List<Seance_Matiere> seance_Matieres = seanceMatiereDAOImpl.getSeanceMatiereByIdMatier(matiere.getId());
-              
-               
-                // payement //
-                if (jCheckBoxCustom7.isSelected()) {
-                    int nbr = seance_Matieres.size();
-                    double prix = matiere.getPrix();
-                    double prix_unitair_seance = prix / nbr;
-                    for(Seance_Matiere seance_Matiere : seance_Matieres ){
-                    JOptionPane.showMessageDialog(null, "  seance "+nbr);
-                    Payement  payement = new Payement(0, newEtudiant, matiere,  seance_Matiere.getSeance(), "cash", prix, prix_unitair_seance, prix, LocalDate.now() );
-                    payementDAOImpl.save(payement);
-                  JOptionPane.showMessageDialog(null, "  after iscripton ");
-                    }
-                } else {                    
-                    if(jCheckBoxCustom8.isSelected()){
-                    int nbr = seance_Matieres.size();
-                    double prix = matiere.getPrix();
-                    double prix_unitair_seance = 0;
-                    for(Seance_Matiere seance_Matiere : seance_Matieres ){         
-                    Payement  payement = new Payement(0, newEtudiant, matiere, seance_Matiere.getSeance(), "NoPayee", prix, prix_unitair_seance, prix, LocalDate.now() );
-                    payementDAOImpl.save(payement);
-                    }
-                   }
-
-                }
-                
+               List<Seance_Matiere> seance_Matieres = seanceMatiereDAOImpl.getSeanceMatiereByIdMatier(matiere.getId());                
                 }
                 
             } else {
@@ -1429,26 +1163,6 @@ public class AddEtudiantForm extends javax.swing.JDialog {
         
     }//GEN-LAST:event_NiveauCatg_EtudeItemStateChanged
 
-    private void jCheckBoxCustom6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxCustom6ActionPerformed
-        jLabel22.setVisible(true);
-        jLabel24.setVisible(false);
-        jTextField1.setVisible(false);
-    }//GEN-LAST:event_jCheckBoxCustom6ActionPerformed
-
-    private void jCheckBoxCustom8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxCustom8ActionPerformed
-        jTextField1.setVisible(true);
-        jLabel24.setVisible(false);
-        jLabel22.setVisible(false);
-        jTextField1.requestFocusInWindow();
-    }//GEN-LAST:event_jCheckBoxCustom8ActionPerformed
-
-    private void jCheckBoxCustom7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxCustom7ActionPerformed
-        jLabel24.setVisible(true);
-        jLabel24.setText(jLabel20.getText());
-        jLabel22.setVisible(false);
-        jTextField1.setVisible(false);
-    }//GEN-LAST:event_jCheckBoxCustom7ActionPerformed
-
     private void EnseignantcomboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EnseignantcomboActionPerformed
        if (matiere_comb.getSelectedIndex() != -1 && ClassInNiveau.getSelectedIndex() != -1
                 && NiveauCatg_Etude.getSelectedIndex() != -1 && Enseignantcombo.getSelectedIndex()!=-1) {
@@ -1467,11 +1181,7 @@ public class AddEtudiantForm extends javax.swing.JDialog {
             System.out.println(enseignat);
             
             if (enseignat!=null){
-            NomEnseignant.setText(enseignat.getNomAr());
-            PrenomEnseignant.setText(enseignat.getPrenomAr());
-            
-            
-            List<Groupe> list_group_etude=group_dao_imp.findGroupsByMatiereAndEnseignat(new EnseignantMatiere(0, enseignat, matiere, LocalDate.MAX),CheckAllGroups.isSelected());
+            List<Groupe> list_group_etude=group_dao_imp.findGroupsByMatiereAndEnseignat(new EnseignantMatiere(0, enseignat, matiere, LocalDate.MAX,0,0),CheckAllGroups.isSelected());
                 System.out.println("List Groups :"+list_group_etude);
             
             ComboGroup.removeAllItems();
@@ -1615,8 +1325,6 @@ public class AddEtudiantForm extends javax.swing.JDialog {
     private material.design.Combobox Groupe4;
     private material.design.Combobox Groupe5;
     private material.design.Combobox NiveauCatg_Etude;
-    private javax.swing.JLabel NomEnseignant;
-    private javax.swing.JLabel PrenomEnseignant;
     private material.design.buttonRounder btn_retour;
     private material.design.buttonRounder buttonRounder1;
     private material.design.buttonRounder buttonRounder17;
@@ -1627,33 +1335,15 @@ public class AddEtudiantForm extends javax.swing.JDialog {
     private material.design.buttonRounder buttonRounder5;
     private material.design.buttonRounder buttonRounder6;
     private material.design.buttonRounder buttonRounder7;
-    private material.design.buttonRounder buttonRounder9;
     private material.design.Combobox com_niv;
     private material.design.Combobox comb_catego_niv;
     private material.design.Combobox combobox2;
     private material.design.Combobox combobox3;
     private datechooser.DateChooser dateChooser;
-    private material.design.JCheckBoxCustomfr jCheckBoxCustom6;
-    private material.design.JCheckBoxCustomfr jCheckBoxCustom7;
-    private material.design.JCheckBoxCustomfr jCheckBoxCustom8;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel23;
-    private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -1663,14 +1353,8 @@ public class AddEtudiantForm extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField6;
     private javax.swing.JTextField jTextField7;
-    private javax.swing.JTextField jTextField8;
     private javax.swing.JLabel lab_codBar;
     private javax.swing.JLabel lab_matricul;
     private material.design.Combobox matiere_comb;
@@ -1683,7 +1367,6 @@ public class AddEtudiantForm extends javax.swing.JDialog {
     private javax.swing.JPanel pan_info_etudiant_insc;
     private javax.swing.JPanel pan_lang;
     private javax.swing.JPanel panel_info_student;
-    private ui.table.TableScrollButton tableScrollButton1;
     private material.design.TextField txt_adress;
     private material.design.TextField txt_dat_birth;
     private javax.swing.JTextField txt_email;

@@ -4,18 +4,64 @@
  */
 package guis;
 
+import DialogFram.ValidationMessageDialog;
+import com.sun.javafx.application.PlatformImpl;
+import domaine.Enseignant;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.sql.Connection;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.stage.FileChooser;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import main.java.com.school.impl.EnseignantDAOImpl;
+import main.java.com.school.model.config.ConnectionDB;
+import main.java.com.school.model.config.DatabaseConnectionException;
+
 /**
  *
  * @author client
  */
 public class ModifyEnseignant extends javax.swing.JDialog {
 
-    /**
-     * Creates new form ModifyEnseignant
-     */
-    public ModifyEnseignant(java.awt.Frame parent, boolean modal) {
+    Enseignant enseignant;
+    home home;
+    EnseignantDAOImpl enseignantDAOImpl;
+    ValidationMessageDialog message_validation;
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    Connection connection;
+
+    public ModifyEnseignant(java.awt.Frame parent, boolean modal, Enseignant enseignant) {
         super(parent, modal);
+
         initComponents();
+        setLocationRelativeTo(this);
+         home = (home) parent;
+        this.enseignant=enseignant;
+        try {
+            connection = new ConnectionDB().getConnection();
+        } catch (DatabaseConnectionException ex) {
+            Logger.getLogger(home.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        enseignantDAOImpl = new EnseignantDAOImpl(connection);
+        message_validation = new ValidationMessageDialog(this, home);
+       
+        setInfoInItems();
+    }
+
+    public void setInfoInItems() {
+        txt_name.setText(enseignant.getNomAr());
+        txt_prenom.setText(enseignant.getPrenomAr());
+        txt_name_fr.setText(enseignant.getNomFr());
+        txt_prenom_fr.setText(enseignant.getPrenomFr());
+        txt_branch.setText(enseignant.getSpecialite());
+        txt_tel.setText(enseignant.getPhoneNum());
+        txt_gmail.setText(enseignant.getEmail());
     }
 
     /**
@@ -27,26 +73,38 @@ public class ModifyEnseignant extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        dateChooser1 = new datechooser.DateChooser();
+        dateChooser2 = new datechooser.DateChooser();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        first_name_client_txt8 = new javax.swing.JTextField();
+        txt_name = new javax.swing.JTextField();
         jLabel17 = new javax.swing.JLabel();
-        first_name_client_txt14 = new javax.swing.JTextField();
+        txt_prenom = new javax.swing.JTextField();
         jLabel18 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
-        first_name_client_txt10 = new javax.swing.JTextField();
+        txt_dat_birth = new javax.swing.JTextField();
         jLabel25 = new javax.swing.JLabel();
-        first_name_client_txt11 = new javax.swing.JTextField();
-        first_name_client_txt7 = new javax.swing.JTextField();
+        txt_adress = new javax.swing.JTextField();
+        txt_ident = new javax.swing.JTextField();
         jLabel21 = new javax.swing.JLabel();
         combobox12 = new material.design.Combobox();
-        first_name_client_txt15 = new javax.swing.JTextField();
+        txt_branch = new javax.swing.JTextField();
         jLabel26 = new javax.swing.JLabel();
-        jLabel28 = new javax.swing.JLabel();
-        first_name_client_txt17 = new javax.swing.JTextField();
-        first_name_client_txt18 = new javax.swing.JTextField();
-        jLabel29 = new javax.swing.JLabel();
+        buttonRounder31 = new material.design.buttonRounder();
+        buttonRounder30 = new material.design.buttonRounder();
+        lab_imag = new javax.swing.JLabel();
+        buttonRounder2 = new material.design.buttonRounder();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel20 = new javax.swing.JLabel();
+        jLabel22 = new javax.swing.JLabel();
+        txt_name_fr = new javax.swing.JTextField();
+        txt_prenom_fr = new javax.swing.JTextField();
+        txt_gmail = new javax.swing.JTextField();
+        txt_tel = new javax.swing.JTextField();
+        jLabel27 = new javax.swing.JLabel();
+        jLabel23 = new javax.swing.JLabel();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -63,308 +121,400 @@ public class ModifyEnseignant extends javax.swing.JDialog {
         setResizable(false);
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(153, 153, 153));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("تــعــديـــل مـعلـومـــــات الأســتـاذ");
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 0, 379, 36));
 
-        first_name_client_txt8.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        first_name_client_txt8.setForeground(new java.awt.Color(204, 204, 204));
-        first_name_client_txt8.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        first_name_client_txt8.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
-        first_name_client_txt8.setPreferredSize(new java.awt.Dimension(100, 30));
-        first_name_client_txt8.addKeyListener(new java.awt.event.KeyAdapter() {
+        txt_name.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        txt_name.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txt_name.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
+        txt_name.setPreferredSize(new java.awt.Dimension(100, 30));
+        txt_name.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                first_name_client_txt8KeyPressed(evt);
+                txt_nameKeyPressed(evt);
             }
         });
+        jPanel2.add(txt_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 180, 180, -1));
 
-        jLabel17.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel17.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        jLabel17.setForeground(new java.awt.Color(102, 102, 102));
         jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel17.setText("اسم الأستاذ :");
+        jPanel2.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 155, 74, 20));
 
-        first_name_client_txt14.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        first_name_client_txt14.setForeground(new java.awt.Color(204, 204, 204));
-        first_name_client_txt14.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        first_name_client_txt14.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
-        first_name_client_txt14.setPreferredSize(new java.awt.Dimension(100, 30));
-        first_name_client_txt14.addKeyListener(new java.awt.event.KeyAdapter() {
+        txt_prenom.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        txt_prenom.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txt_prenom.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
+        txt_prenom.setPreferredSize(new java.awt.Dimension(100, 30));
+        txt_prenom.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                first_name_client_txt14KeyPressed(evt);
+                txt_prenomKeyPressed(evt);
             }
         });
+        jPanel2.add(txt_prenom, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 180, 190, -1));
 
-        jLabel18.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel18.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        jLabel18.setForeground(new java.awt.Color(102, 102, 102));
         jLabel18.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel18.setText("لقب الأستاذ :");
+        jPanel2.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 155, 64, 20));
 
-        jLabel19.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel19.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        jLabel19.setForeground(new java.awt.Color(102, 102, 102));
         jLabel19.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel19.setText("تاريخ الميلاد :");
+        jPanel2.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 286, 74, 20));
 
-        first_name_client_txt10.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        first_name_client_txt10.setForeground(new java.awt.Color(204, 204, 204));
-        first_name_client_txt10.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        first_name_client_txt10.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
-        first_name_client_txt10.setPreferredSize(new java.awt.Dimension(100, 30));
-        first_name_client_txt10.addActionListener(new java.awt.event.ActionListener() {
+        txt_dat_birth.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        txt_dat_birth.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txt_dat_birth.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
+        txt_dat_birth.setPreferredSize(new java.awt.Dimension(100, 30));
+        txt_dat_birth.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                first_name_client_txt10ActionPerformed(evt);
+                txt_dat_birthActionPerformed(evt);
             }
         });
-        first_name_client_txt10.addKeyListener(new java.awt.event.KeyAdapter() {
+        txt_dat_birth.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                first_name_client_txt10KeyPressed(evt);
+                txt_dat_birthKeyPressed(evt);
             }
         });
+        jPanel2.add(txt_dat_birth, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 310, 180, -1));
 
-        jLabel25.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel25.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        jLabel25.setForeground(new java.awt.Color(102, 102, 102));
         jLabel25.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel25.setText("العنوان :");
+        jPanel2.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 286, 60, 20));
 
-        first_name_client_txt11.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        first_name_client_txt11.setForeground(new java.awt.Color(204, 204, 204));
-        first_name_client_txt11.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        first_name_client_txt11.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
-        first_name_client_txt11.setPreferredSize(new java.awt.Dimension(100, 30));
-        first_name_client_txt11.addActionListener(new java.awt.event.ActionListener() {
+        txt_adress.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        txt_adress.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txt_adress.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
+        txt_adress.setPreferredSize(new java.awt.Dimension(100, 30));
+        txt_adress.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                first_name_client_txt11ActionPerformed(evt);
+                txt_adressActionPerformed(evt);
             }
         });
-        first_name_client_txt11.addKeyListener(new java.awt.event.KeyAdapter() {
+        txt_adress.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                first_name_client_txt11KeyPressed(evt);
+                txt_adressKeyPressed(evt);
             }
         });
+        jPanel2.add(txt_adress, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 310, 190, -1));
 
-        first_name_client_txt7.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        first_name_client_txt7.setForeground(new java.awt.Color(204, 204, 204));
-        first_name_client_txt7.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        first_name_client_txt7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
-        first_name_client_txt7.setPreferredSize(new java.awt.Dimension(100, 30));
-        first_name_client_txt7.addKeyListener(new java.awt.event.KeyAdapter() {
+        txt_ident.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        txt_ident.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txt_ident.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(153, 153, 153)));
+        txt_ident.setPreferredSize(new java.awt.Dimension(100, 30));
+        txt_ident.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                first_name_client_txt7KeyPressed(evt);
+                txt_identKeyPressed(evt);
             }
         });
+        jPanel2.add(txt_ident, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 100, 300, -1));
 
-        jLabel21.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel21.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        jLabel21.setForeground(new java.awt.Color(102, 102, 102));
         jLabel21.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel21.setText("رقم التعريف");
+        jPanel2.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 100, -1, 26));
 
         combobox12.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         combobox12.setLabeText("الشــهـادة");
         combobox12.setPreferredSize(new java.awt.Dimension(64, 46));
+        jPanel2.add(combobox12, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 350, 380, 50));
 
-        first_name_client_txt15.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        first_name_client_txt15.setForeground(new java.awt.Color(204, 204, 204));
-        first_name_client_txt15.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        first_name_client_txt15.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
-        first_name_client_txt15.setPreferredSize(new java.awt.Dimension(100, 30));
-        first_name_client_txt15.addActionListener(new java.awt.event.ActionListener() {
+        txt_branch.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        txt_branch.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txt_branch.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
+        txt_branch.setPreferredSize(new java.awt.Dimension(100, 30));
+        txt_branch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                first_name_client_txt15ActionPerformed(evt);
+                txt_branchActionPerformed(evt);
             }
         });
-        first_name_client_txt15.addKeyListener(new java.awt.event.KeyAdapter() {
+        txt_branch.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                first_name_client_txt15KeyPressed(evt);
+                txt_branchKeyPressed(evt);
             }
         });
+        jPanel2.add(txt_branch, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 430, 380, -1));
 
-        jLabel26.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel26.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        jLabel26.setForeground(new java.awt.Color(102, 102, 102));
         jLabel26.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel26.setText("الاخـتصـاص :");
+        jPanel2.add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 410, 64, 20));
 
-        jLabel28.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel28.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel28.setText("المادة :");
-
-        first_name_client_txt17.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        first_name_client_txt17.setForeground(new java.awt.Color(204, 204, 204));
-        first_name_client_txt17.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        first_name_client_txt17.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
-        first_name_client_txt17.setPreferredSize(new java.awt.Dimension(100, 30));
-        first_name_client_txt17.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                first_name_client_txt17KeyPressed(evt);
+        buttonRounder31.setBackground(new java.awt.Color(153, 153, 153));
+        buttonRounder31.setForeground(new java.awt.Color(255, 255, 255));
+        buttonRounder31.setText("إلغاء");
+        buttonRounder31.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonRounder31ActionPerformed(evt);
             }
         });
+        jPanel2.add(buttonRounder31, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 500, 100, 30));
 
-        first_name_client_txt18.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        first_name_client_txt18.setForeground(new java.awt.Color(204, 204, 204));
-        first_name_client_txt18.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        first_name_client_txt18.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
-        first_name_client_txt18.setPreferredSize(new java.awt.Dimension(100, 30));
-        first_name_client_txt18.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                first_name_client_txt18KeyPressed(evt);
+        buttonRounder30.setBackground(new java.awt.Color(102, 102, 255));
+        buttonRounder30.setForeground(new java.awt.Color(255, 255, 255));
+        buttonRounder30.setText("حفظ");
+        buttonRounder30.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonRounder30ActionPerformed(evt);
             }
         });
+        jPanel2.add(buttonRounder30, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 500, 100, 30));
 
-        jLabel29.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel29.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel29.setText("تاريخ الانضمام :");
+        lab_imag.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
+        jPanel2.add(lab_imag, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 60, 110, 100));
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(124, 124, 124)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(116, Short.MAX_VALUE)
-                .addComponent(first_name_client_txt7, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
-                .addComponent(jLabel21)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(first_name_client_txt14, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(14, 14, 14)
-                        .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(6, 6, 6)
-                        .addComponent(first_name_client_txt8, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(220, 220, 220)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(first_name_client_txt10, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(140, 140, 140)
-                                .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jPanel2Layout.createSequentialGroup()
-                                    .addComponent(first_name_client_txt15, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(0, 0, 0)
-                                    .addComponent(jLabel26, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(jPanel2Layout.createSequentialGroup()
-                                    .addComponent(first_name_client_txt17, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(0, 0, 0)
-                                    .addComponent(jLabel28, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(combobox12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(first_name_client_txt11, javax.swing.GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE)))
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel25, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(16, 16, 16)
-                        .addComponent(first_name_client_txt18, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0)
-                        .addComponent(jLabel29)))
-                .addContainerGap())
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(first_name_client_txt14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(first_name_client_txt8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(first_name_client_txt7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(4, 4, 4)
-                        .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(5, 5, 5)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(first_name_client_txt10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(first_name_client_txt11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel25, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(39, 39, 39)
-                .addComponent(combobox12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(first_name_client_txt15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel26, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(first_name_client_txt17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel28, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 101, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(first_name_client_txt18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(24, 24, 24))
-        );
+        buttonRounder2.setBackground(new java.awt.Color(224, 175, 175));
+        buttonRounder2.setText("تحميل الصورة");
+        buttonRounder2.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        buttonRounder2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonRounder2ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(buttonRounder2, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 166, 100, 30));
+
+        jLabel4.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel4.setText("BarrCod");
+        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 60, 53, 30));
+
+        jLabel3.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        jLabel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
+        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 60, 370, 32));
+
+        jLabel20.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        jLabel20.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel20.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel20.setText(" Prénom Enseignant :");
+        jPanel2.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 225, 120, 20));
+
+        jLabel22.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        jLabel22.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel22.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel22.setText("Nom Enseignant :");
+        jPanel2.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 225, 100, 20));
+
+        txt_name_fr.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        txt_name_fr.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txt_name_fr.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
+        txt_name_fr.setPreferredSize(new java.awt.Dimension(100, 30));
+        txt_name_fr.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txt_name_frKeyPressed(evt);
+            }
+        });
+        jPanel2.add(txt_name_fr, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 250, 180, -1));
+
+        txt_prenom_fr.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        txt_prenom_fr.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txt_prenom_fr.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
+        txt_prenom_fr.setPreferredSize(new java.awt.Dimension(100, 30));
+        txt_prenom_fr.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txt_prenom_frKeyPressed(evt);
+            }
+        });
+        jPanel2.add(txt_prenom_fr, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 250, 190, -1));
+
+        txt_gmail.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        txt_gmail.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txt_gmail.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
+        txt_gmail.setPreferredSize(new java.awt.Dimension(100, 30));
+        txt_gmail.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_gmailActionPerformed(evt);
+            }
+        });
+        txt_gmail.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txt_gmailKeyPressed(evt);
+            }
+        });
+        jPanel2.add(txt_gmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 260, 190, -1));
+
+        txt_tel.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        txt_tel.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txt_tel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
+        txt_tel.setPreferredSize(new java.awt.Dimension(100, 30));
+        txt_tel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_telActionPerformed(evt);
+            }
+        });
+        txt_tel.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txt_telKeyPressed(evt);
+            }
+        });
+        jPanel2.add(txt_tel, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 220, 190, -1));
+
+        jLabel27.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        jLabel27.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel27.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel27.setText("Tel");
+        jPanel2.add(jLabel27, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, 20, 20));
+
+        jLabel23.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        jLabel23.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel23.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel23.setText("Gmail");
+        jPanel2.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 260, 40, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 6, Short.MAX_VALUE))
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 848, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 540, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void first_name_client_txt8KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_first_name_client_txt8KeyPressed
+    private void txt_nameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_nameKeyPressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_first_name_client_txt8KeyPressed
+    }//GEN-LAST:event_txt_nameKeyPressed
 
-    private void first_name_client_txt14KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_first_name_client_txt14KeyPressed
+    private void txt_prenomKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_prenomKeyPressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_first_name_client_txt14KeyPressed
+    }//GEN-LAST:event_txt_prenomKeyPressed
 
-    private void first_name_client_txt10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_first_name_client_txt10ActionPerformed
+    private void txt_dat_birthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_dat_birthActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_first_name_client_txt10ActionPerformed
+    }//GEN-LAST:event_txt_dat_birthActionPerformed
 
-    private void first_name_client_txt10KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_first_name_client_txt10KeyPressed
+    private void txt_dat_birthKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_dat_birthKeyPressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_first_name_client_txt10KeyPressed
+    }//GEN-LAST:event_txt_dat_birthKeyPressed
 
-    private void first_name_client_txt11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_first_name_client_txt11ActionPerformed
+    private void txt_adressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_adressActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_first_name_client_txt11ActionPerformed
+    }//GEN-LAST:event_txt_adressActionPerformed
 
-    private void first_name_client_txt11KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_first_name_client_txt11KeyPressed
+    private void txt_adressKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_adressKeyPressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_first_name_client_txt11KeyPressed
+    }//GEN-LAST:event_txt_adressKeyPressed
 
-    private void first_name_client_txt7KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_first_name_client_txt7KeyPressed
+    private void txt_identKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_identKeyPressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_first_name_client_txt7KeyPressed
+    }//GEN-LAST:event_txt_identKeyPressed
 
-    private void first_name_client_txt15KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_first_name_client_txt15KeyPressed
+    private void txt_branchKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_branchKeyPressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_first_name_client_txt15KeyPressed
+    }//GEN-LAST:event_txt_branchKeyPressed
 
-    private void first_name_client_txt17KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_first_name_client_txt17KeyPressed
+    private void txt_branchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_branchActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_first_name_client_txt17KeyPressed
+    }//GEN-LAST:event_txt_branchActionPerformed
 
-    private void first_name_client_txt18KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_first_name_client_txt18KeyPressed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_first_name_client_txt18KeyPressed
+    private void buttonRounder31ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRounder31ActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_buttonRounder31ActionPerformed
+    File imagefile;
+    private void buttonRounder30ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRounder30ActionPerformed
 
-    private void first_name_client_txt15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_first_name_client_txt15ActionPerformed
+        String prenom = txt_prenom.getText();
+        String nom = txt_name.getText();
+        String prenomfr = txt_prenom_fr.getText();
+        String nomfr = txt_name_fr.getText();
+       // LocalDate date_birth = LocalDate.parse(txt_dat_birth.getText(), formatter);//txt_dat_birth
+        String adress = txt_adress.getText();
+        String tel = txt_tel.getText();
+        String email = txt_gmail.getText();
+        String branch = txt_branch.getText();
+
+        enseignant.setNomAr(nom);
+        enseignant.setPrenomAr(prenom);
+        enseignant.setNomFr(nomfr);
+        enseignant.setPrenomAr(prenomfr);
+        enseignant.setSpecialite(txt_branch.getText());
+        enseignant.setPhoneNum(txt_tel.getText());
+        enseignant.setEmail(txt_gmail.getText());
+
+//        ImageIcon imageIcon = new ImageIcon(getClass().getResource("/img/diplome (4).png"));
+//        byte[] image;
+//        if (lab_imag.getIcon() != imageIcon) {
+//            if (imagefile != null) {
+//                image = getimageTOByte();
+//                enseignant.setImage(image);
+//            }
+//        }
+        if (enseignantDAOImpl.update(enseignant) > 0) {
+            home.setInfoEnsignInTab();
+            this.dispose();
+            message_validation.showMessage(" تأكيد العملية", "تم  تعديل معلومات الأستاذ بنجاج  .");
+
+        }
+    }//GEN-LAST:event_buttonRounder30ActionPerformed
+
+    private void buttonRounder2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRounder2ActionPerformed
+        PlatformImpl.startup(() -> {
+            FileChooser fileChooser = new FileChooser();
+            configureFileChooser(fileChooser);
+            File file = fileChooser.showOpenDialog(null);
+            if (file != null) {
+                BufferedImage img = null;
+                try {
+                    img = ImageIO.read(new File(file.getPath()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Image dimg = img.getScaledInstance(lab_imag.getWidth() - 2, lab_imag.getHeight() - 2,
+                        Image.SCALE_SMOOTH);
+                ImageIcon imageIcon;
+                imageIcon = new ImageIcon(dimg);
+
+                //  jLabel2.setIcon(icon);
+                lab_imag.setIcon(imageIcon);
+
+                //lab_image.setText(name_food.getText());
+                // lab_image.setHorizontalTextPosition(JLabel.CENTER);
+            } else {
+
+            }
+        });
+    }//GEN-LAST:event_buttonRounder2ActionPerformed
+
+    private void txt_name_frKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_name_frKeyPressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_first_name_client_txt15ActionPerformed
+    }//GEN-LAST:event_txt_name_frKeyPressed
+
+    private void txt_prenom_frKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_prenom_frKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_prenom_frKeyPressed
+
+    private void txt_gmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_gmailActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_gmailActionPerformed
+
+    private void txt_gmailKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_gmailKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_gmailKeyPressed
+
+    private void txt_telActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_telActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_telActionPerformed
+
+    private void txt_telKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_telKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_telKeyPressed
 
     /**
      * @param args the command line arguments
@@ -394,40 +544,64 @@ public class ModifyEnseignant extends javax.swing.JDialog {
         //</editor-fold>
 
         /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                ModifyEnseignant dialog = new ModifyEnseignant(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                ModifyEnseignant dialog = new ModifyEnseignant(new javax.swing.JFrame(), true);
+//                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+//                    @Override
+//                    public void windowClosing(java.awt.event.WindowEvent e) {
+//                        System.exit(0);
+//                    }
+//                });
+//                dialog.setVisible(true);
+//            }
+//        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private material.design.buttonRounder buttonRounder2;
+    private material.design.buttonRounder buttonRounder30;
+    private material.design.buttonRounder buttonRounder31;
     private material.design.Combobox combobox12;
-    private javax.swing.JTextField first_name_client_txt10;
-    private javax.swing.JTextField first_name_client_txt11;
-    private javax.swing.JTextField first_name_client_txt14;
-    private javax.swing.JTextField first_name_client_txt15;
-    private javax.swing.JTextField first_name_client_txt17;
-    private javax.swing.JTextField first_name_client_txt18;
-    private javax.swing.JTextField first_name_client_txt7;
-    private javax.swing.JTextField first_name_client_txt8;
+    private datechooser.DateChooser dateChooser1;
+    private datechooser.DateChooser dateChooser2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
+    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
-    private javax.swing.JLabel jLabel28;
-    private javax.swing.JLabel jLabel29;
+    private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel lab_imag;
+    private javax.swing.JTextField txt_adress;
+    private javax.swing.JTextField txt_branch;
+    private javax.swing.JTextField txt_dat_birth;
+    private javax.swing.JTextField txt_gmail;
+    private javax.swing.JTextField txt_ident;
+    private javax.swing.JTextField txt_name;
+    private javax.swing.JTextField txt_name_fr;
+    private javax.swing.JTextField txt_prenom;
+    private javax.swing.JTextField txt_prenom_fr;
+    private javax.swing.JTextField txt_tel;
     // End of variables declaration//GEN-END:variables
+private static void configureFileChooser(
+            final FileChooser fileChooser) {
+        fileChooser.setTitle("View Pictures");
+        fileChooser.setInitialDirectory(
+                new File(System.getProperty("user.home"))
+        );
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("JPG", "*.jpg"),
+                new FileChooser.ExtensionFilter("PNG", "*.png")
+        );
+    }
+
 }
