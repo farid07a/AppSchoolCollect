@@ -22,8 +22,10 @@ public class Seance {
     private boolean terminate;
     private  Matiere matiere;
     private Enseignant enseignant;
+    private int NumSeamaine;
+    private int NumMoins;
 
-    public Seance(int id, int numSeance, LocalTime timeSeance, LocalTime finTime, String day_sceance, LocalDate date_sceance, boolean terminate, Matiere matiere, Enseignant enseignant) {
+    public Seance(int id, int numSeance, LocalTime timeSeance, LocalTime finTime, String day_sceance, LocalDate date_sceance, boolean terminate, Matiere matiere, Enseignant enseignant, int NumSeamaine, int NumMoins) {
         this.id = id;
         this.numSeance = numSeance;
         this.timeSeance = timeSeance;
@@ -33,7 +35,41 @@ public class Seance {
         this.terminate = terminate;
         this.matiere = matiere;
         this.enseignant = enseignant;
+        this.NumSeamaine = NumSeamaine;
+        this.NumMoins = NumMoins;
     }
+
+    public int getNumSeamaine() {
+        return NumSeamaine;
+    }
+
+    public void setNumSeamaine(int NumSeamaine) {
+        this.NumSeamaine = NumSeamaine;
+    }
+
+    public int getNumMoins() {
+        return NumMoins;
+    }
+
+    public void setNumMoins(int NumMoins) {
+        this.NumMoins = NumMoins;
+    }
+    
+    
+    
+    
+
+//    public Seance(int id, int numSeance, LocalTime timeSeance, LocalTime finTime, String day_sceance, LocalDate date_sceance, boolean terminate, Matiere matiere, Enseignant enseignant) {
+//        this.id = id;
+//        this.numSeance = numSeance;
+//        this.timeSeance = timeSeance;
+//        this.finTime = finTime;
+//        this.day_sceance = day_sceance;
+//        this.date_sceance = date_sceance;
+//        this.terminate = terminate;
+//        this.matiere = matiere;
+//        this.enseignant = enseignant;
+//    }
 
     public Enseignant getEnseignant() {
         return enseignant;

@@ -821,7 +821,7 @@ public class AddSeanceForm extends javax.swing.JDialog {
                     LocalTime end_seance = LocalTime.parse(pan_time_sund.getfinTime().substring(0, 5));
                     //start_seance.to
                     Seance seance_1 = new Seance(0, num_seance, start_seance, end_seance,
-                            check_sund.getText(), date, false, matiere, enseignat);
+                            check_sund.getText(), date, false, matiere, enseignat,1,1);
                     if (sceanceDAOImpl.save(seance_1) > 0) {
                         listSceance.add(seance_1);
                     }
@@ -841,7 +841,7 @@ public class AddSeanceForm extends javax.swing.JDialog {
                     LocalTime end_seance = LocalTime.parse(pan_time_sund.getfinTime().substring(0, 5));
 
                     Seance seance_2 = new Seance(0, num_seance, start_seance, end_seance,
-                            chec_mond.getText(), date, false, matiere, enseignat);
+                            chec_mond.getText(), date, false, matiere, enseignat,1,1);
 
                     //sceanceDAOImpl.save(seance_2);
                     if (sceanceDAOImpl.save(seance_2) > 0) {
@@ -861,7 +861,7 @@ public class AddSeanceForm extends javax.swing.JDialog {
                     LocalTime end_seance = LocalTime.parse(pan_time_sund.getfinTime().substring(0, 5));
 
                     Seance seance_3 = new Seance(0, num_seance, start_seance, end_seance,
-                            check_tues.getText(), date, false, matiere, enseignat);
+                            check_tues.getText(), date, false, matiere, enseignat,1,1);
                     sceanceDAOImpl.save(seance_3);
 
                     if (sceanceDAOImpl.save(seance_3) > 0) {
@@ -879,7 +879,7 @@ public class AddSeanceForm extends javax.swing.JDialog {
                     LocalTime end_seance = LocalTime.parse(pan_time_sund.getfinTime().substring(0, 5));
 
                     Seance seance_4 = new Seance(0, num_seance, start_seance, end_seance,
-                            check_wed.getText(), date, false, matiere, enseignat);
+                            check_wed.getText(), date, false, matiere, enseignat,1,1);
                     //sceanceDAOImpl.save(seance_4);
                     if (sceanceDAOImpl.save(seance_4) > 0) {
                         listSceance.add(seance_4);
@@ -895,7 +895,7 @@ public class AddSeanceForm extends javax.swing.JDialog {
                     LocalTime end_seance = LocalTime.parse(pan_time_sund.getfinTime().substring(0, 5));
 
                     Seance seance_5 = new Seance(0, num_seance, start_seance, end_seance,
-                            check_thurs.getText(), date, false, matiere, enseignat);
+                            check_thurs.getText(), date, false, matiere, enseignat,1,1);
                     //sceanceDAOImpl.save(seance_5);
                     if (sceanceDAOImpl.save(seance_5) > 0) {
                         listSceance.add(seance_5);
@@ -910,7 +910,7 @@ public class AddSeanceForm extends javax.swing.JDialog {
                     LocalTime start_seance = LocalTime.parse(pan_time_sund.getbignTime().substring(0, 5));
                     LocalTime end_seance = LocalTime.parse(pan_time_sund.getfinTime().substring(0, 5));
                     Seance seance_6 = new Seance(0, num_seance, start_seance, end_seance,
-                            check_frid.getText(), date, false, matiere, enseignat);
+                            check_frid.getText(), date, false, matiere, enseignat,1,1);
                     if (sceanceDAOImpl.save(seance_6) > 0) {
                         listSceance.add(seance_6);
                     }
@@ -925,7 +925,7 @@ public class AddSeanceForm extends javax.swing.JDialog {
                     LocalTime start_seance = LocalTime.parse(pan_time_sund.getbignTime().substring(0, 5));
                     LocalTime end_seance = LocalTime.parse(pan_time_sund.getfinTime().substring(0, 5));
                     Seance seance_6 = new Seance(0, num_seance, start_seance, end_seance,
-                            check_satur.getText(), date, false, matiere, enseignat);
+                            check_satur.getText(), date, false, matiere, enseignat,1,1);
                     if (sceanceDAOImpl.save(seance_6) > 0) {
                         listSceance.add(seance_6);
                     }
@@ -943,9 +943,7 @@ public class AddSeanceForm extends javax.swing.JDialog {
 //                            System.out.println("Success Save");
 //                    }
 //                }
-            } catch (ParseException ex) {
-                Logger.getLogger(AddSeanceForm.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (SQLException ex) {
+            } catch (ParseException | SQLException ex) {
                 Logger.getLogger(AddSeanceForm.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {

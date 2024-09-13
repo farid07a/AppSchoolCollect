@@ -97,8 +97,28 @@ public class EnseignantMatiereDAOImpl extends AbstractDAO<EnseignantMatiere> imp
     }
 
     @Override
+    public EnseignantMatiere findByNamesEnseignantMatiere(Enseignant enseignant, Matiere matiere) throws SQLException{
+        String Query = "SELECT * from " + getTableName() + " WHERE id_enseignant = ? and id_matiere=?";
+         
+        EnseignantMatiere enseignant_matiere=null;
+
+        PreparedStatement statement = connection.prepareStatement(Query);
+        statement.setInt(1, enseignant.getId());
+        statement.setInt(2, matiere.getId());
+        ResultSet resultSet = statement.executeQuery();
+
+        if (resultSet.next()) {
+            enseignant_matiere=mapResultSetToEntity(resultSet);
+        }
+
+        return enseignant_matiere;
+    }
+
+    
+    
+    @Override
     public List<Matiere> findMatiereByEnseignantId(Enseignant Enseignant) throws SQLException {
-        String Query = "SELECT * from " + getTableName() + " WHERE id_matiere = ?";
+        String Query = "SELECT * from " + getTableName() + " WHERE id_enseignant = ?";
         List<Matiere> list_matiere = new ArrayList<>();
 
         PreparedStatement statement = connection.prepareStatement(Query);

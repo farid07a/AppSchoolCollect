@@ -3,19 +3,20 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/farid/Documents/NetBeansProjects/AppSchoolCollect/src/guis/home.java</file>
             <file>file:/C:/Users/farid/Documents/NetBeansProjects/AppSchoolCollect/src/guis/Panel_PresenceUI.java</file>
+            <file>file:/C:/Users/farid/Documents/NetBeansProjects/AppSchoolCollect/src/guis/AddEtudiantForm.java</file>
             <file>file:/C:/Users/farid/Documents/NetBeansProjects/AppSchoolCollect/src/main/java/com/school/impl/EnseignantMatiereDAOImpl.java</file>
-            <file>file:/C:/Users/farid/Documents/NetBeansProjects/AppSchoolCollect/src/Service/EnseignantMatiereService.java</file>
+            <file>file:/C:/Users/farid/Documents/NetBeansProjects/AppSchoolCollect/src/main/java/com/school/DAO/EnseignantMatiereDAO.java</file>
             <file>file:/C:/Users/farid/Documents/NetBeansProjects/AppSchoolCollect/src/guis/UpdatSeanceInfo.java</file>
             <file>file:/C:/Users/farid/Documents/NetBeansProjects/AppSchoolCollect/src/Service/SeanceService.java</file>
-            <file>file:/C:/Users/farid/Documents/NetBeansProjects/AppSchoolCollect/src/Service/EnseignantService.java</file>
             <file>file:/C:/Users/farid/Documents/NetBeansProjects/AppSchoolCollect/src/guis/AddInscription.java</file>
             <file>file:/C:/Users/farid/Documents/NetBeansProjects/AppSchoolCollect/src/Service/MatiereService.java</file>
             <file>file:/C:/Users/farid/Documents/NetBeansProjects/AppSchoolCollect/src/guis/AddSeanceForm.java</file>
+            <file>file:/C:/Users/farid/Documents/NetBeansProjects/AppSchoolCollect/src/domaine/Seance.java</file>
             <file>file:/C:/Users/farid/Documents/NetBeansProjects/AppSchoolCollect/src/guis/UpdateSeanceForm.java</file>
             <file>file:/C:/Users/farid/Documents/NetBeansProjects/AppSchoolCollect/src/main/java/com/school/impl/SeanceDAOImpl.java</file>
-            <file>file:/C:/Users/farid/Documents/NetBeansProjects/AppSchoolCollect/src/main/java/com/school/impl/MatiereDAOImpl.java</file>
+            <file>file:/C:/Users/farid/Documents/NetBeansProjects/AppSchoolCollect/src/main/java/com/school/DAO/AbstractDAO.java</file>
+            <file>file:/C:/Users/farid/Documents/NetBeansProjects/AppSchoolCollect/src/main/java/com/school/DAO/GenericDAO.java</file>
         </group>
     </open-files>
 </project-private>

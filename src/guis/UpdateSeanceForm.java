@@ -7,6 +7,7 @@ package guis;
 import Service.SeanceService;
 import domaine.CategoreNiveau;
 import domaine.Enseignant;
+import domaine.EnseignantMatiere;
 import domaine.Matiere;
 import domaine.NiveauEtude;
 import domaine.Seance;
@@ -55,7 +56,7 @@ import ui.table.TableCustom;
  * @author client
  */
 public class UpdateSeanceForm extends javax.swing.JDialog {
-
+    
     home home;
     Connection connection;
     CategoreNiveauDAOImpl categoreNiveauDAOImpl;
@@ -64,12 +65,12 @@ public class UpdateSeanceForm extends javax.swing.JDialog {
     EnseignantDAOImpl enseignantDAOImpl;
     EnseignantMatiereDAOImpl MatiereEnseignat_dao_impl;
     int nomber_seance = 0;
-
-    public UpdateSeanceForm(java.awt.Frame parent, boolean modal,Seance seance) {
+    
+    public UpdateSeanceForm(java.awt.Frame parent, boolean modal, Seance seance) {
         super(parent, modal);
         home = (home) parent;
         initComponents();
-
+        
         try {
             connection = new ConnectionDB().getConnection();
         } catch (DatabaseConnectionException ex) {
@@ -83,119 +84,131 @@ public class UpdateSeanceForm extends javax.swing.JDialog {
         setLocationRelativeTo(this);
         setDesignTable(TabSeance, jScrollPane1);
         PrepareUI();
-
+        
         txt_dat_first_seance.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
                 changeDateOfDays();
             }
-
+            
             @Override
             public void removeUpdate(DocumentEvent e) {
                 //  changeDateOfDays();
             }
-
+            
             @Override
             public void changedUpdate(DocumentEvent e) {
                 changeDateOfDays();
             }
-
+            
         });
-
-    }
-
-    public void PrepareUI() {
-        setInfoCategoreNiveauInCombox();   
+        
     }
     
-    public void FullSeanceTable(Matiere matiere){
+    public void PrepareUI() {
+        setInfoCategoreNiveauInCombox();        
+    }
+    
+    public void FullSeanceTable(EnseignantMatiere enseignant_matiere) {
         try {
-            SeanceService seance_service=new SeanceService();
+            SeanceService seance_service = new SeanceService();
 //            seance_service.getListAllSeancePrevieuSemaine(matiere);
 //            Connection connection =ConnectionDB.getConnection();
 //            SeanceDAOImpl seance_dao_imp=new SeanceDAOImpl(connection);
 //            List <Seance> list_seance=seance_dao_imp.findAll();
             
-            List <Seance> list_seance = seance_service.getListAllSeancePrevieuSemaine(matiere);
-            DefaultTableModel df=(DefaultTableModel) TabSeance.getModel();
+            List<Seance> list_seance = seance_service.getListAllSeancePrevieuSemaineByEnse_Matiere(enseignant_matiere);
+            DefaultTableModel df = (DefaultTableModel) TabSeance.getModel();
             df.setRowCount(0);
             for (Seance seance : list_seance) {
                 
-                if(matiere.getId()==seance.getMatiere().getId()){
-                Object [] arg={seance.getId(),seance.getNumSeance(),seance.getTimeSeance(),seance.getFinTime(),seance.getDay_sceance()
-                ,seance.getDate_sceance().toString(),seance.isTerminate(),"تحويل"};
-                df.addRow(arg);
+                if (enseignant_matiere.getEnseignant().getId() == seance.getEnseignant().getId()
+                        && enseignant_matiere.getMatiere().getId() == seance.getMatiere().getId()) {
+                    Object[] arg = {seance.getId(), seance.getNumSeance(), seance.getTimeSeance(), seance.getFinTime(), seance.getDay_sceance(),
+                         seance.getDate_sceance().toString(), seance.isTerminate(), "تحويل"};
+                    df.addRow(arg);
                 }
             }
-            
+
             //TabSeance.setModel(df);
-            
         } catch (DatabaseConnectionException ex) {
             Logger.getLogger(UpdatSeanceInfo.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
-    
-    public void SetInfoSeeancesInFormUpdate() throws DatabaseConnectionException {
-    Matiere matiere = matiereDAOImpl.getMatiereNiveauOfCategory(
-            com_matiere.getSelectedItem().toString(),
-            comb_niveau.getSelectedItem().toString(),
-            com_catego_niveau.getSelectedItem().toString()
-    );
-
-    SeanceService seanceService = new SeanceService();
-    
-    List<Seance> listSeance = seanceService.getListAllSeancePrevieuSemaine(matiere);
-    initializeAllSeances();
-    for (Seance seance : listSeance) {
-        System.out.println(seance);
-        String dayName = seance.getDay_sceance();
+    public void SetInfoSeeancesInFormUpdate() throws DatabaseConnectionException, SQLException {
         
-        System.out.println("dayName:"+dayName);
-        switch (dayName) {
-            case "الأحد":
-                setSeanceSund(seance);
-                break;
-            case "الاثنين":
-                System.out.println("I am in Mondy");
-                setSeanceMond(seance);
-                check_mond.setSelected(true);
+        String FullName = (String) com_ensieng.getSelectedItem();
+        String Nom = FullName.split("-")[0];
+        String Prenom = FullName.split("-")[1];
+        System.out.println(Nom + "  -- " + Prenom);
+        Enseignant enseignat = enseignantDAOImpl.findByFullName(Nom, Prenom);
+        
+        if (enseignat != null) {
+            
+            Matiere matiere = matiereDAOImpl.getMatiereNiveauOfCategory(
+                    com_matiere.getSelectedItem().toString(),
+                    comb_niveau.getSelectedItem().toString(),
+                    com_catego_niveau.getSelectedItem().toString()
+            );
+            
+            EnseignantMatiere enseignant_matiere = MatiereEnseignat_dao_impl.findByNamesEnseignantMatiere(enseignat, matiere);
+            
+            SeanceService seanceService = new SeanceService();
+            
+            List<Seance> listSeance = seanceService.getListAllSeancePrevieuSemaineByEnse_Matiere(enseignant_matiere);
+            initializeAllSeances();
+            for (Seance seance : listSeance) {
+                System.out.println(seance);
+                String dayName = seance.getDay_sceance();
                 
-                System.out.println("Success checked");
-                break;
-            case "الثلاثاء":
-                setSeancecheckTues(seance);
-                break;
-            case "الأربعاء":
-                setSeancecheckWend(seance);
-                break;
-            case "الخميس":
-                setSeancecheckThurs(seance);
-                break;
-            case "الجمعة":
-                setSeancecheckFrid(seance);
-                break;
-            case "السبت":
-                setSeancecheckSatur(seance);
-                break;
-            default:
-                System.out.println("No Day");
-                break;
+                System.out.println("dayName:" + dayName);
+                switch (dayName) {
+                    case "الأحد":
+                        setSeanceSund(seance);
+                        break;
+                    case "الاثنين":
+                        System.out.println("I am in Mondy");
+                        setSeanceMond(seance);
+                        check_mond.setSelected(true);
+                        
+                        System.out.println("Success checked");
+                        break;
+                    case "الثلاثاء":
+                        setSeancecheckTues(seance);
+                        break;
+                    case "الأربعاء":
+                        setSeancecheckWend(seance);
+                        break;
+                    case "الخميس":
+                        setSeancecheckThurs(seance);
+                        break;
+                    case "الجمعة":
+                        setSeancecheckFrid(seance);
+                        break;
+                    case "السبت":
+                        setSeancecheckSatur(seance);
+                        break;
+                    default:
+                        System.out.println("No Day");
+                        break;
+                }
+            }
         }
+        }
+
+
+
+    private void initializeAllSeances() {
+        setInitSeanceSund();
+        setInitSeanceMond();
+        setInitSeanceTues();
+        setInitSeanceWend();
+        setInitSeanceThurs();
+        setInitSeanceFrid();
+        setInitSeanceSatur();
     }
-}
 
-private void initializeAllSeances() {
-    setInitSeanceSund();
-    setInitSeanceMond();
-    setInitSeanceTues();
-    setInitSeanceWend();
-    setInitSeanceThurs();
-    setInitSeanceFrid();
-    setInitSeanceSatur();
-}
-
-    
 //    public void SetInfoSeeancesInFormUpdate() throws DatabaseConnectionException{
 //        Matiere matiere = matiereDAOImpl.getMatiereNiveauOfCategory(com_matiere.getSelectedItem().toString(),
 //                    comb_niveau.getSelectedItem().toString(), com_catego_niveau.getSelectedItem().toString());
@@ -284,106 +297,101 @@ private void initializeAllSeances() {
 //            
 //        }
 //    }
-    
-    
-    
-    
-    public void setSeanceSund(Seance seance){
+    public void setSeanceSund(Seance seance) {
         check_sund.setSelected(true);
         pan_time_sund.setbignTime(seance.getTimeSeance().toString());
         pan_time_sund.setfinTime(seance.getFinTime().toString());
         lab_date_1.setText(seance.getDate_sceance().toString());
     }
-    public void setSeanceMond(Seance seance){
+
+    public void setSeanceMond(Seance seance) {
         check_mond.setSelected(true);
         pan_time_mond.setbignTime(seance.getTimeSeance().toString());
         pan_time_mond.setfinTime(seance.getFinTime().toString());
         lab_date_2.setText(seance.getDate_sceance().toString());
     }
     
-    public void setSeancecheckTues(Seance seance){
+    public void setSeancecheckTues(Seance seance) {
         check_tues.setSelected(true);
         pan_time_tuesd.setbignTime(seance.getTimeSeance().toString());
         pan_time_tuesd.setfinTime(seance.getFinTime().toString());
         lab_date_3.setText(seance.getDate_sceance().toString());
     }
     
-    public void setSeancecheckWend(Seance seance){
+    public void setSeancecheckWend(Seance seance) {
         check_wend.setSelected(true);
         pan_time_wednesd.setbignTime(seance.getTimeSeance().toString());
         pan_time_wednesd.setfinTime(seance.getFinTime().toString());
         lab_date_4.setText(seance.getDate_sceance().toString());
     }
     
-    public void setSeancecheckThurs(Seance seance){
+    public void setSeancecheckThurs(Seance seance) {
         check_thurs.setSelected(true);
         pan_time_theursd.setbignTime(seance.getTimeSeance().toString());
         pan_time_theursd.setfinTime(seance.getFinTime().toString());
         lab_date_5.setText(seance.getDate_sceance().toString());
     }
     
-    public void setSeancecheckFrid(Seance seance){
+    public void setSeancecheckFrid(Seance seance) {
         check_frid.setSelected(true);
         pan_time_frid.setbignTime(seance.getTimeSeance().toString());
         pan_time_frid.setfinTime(seance.getFinTime().toString());
         lab_date_6.setText(seance.getDate_sceance().toString());
     }
     
-    public void setSeancecheckSatur(Seance seance){
+    public void setSeancecheckSatur(Seance seance) {
         check_satur.setSelected(true);
         pan_time_saturd.setbignTime(seance.getTimeSeance().toString());
         pan_time_saturd.setfinTime(seance.getFinTime().toString());
         lab_date_7.setText(seance.getDate_sceance().toString());
     }
+
     /**
-     * @param seance***********************************************/
+     * @param seance**********************************************
+     */
     
     public void setInitSeance(JCheckBox checkBox, pan_time timePanel, JLabel dateLabel) {
-    checkBox.setSelected(false);
-    timePanel.setbignTime("08:01");
-    timePanel.setfinTime("09:01");
-    dateLabel.setText("");
-}
+        checkBox.setSelected(false);
+        timePanel.setbignTime("08:01");
+        timePanel.setfinTime("09:01");
+        dateLabel.setText("");
+    }
 
 // Example usage:
-public void setInitSeanceSund() {
-    setInitSeance( check_sund, pan_time_sund, lab_date_1);
-}
-
-public void setInitSeanceMond() {
-    setInitSeance(check_mond, pan_time_mond, lab_date_2);
-}
-
-public void setInitSeanceTues() {
-    setInitSeance( check_tues, pan_time_tuesd, lab_date_3);
-}
-
-public void setInitSeanceWend() {
-    setInitSeance(check_wend, pan_time_wednesd, lab_date_4);
-}
-
-public void setInitSeanceThurs() {
-    setInitSeance(check_thurs, pan_time_theursd, lab_date_5);
-}
-
-public void setInitSeanceFrid() {
-    setInitSeance( check_frid, pan_time_frid, lab_date_6);
-}
-
-public void setInitSeanceSatur() {
-    setInitSeance( check_satur, pan_time_saturd, lab_date_7);
-}
-
-    
-    /**************************************************/
-    
-    public void EmptyFieldsUpdateSeamine(){
-        
-    
+    public void setInitSeanceSund() {
+        setInitSeance(check_sund, pan_time_sund, lab_date_1);
     }
     
+    public void setInitSeanceMond() {
+        setInitSeance(check_mond, pan_time_mond, lab_date_2);
+    }
     
+    public void setInitSeanceTues() {
+        setInitSeance(check_tues, pan_time_tuesd, lab_date_3);
+    }
     
+    public void setInitSeanceWend() {
+        setInitSeance(check_wend, pan_time_wednesd, lab_date_4);
+    }
+    
+    public void setInitSeanceThurs() {
+        setInitSeance(check_thurs, pan_time_theursd, lab_date_5);
+    }
+    
+    public void setInitSeanceFrid() {
+        setInitSeance(check_frid, pan_time_frid, lab_date_6);
+    }
+    
+    public void setInitSeanceSatur() {
+        setInitSeance(check_satur, pan_time_saturd, lab_date_7);
+    }
+
+    /**
+     * ***********************************************
+     */
+    public void EmptyFieldsUpdateSeamine() {
+        
+    }
     
     public void setInfoCategoreNiveauInCombox() {
         List<CategoreNiveau> categoreNiveaus = categoreNiveauDAOImpl.findAll();
@@ -392,7 +400,7 @@ public void setInitSeanceSatur() {
         }
         setInfoNiveauEtudeInCom();
     }
-
+    
     public void setInfoNiveauEtudeInCom() {
         CategoreNiveau category = categoreNiveauDAOImpl.findByName(com_catego_niveau.getSelectedItem().toString(), "categore_niveau_ar");
         List<NiveauEtude> niveauEtudes = niveauEtudeDAOImpl.findAll();
@@ -405,7 +413,7 @@ public void setInitSeanceSatur() {
         //setInfoMatiereInCom();
 
     }
-
+    
     public void setInfoMatiereInCom() {
         com_matiere.removeAllItems();
         CategoreNiveau category = categoreNiveauDAOImpl.findByName(com_catego_niveau.getSelectedItem().toString(), "categore_niveau_ar");
@@ -430,11 +438,11 @@ public void setInitSeanceSatur() {
             //setInfoEnsignInCom();
         }
     }
-
+    
     public void setInfoMatiereInCom(JComboBox com_catego_niv, JComboBox com_niv, JComboBox com_matier) {
-
+        
         if (com_catego_niv.getSelectedIndex() != -1 && com_niv.getSelectedIndex() != -1) {
-
+            
             com_matier.removeAllItems();
             CategoreNiveau category = categoreNiveauDAOImpl.findByName(com_catego_niv.getSelectedItem().toString(), "categore_niveau_ar");
             NiveauEtude niveauEtude = new NiveauEtude();// = niveauEtudeDAOImpl.findByName(comb_niveau.getSelectedItem().toString(), "niveau_initial_ar");
@@ -452,7 +460,7 @@ public void setInitSeanceSatur() {
                             && matiere_obj.getCategoreNiveau().getId() == category.getId()) {
                         // || matiere_obj.getCategoreNiveau().getId() == idCategoreNiveau) {           
                         com_matier.addItem(matiere_obj.getMatiereEtdAr());
-
+                        
                     }
                 }
 
@@ -473,7 +481,7 @@ public void setInitSeanceSatur() {
 //        }
 //    }
     public void changeDateOfDays() {
-
+        
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         LocalDate date = LocalDate.parse(txt_dat_first_seance.getText(), formatter);
         LocalDate dat_next;
@@ -482,12 +490,12 @@ public void setInitSeanceSatur() {
             lab_date_1.setText(dat_next.format(formatter) + "");
             //lab_date_1.setText(dat_next + "");
         } else {
-
+            
             dat_next = date.with(TemporalAdjusters.next(DayOfWeek.SUNDAY));
             //lab_date_1.setText(dat_next.format(formatter) + "");
             lab_date_1.setText(dat_next.format(formatter) + "");
         }
-
+        
         lab_date_2.setText(dat_next.plusDays(1).format(formatter) + "");
         lab_date_3.setText(dat_next.plusDays(2).format(formatter) + "");
         lab_date_4.setText(dat_next.plusDays(3).format(formatter) + "");
@@ -564,10 +572,6 @@ public void setInitSeanceSatur() {
      * WARNING: Do NOT modify this code. The content of this method is always
      * regenerated by the Form Editor.
      */
-    
-    
-    
-    
     public void setDesignTable(JTable tab, JScrollPane scrol) {
         TableCustom.apply(scrol, TableCustom.TableType.DEFAULT);
         tab.getTableHeader().setFont(new Font("", Font.BOLD, 15));
@@ -591,11 +595,8 @@ public void setInitSeanceSatur() {
         JTableHeader header = tab.getTableHeader();
         header.setDefaultRenderer(headerRenderer);
         tab.setRowHeight(45);
-
+        
     }
-
-    
-    
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -1110,14 +1111,14 @@ public void setInitSeanceSatur() {
 
 
     private void buttonRounder19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRounder19ActionPerformed
-
+        
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         if (Integer.valueOf(NbrSeanceInSemaine_db.getText()) == 0
                 || (!Objects.equals(Integer.valueOf(NbrSeanceInSemaine_db.getText()), Integer.valueOf(lab_nbr_seance.getText())))) {
             JOptionPane.showMessageDialog(null, "Error in Number Seance please check it");
             return;
         }
-
+        
         if (com_matiere.getSelectedIndex() != -1 && !txt_dat_first_seance.getText().isEmpty() && !lab_nbr_seance.getText().equals("0")) {
             Matiere matiere = new MatiereDAOImpl(connection).getMatiereNiveauOfCategory(com_matiere.getSelectedItem().toString(),
                     comb_niveau.getSelectedItem().toString(), com_catego_niveau.getSelectedItem().toString());
@@ -1129,28 +1130,54 @@ public void setInitSeanceSatur() {
             java.util.Date fin_seance;
             int num_seance = 1;
             List<Seance> listSceance = new ArrayList<>();
-
+            
             try {
                 String FullName = (String) com_ensieng.getSelectedItem();
-
+                
                 String Nom = FullName.split("-")[0];
                 String Prenom = FullName.split("-")[1];
-
+                
                 System.out.println(Nom + "  -- " + Prenom);
-
+                
                 Enseignant enseignat = enseignantDAOImpl.findByFullName(Nom, Prenom);
+                
+                
+                EnseignantMatiere enseignant_matiere = MatiereEnseignat_dao_impl.findByNamesEnseignantMatiere(enseignat, matiere);
+                SeanceService seance_service = new SeanceService();
+//            seance_service.getListAllSeancePrevieuSemaine(matiere);
+//            Connection connection =ConnectionDB.getConnection();
+//            SeanceDAOImpl seance_dao_imp=new SeanceDAOImpl(connection);
+//            List <Seance> list_seance=seance_dao_imp.findAll();
+            
+            List<Seance> list_seance = seance_service.getListAllSeancePrevieuSemaineByEnse_Matiere(enseignant_matiere);
+              
+            Seance last_seance=listSceance.get(listSceance.size()-1);
+            
+            int num_semaine=(last_seance.getNumSeamaine()==4)? last_seance.getNumSeamaine()+1 :1;
+            
+            int num_moins = last_seance.getNumMoins();
+
+            if (last_seance.getNumSeamaine() == 4) {
+                if (num_moins == 12) {
+                    num_moins = 1;
+                } else {
+                    num_moins++;
+                }
+            }
+                
                 
                 if (check_sund.isSelected()) {
                     LocalDate date = LocalDate.parse(lab_date_1.getText(), formatter);
-
+                    
                     debu_seance = sdf.parse(pan_time_sund.getbignTime());
                     fin_seance = sdf.parse(pan_time_sund.getfinTime());
-
+                    
                     LocalTime start_seance = LocalTime.parse(pan_time_sund.getbignTime().substring(0, 5));
                     LocalTime end_seance = LocalTime.parse(pan_time_sund.getfinTime().substring(0, 5));
-
+                    
+                    
                     Seance seance_1 = new Seance(0, num_seance, start_seance, end_seance,
-                            check_sund.getText(), date, false, matiere,enseignat);
+                            check_sund.getText(), date, false, matiere, enseignat,num_semaine,num_moins);
                     if (sceanceDAOImpl.save(seance_1) > 0) {
                         listSceance.add(seance_1);
                     }
@@ -1162,15 +1189,15 @@ public void setInitSeanceSatur() {
                 // الاثين
                 if (check_mond.isSelected()) {
                     LocalDate date = LocalDate.parse(lab_date_2.getText(), formatter);
-
+                    
                     num_seance = num_seance + 1;
                     debu_seance = sdf.parse(pan_time_mond.getbignTime());
                     fin_seance = sdf.parse(pan_time_mond.getfinTime());
                     LocalTime start_seance = LocalTime.parse(pan_time_sund.getbignTime().substring(0, 5));
                     LocalTime end_seance = LocalTime.parse(pan_time_sund.getfinTime().substring(0, 5));
-
+                    
                     Seance seance_2 = new Seance(0, num_seance, start_seance, end_seance,
-                            check_mond.getText(), date, false, matiere,enseignat);
+                            check_mond.getText(), date, false, matiere, enseignat,num_semaine,num_moins);
 
                     //sceanceDAOImpl.save(seance_2);
                     if (sceanceDAOImpl.save(seance_2) > 0) {
@@ -1181,34 +1208,34 @@ public void setInitSeanceSatur() {
                 }
                 if (check_tues.isSelected()) {
                     LocalDate date = LocalDate.parse(lab_date_3.getText(), formatter);
-
+                    
                     num_seance = num_seance + 1;
                     debu_seance = sdf.parse(pan_time_tuesd.getbignTime());
                     fin_seance = sdf.parse(pan_time_tuesd.getfinTime());
-
+                    
                     LocalTime start_seance = LocalTime.parse(pan_time_sund.getbignTime().substring(0, 5));
                     LocalTime end_seance = LocalTime.parse(pan_time_sund.getfinTime().substring(0, 5));
-
+                    
                     Seance seance_3 = new Seance(0, num_seance, start_seance, end_seance,
-                            check_tues.getText(), date, false, matiere,enseignat);
+                            check_tues.getText(), date, false, matiere, enseignat,num_semaine,num_moins);
                     sceanceDAOImpl.save(seance_3);
-
+                    
                     if (sceanceDAOImpl.save(seance_3) > 0) {
                         listSceance.add(seance_3);
                     }
-
+                    
                 }
                 if (check_wend.isSelected()) {
                     LocalDate date = LocalDate.parse(lab_date_4.getText(), formatter);
-
+                    
                     num_seance = num_seance + 1;
                     debu_seance = sdf.parse(pan_time_wednesd.getbignTime());
                     fin_seance = sdf.parse(pan_time_wednesd.getfinTime());
                     LocalTime start_seance = LocalTime.parse(pan_time_sund.getbignTime().substring(0, 5));
                     LocalTime end_seance = LocalTime.parse(pan_time_sund.getfinTime().substring(0, 5));
-
+                    
                     Seance seance_4 = new Seance(0, num_seance, start_seance, end_seance,
-                            check_wend.getText(), date, false, matiere,enseignat);
+                            check_wend.getText(), date, false, matiere, enseignat,num_semaine,num_moins);
                     //sceanceDAOImpl.save(seance_4);
                     if (sceanceDAOImpl.save(seance_4) > 0) {
                         listSceance.add(seance_4);
@@ -1216,21 +1243,21 @@ public void setInitSeanceSatur() {
                 }
                 if (check_thurs.isSelected()) {
                     LocalDate date = LocalDate.parse(lab_date_5.getText(), formatter);
-
+                    
                     num_seance = num_seance + 1;
                     debu_seance = sdf.parse(pan_time_theursd.getbignTime());
                     fin_seance = sdf.parse(pan_time_theursd.getfinTime());
                     LocalTime start_seance = LocalTime.parse(pan_time_sund.getbignTime().substring(0, 5));
                     LocalTime end_seance = LocalTime.parse(pan_time_sund.getfinTime().substring(0, 5));
-
+                    
                     Seance seance_5 = new Seance(0, num_seance, start_seance, end_seance,
-                            check_thurs.getText(), date, false, matiere,enseignat);
+                            check_thurs.getText(), date, false, matiere, enseignat,num_semaine,num_moins);
                     //sceanceDAOImpl.save(seance_5);
                     if (sceanceDAOImpl.save(seance_5) > 0) {
                         listSceance.add(seance_5);
                     }
                 }
-
+                
                 if (check_frid.isSelected()) {
                     LocalDate date = LocalDate.parse(lab_date_6.getText(), formatter);
                     num_seance = num_seance + 1;
@@ -1239,26 +1266,26 @@ public void setInitSeanceSatur() {
                     LocalTime start_seance = LocalTime.parse(pan_time_sund.getbignTime().substring(0, 5));
                     LocalTime end_seance = LocalTime.parse(pan_time_sund.getfinTime().substring(0, 5));
                     Seance seance_6 = new Seance(0, num_seance, start_seance, end_seance,
-                            check_frid.getText(), date, false, matiere,enseignat);
+                            check_frid.getText(), date, false, matiere, enseignat,num_semaine,num_moins);
                     if (sceanceDAOImpl.save(seance_6) > 0) {
                         listSceance.add(seance_6);
                     }
-
+                    
                 }
                 if (check_satur.isSelected()) {
                     LocalDate date = LocalDate.parse(lab_date_7.getText(), formatter);
-
+                    
                     num_seance = num_seance + 1;
                     debu_seance = sdf.parse(pan_time_saturd.getbignTime());
                     fin_seance = sdf.parse(pan_time_saturd.getfinTime());
                     LocalTime start_seance = LocalTime.parse(pan_time_sund.getbignTime().substring(0, 5));
                     LocalTime end_seance = LocalTime.parse(pan_time_sund.getfinTime().substring(0, 5));
                     Seance seance_6 = new Seance(0, num_seance, start_seance, end_seance,
-                            check_satur.getText(), date, false, matiere,enseignat);
+                            check_satur.getText(), date, false, matiere, enseignat,num_semaine,num_moins);
                     if (sceanceDAOImpl.save(seance_6) > 0) {
                         listSceance.add(seance_6);
                     }
-
+                    
                 }
 
 //                int numSceance = Integer.parseInt(lab_nbr_seance.getText());
@@ -1275,6 +1302,8 @@ public void setInitSeanceSatur() {
             } catch (ParseException ex) {
                 Logger.getLogger(UpdateSeanceForm.class.getName()).log(Level.SEVERE, null, ex);
             } catch (SQLException ex) {
+                Logger.getLogger(UpdateSeanceForm.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (DatabaseConnectionException ex) {
                 Logger.getLogger(UpdateSeanceForm.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
@@ -1296,7 +1325,7 @@ public void setInitSeanceSatur() {
         if (com_matiere.getSelectedIndex() != -1) {
             lab_error_matier.setText("");
         }
-
+        
         if (com_matiere.getSelectedIndex() != -1 && comb_niveau.getSelectedIndex() != -1
                 && com_catego_niveau.getSelectedIndex() != -1) {
             try {
@@ -1305,50 +1334,62 @@ public void setInitSeanceSatur() {
                         comb_niveau.getSelectedItem().toString(), com_catego_niveau.getSelectedItem().toString());
                 
                 setInfoEnseignantByMatiere(matiere);
-                setNumbeSeanceInSemaineByMatiere(matiere);
-                FullSeanceTable(matiere);
-                //initializeAllSeances();
-                SetInfoSeeancesInFormUpdate();
-            } catch (DatabaseConnectionException ex) {
+                //Enseignant enseignat = enseignantDAOImpl.findByFullName(Nom, Prenom);
+                
+                String FullName = (String) com_ensieng.getSelectedItem();
+                String Nom = FullName.split("-")[0];
+                String Prenom = FullName.split("-")[1];
+                System.out.println(Nom + "  -- " + Prenom);
+                Enseignant enseignat = enseignantDAOImpl.findByFullName(Nom, Prenom);
+                
+                if (enseignat != null) {
+                    EnseignantMatiere enseignant_matiere = MatiereEnseignat_dao_impl.findByNamesEnseignantMatiere(enseignat, matiere);
+                    
+                    setNumbeSeanceInSemaineByMatiere(matiere);
+                    
+                    FullSeanceTable(enseignant_matiere);
+                    //initializeAllSeances();
+                    SetInfoSeeancesInFormUpdate();
+                }
+            } catch (DatabaseConnectionException | SQLException ex) {
                 Logger.getLogger(UpdateSeanceForm.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
-
+            
             com_ensieng.removeAllItems();
             NbrSeanceInSemaine_db.setText("00");
             //ComboGroup.removeAllItems();
         }
 
     }//GEN-LAST:event_com_matiereActionPerformed
-
+    
     public void setNumbeSeanceInSemaineByMatiere(Matiere matiere) {
         NbrSeanceInSemaine_db.setText(String.valueOf(matiere.getNum_sceance_semaine()));
     }
-
+    
     public void setInfoEnseignantByMatiere(Matiere matiere) {
         try {
             System.out.println(matiere);
-
+            
             List<Enseignant> list_enseignat = MatiereEnseignat_dao_impl.findEnseignantByMatiereId(matiere);
-
+            
             System.out.println("list enseignat:" + list_enseignat);
-
+            
             com_ensieng.removeAllItems();
-
+            
             System.out.println("");
             for (Enseignant enseignat : list_enseignat) {
                 com_ensieng.addItem(enseignat.getNomAr() + "-" + enseignat.getPrenomAr());
             }
-
+            
         } catch (SQLException ex) {
             ex.printStackTrace();
             Logger.getLogger(AddEtudiantForm.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        
     }
+    
 
-    
-    
     private void com_matiereItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_com_matiereItemStateChanged
 
     }//GEN-LAST:event_com_matiereItemStateChanged
@@ -1366,7 +1407,7 @@ public void setInitSeanceSatur() {
     }//GEN-LAST:event_com_ensiengItemStateChanged
 
     private void com_ensiengActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_com_ensiengActionPerformed
-         if (com_ensieng.getSelectedIndex()==-1) {
+        if (com_ensieng.getSelectedIndex() == -1) {
             System.out.println("No Prof Affected To This Module");
             NbrSeanceInSemaine_db.setText("00");
             id_ens.setText("");
@@ -1473,7 +1514,7 @@ public void setInitSeanceSatur() {
         if (!txt_dat_first_seance.getText().equals("")) {
             lab_error_check_day.setText("");
         }
-
+        
 
     }//GEN-LAST:event_txt_dat_first_seanceActionPerformed
 
@@ -1490,15 +1531,15 @@ public void setInitSeanceSatur() {
     }//GEN-LAST:event_txt_dat_first_seancePropertyChange
 
     private void TabSeanceMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TabSeanceMouseClicked
-         
+        
     }//GEN-LAST:event_TabSeanceMouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-      try {
-            int selcRow=TabSeance.getSelectedRow();
-            int id_Seance=(int) TabSeance.getValueAt(selcRow, 0);
-            Seance seance=new SeanceDAOImpl(ConnectionDB.getConnection()).findById(id_Seance);
-            UpdatSeanceInfo obj=new UpdatSeanceInfo(home, true, seance);
+        try {
+            int selcRow = TabSeance.getSelectedRow();
+            int id_Seance = (int) TabSeance.getValueAt(selcRow, 0);
+            Seance seance = new SeanceDAOImpl(ConnectionDB.getConnection()).findById(id_Seance);
+            UpdatSeanceInfo obj = new UpdatSeanceInfo(home, true, seance);
             obj.setVisible(true);
         } catch (DatabaseConnectionException ex) {
             Logger.getLogger(UpdateSeanceForm.class.getName()).log(Level.SEVERE, null, ex);
@@ -1506,13 +1547,13 @@ public void setInitSeanceSatur() {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void buttonRounder18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRounder18ActionPerformed
-       pan_week_updt.setVisible(false);
-       pan_seance_updt.setVisible(true);
+        pan_week_updt.setVisible(false);
+        pan_seance_updt.setVisible(true);
     }//GEN-LAST:event_buttonRounder18ActionPerformed
 
     private void buttonRounder20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRounder20ActionPerformed
-         pan_week_updt.setVisible(true);
-       pan_seance_updt.setVisible(false);
+        pan_week_updt.setVisible(true);
+        pan_seance_updt.setVisible(false);
     }//GEN-LAST:event_buttonRounder20ActionPerformed
 
     /**
@@ -1560,7 +1601,7 @@ public void setInitSeanceSatur() {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                UpdateSeanceForm dialog = new UpdateSeanceForm(new home(), true,null);
+                UpdateSeanceForm dialog = new UpdateSeanceForm(new home(), true, null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
