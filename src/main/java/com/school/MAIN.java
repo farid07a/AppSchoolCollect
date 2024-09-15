@@ -27,7 +27,7 @@ import main.java.com.school.impl.CategoreNiveauDAOImpl;
 import main.java.com.school.impl.EtudiantDAOImpl;
 import main.java.com.school.impl.MatiereDAOImpl;
 import main.java.com.school.impl.NiveauEtudeDAOImpl;
-import main.java.com.school.impl.SceanceDAOImpl;
+import main.java.com.school.impl.SeanceDAOImpl;
 import main.java.com.school.impl.SeanceMatiereDAOImpl;
 import main.java.com.school.model.config.ConnectionDB;
 import main.java.com.school.model.config.DatabaseConnectionException;
@@ -47,7 +47,7 @@ public class MAIN {
         Connection connection;
         try {
             connection = new ConnectionDB().getConnection();
-            Seance seance = new SceanceDAOImpl(connection).findById(5);
+            Seance seance = new SeanceDAOImpl(connection).findById(5);
         
       MatiereDAOImpl m = new MatiereDAOImpl(connection);
            // m.getMatieresNiveauOfCategory(new CategoreNiveauDAOImpl(connection).findById(6),new NiveauEtudeDAOImpl(connection).findById(5)).get(0).getMatiereEtdAr();

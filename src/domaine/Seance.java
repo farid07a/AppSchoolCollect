@@ -5,9 +5,7 @@
  */
 package domaine;
 
-import java.sql.Time;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 /**
@@ -105,6 +103,11 @@ public class Seance {
 
     public Matiere getMatiere() {
         return matiere;
+    }
+
+    @Override
+    public String toString() {
+        return "Seance{" + "id=" + id + ", numSeance=" + numSeance + ", timeSeance=" + timeSeance + ", finTime=" + finTime + ", day_sceance=" + day_sceance + ", date_sceance=" + date_sceance + ", terminate=" + terminate + ", matiere=" + matiere + '}';
     }
     
     

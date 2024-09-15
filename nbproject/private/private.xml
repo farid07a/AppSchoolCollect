@@ -3,17 +3,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/client/Documents/NetBeansProjects/AppSchoolCollect/src/domaine/Seance.java</file>
-            <file>file:/C:/Users/client/Documents/NetBeansProjects/AppSchoolCollect/src/guis/AddCategoreNiveauForm.java</file>
-            <file>file:/C:/Users/client/Documents/NetBeansProjects/AppSchoolCollect/src/guis/home.java</file>
-            <file>file:/C:/Users/client/Documents/NetBeansProjects/AppSchoolCollect/src/main/java/com/school/impl/MatiereDAOImpl.java</file>
-            <file>file:/C:/Users/client/Documents/NetBeansProjects/AppSchoolCollect/src/DialogFram/ValidationMessageDialog.java</file>
-            <file>file:/C:/Users/client/Documents/NetBeansProjects/AppSchoolCollect/src/main/java/com/school/impl/SeanceMatiereDAOImpl.java</file>
-            <file>file:/C:/Users/client/Documents/NetBeansProjects/AppSchoolCollect/src/Service/MatiereService.java</file>
-            <file>file:/C:/Users/client/Documents/NetBeansProjects/AppSchoolCollect/src/guis/AddMatiereForm.java</file>
-            <file>file:/C:/Users/client/Documents/NetBeansProjects/AppSchoolCollect/src/guis/AddEtudiantForm.java</file>
-            <file>file:/C:/Users/client/Documents/NetBeansProjects/AppSchoolCollect/src/main/java/com/school/impl/SceanceDAOImpl.java</file>
-            <file>file:/C:/Users/client/Documents/NetBeansProjects/AppSchoolCollect/src/domaine/Matiere.java</file>
+            <file>file:/C:/Users/farid/Documents/NetBeansProjects/AppSchoolCollect/src/Service/testClass.java</file>
+            <file>file:/C:/Users/farid/Documents/NetBeansProjects/AppSchoolCollect/src/domaine/Matiere.java</file>
+            <file>file:/C:/Users/farid/Documents/NetBeansProjects/AppSchoolCollect/src/guis/home.java</file>
+            <file>file:/C:/Users/farid/Documents/NetBeansProjects/AppSchoolCollect/src/guis/Panel_PresenceUI.java</file>
+            <file>file:/C:/Users/farid/Documents/NetBeansProjects/AppSchoolCollect/src/Service/MatiereService.java</file>
+            <file>file:/C:/Users/farid/Documents/NetBeansProjects/AppSchoolCollect/src/guis/AddSeanceForm.java</file>
+            <file>file:/C:/Users/farid/Documents/NetBeansProjects/AppSchoolCollect/src/domaine/Seance.java</file>
+            <file>file:/C:/Users/farid/Documents/NetBeansProjects/AppSchoolCollect/src/main/java/com/school/impl/SeanceDAOImpl.java</file>
+            <file>file:/C:/Users/farid/Documents/NetBeansProjects/AppSchoolCollect/src/Service/SeanceService.java</file>
+            <file>file:/C:/Users/farid/Documents/NetBeansProjects/AppSchoolCollect/src/main/java/com/school/impl/MatiereDAOImpl.java</file>
         </group>
     </open-files>
 </project-private>

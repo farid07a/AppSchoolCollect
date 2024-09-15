@@ -81,7 +81,7 @@ public class PayementDAOImpl extends AbstractDAO<Payement> {
         payement.setEtudiant(new EtudiantDAOImpl(connection).findById(resultSet.getInt("id_etudiant")));
         payement.setMatiere(new MatiereDAOImpl(connection).findById(resultSet.getInt("id_matiere")));
        payement.setSeance_matiere(new SeanceMatiereDAOImpl(connection).findById(resultSet.getInt("id_seance_matiere")));
-        payement.setSeance(new SceanceDAOImpl(connection).findById(resultSet.getInt("id_seance")));
+        payement.setSeance(new SeanceDAOImpl(connection).findById(resultSet.getInt("id_seance")));
         payement.setTypePayement(resultSet.getString("type_payement"));
         payement.setPrix(resultSet.getDouble("prix"));
         payement.setPrixPaye(resultSet.getDouble("prix_paye"));

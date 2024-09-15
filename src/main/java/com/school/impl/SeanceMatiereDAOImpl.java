@@ -74,7 +74,7 @@ public class SeanceMatiereDAOImpl extends AbstractDAO<Seance_Matiere> implements
         Seance_Matiere seance_Matiere = new Seance_Matiere();
        seance_Matiere.setId(resultSet.getInt("id"));
         seance_Matiere.setMatiere(new MatiereDAOImpl(connection).findById(resultSet.getInt("id_matiere")));
-        seance_Matiere.setSeance(new SceanceDAOImpl(connection).findById(resultSet.getInt("id_sceance")));
+        seance_Matiere.setSeance(new SeanceDAOImpl(connection).findById(resultSet.getInt("id_sceance")));
         seance_Matiere.setDate(resultSet.getDate("date").toLocalDate());
         seance_Matiere.setTermine(resultSet.getBoolean("termine"));
         return seance_Matiere;

@@ -54,7 +54,7 @@ import main.java.com.school.impl.MatiereDAOImpl;
 import main.java.com.school.impl.MatiereEnseignantDAOImpl;
 import main.java.com.school.impl.NiveauEtudeDAOImpl;
 import main.java.com.school.impl.PayementDAOImpl;
-import main.java.com.school.impl.SceanceDAOImpl;
+import main.java.com.school.impl.SeanceDAOImpl;
 import main.java.com.school.impl.SeanceMatiereDAOImpl;
 import main.java.com.school.model.config.ConnectionDB;
 import main.java.com.school.model.config.DatabaseConnectionException;

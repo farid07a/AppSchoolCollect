@@ -98,7 +98,7 @@ public class MatiereDAOImpl extends AbstractDAO<Matiere> {
         matiere.setCategoreNiveau(categore_dao.findById(resultSet.getInt("id_categore_niveau")));
         matiere.setEnseignant(enseignant_dao.findById(resultSet.getInt("id_enseignant")));
         matiere.setNum_sceance_semaine(resultSet.getInt("num_sceance_semaine"));
-        matiere.setNum_sceance_semaine(resultSet.getInt("num_sceance_moins"));
+        matiere.setNum_sceance_moins(resultSet.getInt("num_sceance_moins"));
         return matiere;
     }
 

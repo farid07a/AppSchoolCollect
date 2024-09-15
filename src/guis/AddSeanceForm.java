@@ -45,7 +45,7 @@ import main.java.com.school.impl.EnseignantDAOImpl;
 import main.java.com.school.impl.MatiereDAOImpl;
 import main.java.com.school.impl.MatiereEnseignantDAOImpl;
 import main.java.com.school.impl.NiveauEtudeDAOImpl;
-import main.java.com.school.impl.SceanceDAOImpl;
+import main.java.com.school.impl.SeanceDAOImpl;
 import main.java.com.school.impl.SeanceMatiereDAOImpl;
 import main.java.com.school.model.config.ConnectionDB;
 import main.java.com.school.model.config.DatabaseConnectionException;
@@ -205,13 +205,14 @@ public class AddSeanceForm extends javax.swing.JDialog {
 //    }
     
     public void changeDateOfDays(){
+        
          DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         LocalDate date = LocalDate.parse(txt_dat_first_seance.getText(), formatter);
         LocalDate dat_next;
         if (date.getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
             dat_next = date;
             lab_date_1.setText(dat_next.format(formatter) + "");
-            lab_date_1.setText(dat_next + "");
+            //lab_date_1.setText(dat_next + "");
         } else {
 
             dat_next = date.with(TemporalAdjusters.next(DayOfWeek.SUNDAY));
@@ -774,7 +775,7 @@ public class AddSeanceForm extends javax.swing.JDialog {
             Matiere matiere = new MatiereDAOImpl(connection).getMatiereNiveauOfCategory(com_matiere.getSelectedItem().toString(),
                     comb_niveau.getSelectedItem().toString(), com_catego_niveau.getSelectedItem().toString());
             JOptionPane.showMessageDialog(null, ""+matiere.getId());
-            SceanceDAOImpl sceanceDAOImpl = new SceanceDAOImpl(connection);
+            SeanceDAOImpl sceanceDAOImpl = new SeanceDAOImpl(connection);
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
             //  DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             java.util.Date debu_seance;

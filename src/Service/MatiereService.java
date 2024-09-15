@@ -18,7 +18,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import main.java.com.school.impl.SceanceDAOImpl;
+import main.java.com.school.impl.SeanceDAOImpl;
 import main.java.com.school.model.config.ConnectionDB;
 import main.java.com.school.model.config.DatabaseConnectionException;
 
@@ -32,7 +32,7 @@ public class MatiereService {
        List<Seance> Listsceance = null;
        Map<Integer, Matiere> map_matiere = new HashMap<>();
        try {
-            Listsceance=new SceanceDAOImpl(ConnectionDB.getConnection()).findAll();
+            Listsceance=new SeanceDAOImpl(ConnectionDB.getConnection()).findAll();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE", new Locale("ar"));
             LocalDate today = LocalDate.now();
         // Format the date to get the day name in Arabic
@@ -61,6 +61,8 @@ public class MatiereService {
    return listMatiere;
    }
     
+   
+   
     public static void main(String[] args) {
         new MatiereService().getListMatierByDay();
         

@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import main.java.com.school.impl.PayementDAOImpl;
-import main.java.com.school.impl.SceanceDAOImpl;
+import main.java.com.school.impl.SeanceDAOImpl;
 import main.java.com.school.impl.SeanceMatiereDAOImpl;
 import main.java.com.school.model.config.ConnectionDB;
 import main.java.com.school.model.config.DatabaseConnectionException;
@@ -33,7 +33,7 @@ public class FormPayement extends javax.swing.JDialog {
      Seance_Matiere seance_Matiere;
      PayementDAOImpl payementDAOImpl;
      SeanceMatiereDAOImpl seanceMatiereDAOImpl;
-     SceanceDAOImpl sceanceDAOImpl;
+     SeanceDAOImpl sceanceDAOImpl;
     Connection connection;
     public FormPayement(java.awt.Frame parent, boolean modal , Etudiant etudiant, Seance_Matiere seance_Matiere) {
         super(parent, modal);
@@ -45,7 +45,7 @@ public class FormPayement extends javax.swing.JDialog {
              Logger.getLogger(home.class.getName()).log(Level.SEVERE, null, ex);
         }
          this.seance_Matiere=seance_Matiere;
-        sceanceDAOImpl= new SceanceDAOImpl(connection);
+        sceanceDAOImpl= new SeanceDAOImpl(connection);
         
         payementDAOImpl =new PayementDAOImpl(connection);
         initComponents();

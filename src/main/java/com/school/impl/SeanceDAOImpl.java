@@ -5,6 +5,7 @@
  */
 package main.java.com.school.impl;
 
+import domaine.Matiere;
 import domaine.NiveauEtude;
 import domaine.Seance;
 import domaine.Seance_Matiere;
@@ -24,9 +25,9 @@ import main.java.com.school.model.config.DatabaseConnectionException;
 
 
 
-public class SceanceDAOImpl extends AbstractDAO<Seance> {
+public class SeanceDAOImpl extends AbstractDAO<Seance> {
 
-    public SceanceDAOImpl(Connection connection) {
+    public SeanceDAOImpl(Connection connection) {
         super(connection);
     }
 
@@ -110,8 +111,9 @@ public class SceanceDAOImpl extends AbstractDAO<Seance> {
             String query = " SELECT * From "+getTableName()+"  where date_sceance =? "; //delet id matiere 
             
            PreparedStatement statement = connection.prepareStatement(query);
-            ResultSet resultSet = statement.executeQuery();
-            statement.setDate(1,java.sql.Date.valueOf( date));
+           statement.setDate(1,java.sql.Date.valueOf( date));
+           ResultSet resultSet = statement.executeQuery();
+            
             while (resultSet.next()) {
                 seances.add(mapResultSetToEntity(resultSet));
             }
@@ -121,13 +123,49 @@ public class SceanceDAOImpl extends AbstractDAO<Seance> {
         return seances;
     }
          
+     public List<Seance> getListPrevieuxSceanceByMatiere(Matiere matiere){
+         
+         List<Seance> seances = new ArrayList<>();
+        try {
+            String query = " SELECT TOP "+matiere.getNum_sceance_moins()+  " * FROM "+getTableName()+"  WHERE id_matiere =?  ORDER BY id DESC "; //delet id matiere 
+            
+           PreparedStatement statement = connection.prepareStatement(query);
+           statement.setInt(1,matiere.getId()); 
+           ResultSet resultSet = statement.executeQuery();
+            
+            while (resultSet.next()) {
+                seances.add(mapResultSetToEntity(resultSet));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return seances;
+     
+     }
+         
          
          public static void main(String[] args) {
         try {
-            Seance sc=  new SceanceDAOImpl(ConnectionDB.getConnection()).findById(1);
+            Seance sc=  new SeanceDAOImpl(ConnectionDB.getConnection()).findById(1);
             System.out.println(sc);
         } catch (DatabaseConnectionException ex) {
-            Logger.getLogger(SceanceDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SeanceDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        try {
+            Connection conx=ConnectionDB.getConnection();
+            Matiere mat=new MatiereDAOImpl(conx).findById(2);
+            System.out.println(mat);
+            System.out.println("--------------");
+            List<Seance>  lst=  new SeanceDAOImpl(conx).getListPrevieuxSceanceByMatiere(mat);
+            System.out.println(lst);
+            
+            for (Seance seance : lst) {
+                System.out.println(seance);
+            }
+            
+        } catch (DatabaseConnectionException ex) {
+            Logger.getLogger(SeanceDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
              
     }

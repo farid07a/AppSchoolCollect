@@ -1,6 +1,8 @@
 package guis;
 
 import DialogFram.ValidationMessageDialog;
+import Service.MatiereService;
+import Service.SeanceService;
 import com.sun.accessibility.internal.resources.accessibility;
 import com.sun.javafx.application.PlatformImpl;
 import domaine.CategoreNiveau;
@@ -75,7 +77,7 @@ import main.java.com.school.impl.MatiereDAOImpl;
 import main.java.com.school.impl.NiveauEtudeDAOImpl;
 import main.java.com.school.impl.PayementDAOImpl;
 import main.java.com.school.impl.PresenceDAOImpl;
-import main.java.com.school.impl.SceanceDAOImpl;
+import main.java.com.school.impl.SeanceDAOImpl;
 import main.java.com.school.impl.SeanceMatiereDAOImpl;
 import main.java.com.school.model.config.ConnectionDB;
 import main.java.com.school.model.config.DatabaseConnectionException;
@@ -98,7 +100,7 @@ public class home extends javax.swing.JFrame {
     EnseignantDAOImpl enseignantDAOImpl;
     EtudiantDAOImpl etudiantDAOImpl;
     MatiereDAOImpl matiereDAOImpl;
-    SceanceDAOImpl sceanceDAOImpl;
+    SeanceDAOImpl sceanceDAOImpl;
     SeanceMatiereDAOImpl seanceMatiereDAOImpl;
     ValidationMessageDialog message_validation;
     InscriptionDAOImpl inscriptionDAOImpl;
@@ -108,6 +110,9 @@ public class home extends javax.swing.JFrame {
     File image_file_mod = null;
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     FormPayement formPayement;
+    MatiereService matiere_service=new MatiereService();
+    SeanceService seance_service=new SeanceService();
+    List <Seance> list_seance_about_all_matieres=new ArrayList<>();
 
     public home() {
         initComponents();
@@ -120,7 +125,7 @@ public class home extends javax.swing.JFrame {
         enseignantDAOImpl = new EnseignantDAOImpl(connection);
         etudiantDAOImpl = new EtudiantDAOImpl(connection);
         matiereDAOImpl = new MatiereDAOImpl(connection);
-        sceanceDAOImpl = new SceanceDAOImpl(connection);
+        sceanceDAOImpl = new SeanceDAOImpl(connection);
         seanceMatiereDAOImpl = new SeanceMatiereDAOImpl(connection);
         inscriptionDAOImpl = new InscriptionDAOImpl(connection);
         payementDAOImpl = new PayementDAOImpl(connection);
@@ -181,7 +186,14 @@ public class home extends javax.swing.JFrame {
 
                     case 4:
                         setForm(pan_center, pan_presence);
-                        getMatiereOfToDay2();
+                        //Panel_PresenceUI pan_prsence=new Panel_PresenceUI();
+                      //setForm(pan_center,pan_prsence);
+                      try {
+                        prepareUIPresence();
+                    } catch (SQLException ex) {
+                        Logger.getLogger(home.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                        //getMatiereOfToDay2();
                         /// getMatiereOfToDay();
                         break;
 
@@ -244,6 +256,61 @@ public class home extends javax.swing.JFrame {
         PrepareUI();
     }
 
+    public void prepareUIPresence() throws SQLException{
+    
+        try {
+            checkSeancesAndSaveNewSeance();
+            setSeanceInTable();
+            this.list_seance_about_all_matieres.clear();
+        } catch (DatabaseConnectionException ex) {
+            Logger.getLogger(Panel_PresenceUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void checkSeancesAndSaveNewSeance() throws DatabaseConnectionException, SQLException{
+        java.util.List<Matiere> list_matiere=matiere_service.getListMatierByDay();// get all Matiere for today 
+        List list_previeux=null;
+        // for test si seance exit update true= en cours sinon creation Number total of seance in month  
+        Seance scence_obj=null;
+        for (Matiere matiere : list_matiere) {
+            // get seance of matiere today 
+            scence_obj=seance_service.GetSeanceByTody(matiere);
+            if(scence_obj!=null){
+                // 
+                list_seance_about_all_matieres.add(scence_obj);
+                System.out.println("Object != null success add ");
+                
+            }else{
+                
+                list_previeux=seance_service.getListAllSeancePrevieuMonth(matiere); // list [sceance(1....30) ]
+                seance_service.saveAllNextSeances(list_previeux);// save next seances about Matiere
+                System.out.println("Seance is Null AFter inser database change to :"+seance_service.GetSeanceByTody(matiere));
+                list_seance_about_all_matieres.add(seance_service.GetSeanceByTody(matiere));
+                
+            }
+        }
+        
+        
+    }
+    
+    
+    public void setSeanceInTable(){
+        
+        DefaultTableModel df=(DefaultTableModel)table_seance_to_day.getModel();
+        df.setRowCount(0);
+        
+        System.out.println("List Befor Insert Data in Table "+list_seance_about_all_matieres);
+        for (Seance seance_obj : list_seance_about_all_matieres) {
+            System.out.println(seance_obj);
+            
+            Object[]args={seance_obj.getNumSeance(),seance_obj.getMatiere().getMatiereEtdAr(),seance_obj.getMatiere().getNiveau().getNiveauInitialAr(),
+                            seance_obj.getMatiere().getCategoreNiveau().getCategore_niveau_ar(),seance_obj.getMatiere().getId(),seance_obj.getId()};
+            df.addRow(args);
+        }
+        
+    }
+    
+    
     public void PrepareUI() {
         // setInfoCategoreNiveauInCombox(com_catego_niveau, com_niveau);
 

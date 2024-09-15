@@ -34,7 +34,7 @@ import main.java.com.school.impl.InscriptionDAOImpl;
 import main.java.com.school.impl.MatiereDAOImpl;
 import main.java.com.school.impl.NiveauEtudeDAOImpl;
 import main.java.com.school.impl.PayementDAOImpl;
-import main.java.com.school.impl.SceanceDAOImpl;
+import main.java.com.school.impl.SeanceDAOImpl;
 import main.java.com.school.impl.SeanceMatiereDAOImpl;
 import main.java.com.school.model.config.ConnectionDB;
 import main.java.com.school.model.config.DatabaseConnectionException;
@@ -54,7 +54,7 @@ public class PayemmentParMoin extends javax.swing.JDialog {
     InscriptionDAOImpl inscriptionDAOImpl;
     EtudiantDAOImpl etudiantDAOImpl;
     SeanceMatiereDAOImpl seanceMatiereDAOImpl;
-    SceanceDAOImpl sceanceDAOImpl;
+    SeanceDAOImpl sceanceDAOImpl;
     PayementDAOImpl payementDAOImpl;
     List<Seance_Matiere> seance_Matieres_payee = new ArrayList<>();
     List<Payement> payements = new ArrayList<>();
@@ -77,7 +77,7 @@ public class PayemmentParMoin extends javax.swing.JDialog {
         inscriptionDAOImpl = new InscriptionDAOImpl(connection);
         seanceMatiereDAOImpl = new SeanceMatiereDAOImpl(connection);
         payementDAOImpl = new PayementDAOImpl(connection);
-        sceanceDAOImpl = new SceanceDAOImpl(connection);
+        sceanceDAOImpl = new SeanceDAOImpl(connection);
 
         setLocationRelativeTo(this);
     }

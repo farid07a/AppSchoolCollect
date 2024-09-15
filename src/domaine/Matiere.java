@@ -54,12 +54,14 @@ public class Matiere {
    
     }
 
-    
-
     @Override
     public String toString() {
-        return "Matiere{" + "id=" + id + ", matiereEtdAr=" + matiereEtdAr + ", matiereEtdFr=" + matiereEtdFr + ", prix=" + prix + ", niveau=" + niveau + ", enseignant=" + enseignant + '}';
+        return "Matiere{" + "id=" + id + ", matiereEtdAr=" + matiereEtdAr + ", matiereEtdFr=" + matiereEtdFr + ", prix=" + prix + ", niveau=" + niveau + ", categoreNiveau=" + categoreNiveau + ", enseignant=" + enseignant + ", num_sceance_semaine=" + num_sceance_semaine + ", num_sceance_moins=" + num_sceance_moins + '}';
     }
+
+    
+
+    
     
     
     public int getId() {
