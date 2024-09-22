@@ -127,6 +127,26 @@ public class PayementDAOImpl extends AbstractDAO<Payement> {
         }
         return entity;
     }
+     public Payement getlastCreditEtudiantOfMatier(int id_etudiant, int id_matier) {
+        Payement entity =null;
+        try {
+            //String query = " SELECT TOP 1 * From " + getTableName() + " where  id_etudiant =? and  id_matiere =?  ORDER BY id DESC ";
+             String query = " SELECT TOP 1 * From " + getTableName() + " where  id_etudiant =? and  id_matiere =?   "
+                     + "AND type_payement=N'ديون'  ORDER BY id DESC ";
+
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, id_etudiant);
+            statement.setInt(2, id_matier);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                entity = mapResultSetToEntity(resultSet);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return entity;
+    }
+
 
      public List< Payement> getCreditEtudiantByMatiers_no_payéé(Etudiant etudiant, Matiere matier) {
        List< Payement> payements =new ArrayList<>();
@@ -146,7 +166,7 @@ public class PayementDAOImpl extends AbstractDAO<Payement> {
         }
         return payements;
     }
-     public Payement getlastCreditEtudiantOfMatiers(Etudiant etudiant, Matiere matier) {
+     public Payement getlastCreditEtudiantOfMatierss(Etudiant etudiant, Matiere matier) {
         Payement entity =null;
         try {
             //String query = " SELECT TOP 1 * From " + getTableName() + " where  id_etudiant =? and  id_matiere =?  ORDER BY id DESC ";

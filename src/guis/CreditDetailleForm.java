@@ -6,13 +6,19 @@ package guis;
 
 import domaine.Payement;
 import domaine.PayementDetaille;
+import java.awt.Color;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import main.java.com.school.impl.PayementDetailleDAOImp;
 import main.java.com.school.model.config.ConnectionDB;
 import main.java.com.school.model.config.DatabaseConnectionException;
+import material.design.ScrollBar;
+import ui.table.TableCustom;
 
 /**
  *
@@ -25,9 +31,10 @@ public class CreditDetailleForm extends javax.swing.JDialog {
     public CreditDetailleForm(java.awt.Frame parent, boolean modal, Payement payement) {
         super(parent, modal);
         this.payement=payement; 
-         setLocationRelativeTo(this);
         initComponents();
+        setLocationRelativeTo(this);
         
+        setDesignTable(jTable2, jScrollPane2);
         setInfoPaymentCreditInTable(payement);
     }
 
@@ -57,6 +64,21 @@ public class CreditDetailleForm extends javax.swing.JDialog {
     
     }
     
+    
+    
+    public void setDesignTable(JTable tab, JScrollPane scrol) {
+        TableCustom.apply(scrol, TableCustom.TableType.DEFAULT);
+        //tab.getTableHeader().setFont(new Font("", Font.BOLD, 15));
+        tab.getTableHeader().setFont(new java.awt.Font("Times New Roman", 1, 18));
+        //tab.setFont(new Font("", Font.BOLD, 14));
+        tab.setFont(new java.awt.Font("Times New Roman", 1, 16));
+        scrol.setVerticalScrollBar(new ScrollBar());
+        scrol.getVerticalScrollBar().setBackground(Color.WHITE);
+        scrol.getViewport().setBackground(Color.white);// make table without rouw white
+        JPanel p = new JPanel();
+        p.setBackground(Color.WHITE);
+        scrol.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

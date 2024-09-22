@@ -71,9 +71,9 @@ public class PayementCredit extends javax.swing.JDialog {
     public PayementCredit(java.awt.Frame parent, boolean modal, Etudiant etudiant) {
         super(parent, modal);
         this.home = (home) parent;
-        this.etudiant = etudiant;
-        setLocationRelativeTo(this);
         initComponents();
+        setLocationRelativeTo( this.home);
+        this.etudiant = etudiant;
         
         try {
             connection = new ConnectionDB().getConnection();
@@ -531,7 +531,7 @@ public class PayementCredit extends javax.swing.JDialog {
         if (jTable5.getSelectedRow() != -1) {
             int id = (int) jTable5.getValueAt(jTable5.getSelectedRow(),12 );
             Payement payement = payementDAOImpl.findById(id);
-            new CreditDetailleForm((Frame) SwingUtilities.getWindowAncestor(this), true,payement ).setVisible(true);
+            new CreditDetailleForm((Frame) SwingUtilities.getWindowAncestor(this.home), true,payement ).setVisible(true);
         }
     }//GEN-LAST:event_buttonRounder5ActionPerformed
 

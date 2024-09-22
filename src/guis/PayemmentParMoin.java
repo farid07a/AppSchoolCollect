@@ -546,6 +546,10 @@ public class PayemmentParMoin extends javax.swing.JDialog {
                 payement = new Payement(0, etudiant, matiere, null, "شهري", matiere.getPrix(), matiere.getPrix(), matiere.getPrix(), LocalDate.now(), matiere.getNum_sceance_moins());
                 if (payementDAOImpl.SavePayementParMoin(payement) > 0) {
                     JOptionPane.showMessageDialog(null, "payemnt succes");
+                    jCheckBoxCustomfr1.setSelected(false);
+                    home.getpan_payement().setInfoPayementInTab();
+
+                  
                 }    
         }
         if (rad_payem_seance.isSelected()) {
@@ -558,7 +562,7 @@ public class PayemmentParMoin extends javax.swing.JDialog {
          
         }
        }else{
-           this.dispose();
+       this.dispose();
        new ValidationMessageDialog(this, home).showMessagetoDialog("خـطـأ ", "لا يمكنك دفع حقوق شهر جديد لانه \n لديك ديون قم بتسدسديدها أولا ");
 //JOptionPane.showMessageDialog(null, "a des credite . ?! ");
        }

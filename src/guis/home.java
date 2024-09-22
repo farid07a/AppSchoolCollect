@@ -111,7 +111,7 @@ public class home extends javax.swing.JFrame {
     EnseignantMatiereDAOImpl enseignantMatiereDAOImpl;
     GroupeImpl group_dao_imp;
     File imagefile = null;
-
+    Pan_payement pan_payement ;
     public home() {
         initComponents();
         try {
@@ -202,7 +202,7 @@ public class home extends javax.swing.JFrame {
                         /// getMatiereOfToDay();
                         break;
                     case 5:
-                        Pan_payement pan_payement = new Pan_payement();
+                         pan_payement = new Pan_payement();
                         setForm(pan_center, pan_payement);
                         //                        }
                         try {
@@ -3775,5 +3775,8 @@ public class home extends javax.swing.JFrame {
             Logger.getLogger(AddEtudiantForm.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+    public Pan_payement getpan_payement(){
+        return pan_payement;
     }
 }

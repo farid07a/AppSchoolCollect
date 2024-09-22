@@ -523,7 +523,7 @@ public class Panel_PresenceUI1 extends javax.swing.JPanel {
                       lab_msg_error.setText("الحصة مدفوعة");
                    }else{ // no payéé
                        try {                                                                                        
-                        Payement  Last_payement_credit = new PayementDAOImpl(ConnectionDB.getConnection()).getlasPayementEtudiantOfMatier(etudiant.getId(), matiere.getId());          
+                        Payement  Last_payement_credit = new PayementDAOImpl(ConnectionDB.getConnection()).getlastCreditEtudiantOfMatier(etudiant.getId(), matiere.getId());          
                            new PayementService().SaveDettesInPayement(Last_payement_credit, etudiant, matiere, seance);                          
                            lab_msg_error.setText("الحضور بديون");
                        } catch (DatabaseConnectionException ex) {
