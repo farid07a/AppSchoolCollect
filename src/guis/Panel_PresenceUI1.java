@@ -497,70 +497,6 @@ public class Panel_PresenceUI1 extends javax.swing.JPanel {
     }//GEN-LAST:event_buttonRounder33ActionPerformed
 
     private void buttonRounder2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRounder2ActionPerformed
-        try {
-        if (!txt_cod_barr_presence.getText().isEmpty()) {
-            Etudiant etudiant = etudiantDAOImpl.getEtudiantByCodbar(txt_cod_barr_presence.getText());// matier of today
-            setInfoEtudiantInPanPresence(etudiant);
-            JOptionPane.showMessageDialog(null, "seance etudiant" + list_seance_about_all_matieres.size());
-            List<Seance> Seance_of_today_for_etudtaint = getSeanceOfTodayWithInscriptionEtud(list_seance_about_all_matieres, etudiant);
-            JOptionPane.showMessageDialog(null, "seance etudiant" + Seance_of_today_for_etudtaint.size());
-            if (!Seance_of_today_for_etudtaint.isEmpty()) {
-                // seance etudeé to day 1,2,3
-                Matiere matiere = matiere_service.getMatier_Of_TimNow_Etud(Seance_of_today_for_etudtaint);//
-                if(matiere !=null){
-                lab_matiere_presence.setText(matiere.getMatiereEtdAr());
-                Seance seance = getSeanceFromTab(matiere);
-                JOptionPane.showMessageDialog(null, "matiere now " + matiere.getMatiereEtdAr());
-                Presence presence = presenceDAOImpl.getPresenceOFetudiantInSeance(etudiant, seance,LocalDate.now());
-                JOptionPane.showMessageDialog(null, "Presence  : " + presence.getId());               
-                Payement Last_payement = payementDAOImpl.getlasPayementEtudiantOfMatier(etudiant.getId(), matiere.getId());              
-                if(!presence.isEtat() && Last_payement !=null && Last_payement.getNb_seance()>0){ // seance payee
-                presence.setEtat(true);
-                if ( presenceDAOImpl.update(presence) > 0) {
-                 lab_msg_error.setText("");
-                    JOptionPane.showMessageDialog(null, "save presence ");
-                    int nbr_seance_payee=Last_payement.getNb_seance();
-                    Last_payement.setSeance(seance);
-                    Last_payement.setNb_seance(nbr_seance_payee-1);
-                    payementDAOImpl.update(Last_payement);
-                    SavePresenceInTable();
-                }
-                }else{  // pas de Last_payement                                                 
-                if(Last_payement !=null && Last_payement.getNb_seance()==0){
-                if(jCheckBox1.isSelected())
-                  new PayementService().SaveDettesInPayement(Last_payement, etudiant, matiere,seance);
-                lab_msg_error.setText(" لم يتم تسديد الشهري الحالي");
-                 }
-                
-                 if(presence.isEtat())
-                   lab_msg_error.setText(" تم تسجيل الحضور");
-                 }               
-            } else {
-                lab_matiere_presence.setText("/");
-                //  message_validation.showMessage(null, "لا توجد حصة اليوم بالنسبة لهذا الطالب");
-            }
-         }else{
-            lab_matiere_presence.setText("****");
-            lab_msg_error.setText(" لا توجد حصصة بالنسبة لهاد الطالب");
-            }
-        } else {
-            cleanItemsPanPresence();
-        }
-         } catch (DatabaseConnectionException ex) {
-                        Logger.getLogger(Panel_PresenceUI1.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-        // setInfoInTablePresence();
-    }//GEN-LAST:event_buttonRounder2ActionPerformed
-
-    private void searchText6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchText6ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_searchText6ActionPerformed
-
-    private void buttonRounder3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRounder3ActionPerformed
-      new PayemmentParMoin((Frame) SwingUtilities.getWindowAncestor(this), true).setVisible(true);
-    }//GEN-LAST:event_buttonRounder3ActionPerformed
-
-    private void buttonRounder4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRounder4ActionPerformed
  if (!txt_cod_barr_presence.getText().isEmpty()) {
             Etudiant etudiant = etudiantDAOImpl.getEtudiantByCodbar(txt_cod_barr_presence.getText());// matier of today
             setInfoEtudiantInPanPresence(etudiant);
@@ -614,6 +550,72 @@ public class Panel_PresenceUI1 extends javax.swing.JPanel {
 
             }
  }
+
+//        try {
+//        if (!txt_cod_barr_presence.getText().isEmpty()) {
+//            Etudiant etudiant = etudiantDAOImpl.getEtudiantByCodbar(txt_cod_barr_presence.getText());// matier of today
+//            setInfoEtudiantInPanPresence(etudiant);
+//            JOptionPane.showMessageDialog(null, "seance etudiant" + list_seance_about_all_matieres.size());
+//            List<Seance> Seance_of_today_for_etudtaint = getSeanceOfTodayWithInscriptionEtud(list_seance_about_all_matieres, etudiant);
+//            JOptionPane.showMessageDialog(null, "seance etudiant" + Seance_of_today_for_etudtaint.size());
+//            if (!Seance_of_today_for_etudtaint.isEmpty()) {
+//                // seance etudeé to day 1,2,3
+//                Matiere matiere = matiere_service.getMatier_Of_TimNow_Etud(Seance_of_today_for_etudtaint);//
+//                if(matiere !=null){
+//                lab_matiere_presence.setText(matiere.getMatiereEtdAr());
+//                Seance seance = getSeanceFromTab(matiere);
+//                JOptionPane.showMessageDialog(null, "matiere now " + matiere.getMatiereEtdAr());
+//                Presence presence = presenceDAOImpl.getPresenceOFetudiantInSeance(etudiant, seance,LocalDate.now());
+//                JOptionPane.showMessageDialog(null, "Presence  : " + presence.getId());               
+//                Payement Last_payement = payementDAOImpl.getlasPayementEtudiantOfMatier(etudiant.getId(), matiere.getId());              
+//                if(!presence.isEtat() && Last_payement !=null && Last_payement.getNb_seance()>0){ // seance payee
+//                presence.setEtat(true);
+//                if ( presenceDAOImpl.update(presence) > 0) {
+//                 lab_msg_error.setText("");
+//                    JOptionPane.showMessageDialog(null, "save presence ");
+//                    int nbr_seance_payee=Last_payement.getNb_seance();
+//                    Last_payement.setSeance(seance);
+//                    Last_payement.setNb_seance(nbr_seance_payee-1);
+//                    payementDAOImpl.update(Last_payement);
+//                    SavePresenceInTable();
+//                }
+//                }else{  // pas de Last_payement                                                 
+//                if(Last_payement !=null && Last_payement.getNb_seance()==0){
+//                if(jCheckBox1.isSelected())
+//                  new PayementService().SaveDettesInPayement(Last_payement, etudiant, matiere,seance);
+//                lab_msg_error.setText(" لم يتم تسديد الشهري الحالي");
+//                 }
+//                
+//                 if(presence.isEtat())
+//                   lab_msg_error.setText(" تم تسجيل الحضور");
+//                 }               
+//            } else {
+//                lab_matiere_presence.setText("/");
+//                //  message_validation.showMessage(null, "لا توجد حصة اليوم بالنسبة لهذا الطالب");
+//            }
+//         }else{
+//            lab_matiere_presence.setText("****");
+//            lab_msg_error.setText(" لا توجد حصصة بالنسبة لهاد الطالب");
+//            }
+//        } else {
+//            cleanItemsPanPresence();
+//        }
+//         } catch (DatabaseConnectionException ex) {
+//                        Logger.getLogger(Panel_PresenceUI1.class.getName()).log(Level.SEVERE, null, ex);
+//                    }
+//        // setInfoInTablePresence();
+    }//GEN-LAST:event_buttonRounder2ActionPerformed
+
+    private void searchText6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchText6ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_searchText6ActionPerformed
+
+    private void buttonRounder3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRounder3ActionPerformed
+      new PayemmentParMoin((Frame) SwingUtilities.getWindowAncestor(this), true).setVisible(true);
+    }//GEN-LAST:event_buttonRounder3ActionPerformed
+
+    private void buttonRounder4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRounder4ActionPerformed
+
 
     }//GEN-LAST:event_buttonRounder4ActionPerformed
 
