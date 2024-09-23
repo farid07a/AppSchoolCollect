@@ -275,6 +275,8 @@ public class home extends javax.swing.JFrame {
         for (Matiere matiere : list_matiere) {
             // get seance of matiere today 
             scence_obj=seance_service.GetSeanceByTody(matiere);
+            
+            
             if(scence_obj!=null){
                 // 
                 list_seance_about_all_matieres.add(scence_obj);
@@ -282,11 +284,15 @@ public class home extends javax.swing.JFrame {
                 
             }else{
                 
-                list_previeux=seance_service.getListAllSeancePrevieuMonth(matiere); // list [sceance(1....30) ]
+                //- get last seance si diference <=7
+                // if (exist_vacance(matiere) != True)
+                list_previeux=seance_service.getListAllSeancePrevieuSemaine(matiere); // list [sceance(1....30) ]
                 seance_service.saveAllNextSeances(list_previeux);// save next seances about Matiere
                 System.out.println("Seance is Null AFter inser database change to :"+seance_service.GetSeanceByTody(matiere));
                 list_seance_about_all_matieres.add(seance_service.GetSeanceByTody(matiere));
                 
+                // else 
+                // disable all components and show add seance
             }
         }
         

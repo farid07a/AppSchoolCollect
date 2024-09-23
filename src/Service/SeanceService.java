@@ -42,7 +42,19 @@ public class SeanceService {
     }
     
     public java.util.List<Seance> getListAllSeancePrevieuMonth(Matiere matiere)throws DatabaseConnectionException{
-        List<Seance>  Reverse_list_previeux_seances=  new SeanceDAOImpl(ConnectionDB.getConnection()).getListPrevieuxSceanceByMatiere(matiere);
+        List<Seance>  Reverse_list_previeux_seances=  new SeanceDAOImpl(ConnectionDB.getConnection()).getListPrevieuxSceanceWithMonthByMatiere(matiere);
+        
+        List list_previeux_seances=new ArrayList();
+        for(int i=Reverse_list_previeux_seances.size()-1;i>=0;i--){
+            list_previeux_seances.add(Reverse_list_previeux_seances.get(i));
+        }
+        
+        return list_previeux_seances;
+        
+    }
+    
+    public java.util.List<Seance> getListAllSeancePrevieuSemaine(Matiere matiere)throws DatabaseConnectionException{
+        List<Seance>  Reverse_list_previeux_seances=  new SeanceDAOImpl(ConnectionDB.getConnection()).getListPrevieuxSceanceWithSemaineByMatiere(matiere);
         
         List list_previeux_seances=new ArrayList();
         for(int i=Reverse_list_previeux_seances.size()-1;i>=0;i--){
@@ -60,7 +72,7 @@ public class SeanceService {
         for (Seance previeux_seance : previeux_seances) {
            
             System.out.print("Before: "+previeux_seance.getDay_sceance()+" "+previeux_seance.getDate_sceance());
-            previeux_seance.setDate_sceance(previeux_seance.getDate_sceance().plusDays(7*4));
+            previeux_seance.setDate_sceance(previeux_seance.getDate_sceance().plusDays(7));
             // seance{ id , time, fiTime, date }
             System.out.println("-- next: "+previeux_seance.getDay_sceance()+" "+previeux_seance.getDate_sceance());
             int x=seance_dao.save(previeux_seance);
@@ -75,11 +87,15 @@ public class SeanceService {
             
         }
         
-        
-        
-        
-        
     }
+    
+    
+    
+    public boolean ExistVacances(Matiere matiere){
+         
+        
+        return True;
+     }
     
     
     public static void main(String[] args) {

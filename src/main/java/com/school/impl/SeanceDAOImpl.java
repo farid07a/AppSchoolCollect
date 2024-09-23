@@ -123,7 +123,7 @@ public class SeanceDAOImpl extends AbstractDAO<Seance> {
         return seances;
     }
          
-     public List<Seance> getListPrevieuxSceanceByMatiere(Matiere matiere){
+     public List<Seance> getListPrevieuxSceanceWithMonthByMatiere(Matiere matiere){
          
          List<Seance> seances = new ArrayList<>();
         try {
@@ -142,6 +142,26 @@ public class SeanceDAOImpl extends AbstractDAO<Seance> {
         return seances;
      
      }
+     public List<Seance> getListPrevieuxSceanceWithSemaineByMatiere(Matiere matiere){
+         
+         List<Seance> seances = new ArrayList<>();
+        try {
+            String query = " SELECT TOP "+matiere.getNum_sceance_semaine()+  " * FROM "+getTableName()+"  WHERE id_matiere =?  ORDER BY id DESC "; //delet id matiere 
+            
+           PreparedStatement statement = connection.prepareStatement(query);
+           statement.setInt(1,matiere.getId()); 
+           ResultSet resultSet = statement.executeQuery();
+            
+            while (resultSet.next()) {
+                seances.add(mapResultSetToEntity(resultSet));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return seances;
+     
+     }
+     
          
          
          public static void main(String[] args) {
@@ -157,7 +177,7 @@ public class SeanceDAOImpl extends AbstractDAO<Seance> {
             Matiere mat=new MatiereDAOImpl(conx).findById(2);
             System.out.println(mat);
             System.out.println("--------------");
-            List<Seance>  lst=  new SeanceDAOImpl(conx).getListPrevieuxSceanceByMatiere(mat);
+            List<Seance>  lst=  new SeanceDAOImpl(conx).getListPrevieuxSceanceWithMonthByMatiere(mat);
             System.out.println(lst);
             
             for (Seance seance : lst) {

@@ -27,6 +27,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JCheckBox;
@@ -81,38 +82,35 @@ public class AddSeanceForm extends javax.swing.JDialog {
         niveauEtudeDAOImpl = new NiveauEtudeDAOImpl(connection);
         matiereDAOImpl = new MatiereDAOImpl(connection);
         enseignantDAOImpl = new EnseignantDAOImpl(connection);
-        MatiereEnseignat_dao_impl=new MatiereEnseignantDAOImpl(connection);
+        MatiereEnseignat_dao_impl = new MatiereEnseignantDAOImpl(connection);
         setLocationRelativeTo(this);
 
         PrepareUI();
-        
-     
- 
-         txt_dat_first_seance.getDocument().addDocumentListener(new DocumentListener(){
+
+        txt_dat_first_seance.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-           changeDateOfDays();           
+                changeDateOfDays();
             }
+
             @Override
             public void removeUpdate(DocumentEvent e) {
-              //  changeDateOfDays();
+                //  changeDateOfDays();
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                changeDateOfDays() ;
+                changeDateOfDays();
             }
-                   
-         });
-         
-         
-        
+
+        });
+
     }
 
     public void PrepareUI() {
-        
+
         setInfoCategoreNiveauInCombox();
-    
+
     }
 
     public void setInfoCategoreNiveauInCombox() {
@@ -133,8 +131,7 @@ public class AddSeanceForm extends javax.swing.JDialog {
             }
         }
         //setInfoMatiereInCom();
-        setInfoMatiereInCom(com_catego_niveau, comb_niveau, com_matiere);
-        
+
     }
 
     public void setInfoMatiereInCom() {
@@ -163,35 +160,35 @@ public class AddSeanceForm extends javax.swing.JDialog {
     }
 
     public void setInfoMatiereInCom(JComboBox com_catego_niv, JComboBox com_niv, JComboBox com_matier) {
-        
-        if (com_catego_niv.getSelectedIndex()!=-1 && com_niv.getSelectedIndex()!= -1){
-        
-        com_matier.removeAllItems();
-        CategoreNiveau category = categoreNiveauDAOImpl.findByName(com_catego_niv.getSelectedItem().toString(), "categore_niveau_ar");
-        NiveauEtude niveauEtude = new NiveauEtude();// = niveauEtudeDAOImpl.findByName(comb_niveau.getSelectedItem().toString(), "niveau_initial_ar");
-        List<NiveauEtude> niveauEtudes = niveauEtudeDAOImpl.findAll();
-        if (com_niv.getSelectedIndex() != -1) {
-            for (NiveauEtude obj : niveauEtudes) {
-                if (obj.getCategore_niveau_id() == category.getId()
-                        && obj.getNiveauInitialAr().equals(com_niv.getSelectedItem().toString())) {
-                    niveauEtude = obj;
-                }
-            }
-            List<Matiere> matieres = matiereDAOImpl.findAll();
-            for (Matiere matiere_obj : matieres) {
-                if (matiere_obj.getNiveau().getId() == niveauEtude.getId()
-                        && matiere_obj.getCategoreNiveau().getId() == category.getId()) {
-                    // || matiere_obj.getCategoreNiveau().getId() == idCategoreNiveau) {           
-                    com_matier.addItem(matiere_obj.getMatiereEtdAr());
 
-                }
-            }
+        if (com_catego_niv.getSelectedIndex() != -1 && com_niv.getSelectedIndex() != -1) {
 
-            //  setInfoEnsignInCom();
-        }
+            com_matier.removeAllItems();
+            CategoreNiveau category = categoreNiveauDAOImpl.findByName(com_catego_niv.getSelectedItem().toString(), "categore_niveau_ar");
+            NiveauEtude niveauEtude = new NiveauEtude();// = niveauEtudeDAOImpl.findByName(comb_niveau.getSelectedItem().toString(), "niveau_initial_ar");
+            List<NiveauEtude> niveauEtudes = niveauEtudeDAOImpl.findAll();
+            if (com_niv.getSelectedIndex() != -1) {
+                for (NiveauEtude obj : niveauEtudes) {
+                    if (obj.getCategore_niveau_id() == category.getId()
+                            && obj.getNiveauInitialAr().equals(com_niv.getSelectedItem().toString())) {
+                        niveauEtude = obj;
+                    }
+                }
+                List<Matiere> matieres = matiereDAOImpl.findAll();
+                for (Matiere matiere_obj : matieres) {
+                    if (matiere_obj.getNiveau().getId() == niveauEtude.getId()
+                            && matiere_obj.getCategoreNiveau().getId() == category.getId()) {
+                        // || matiere_obj.getCategoreNiveau().getId() == idCategoreNiveau) {           
+                        com_matier.addItem(matiere_obj.getMatiereEtdAr());
+
+                    }
+                }
+
+                //  setInfoEnsignInCom();
+            }
         }
     }
-    
+
 //    public void setInfoEnsignInCom() {
 //
 //        if (com_matiere.getSelectedIndex() != -1 && comb_niveau.getSelectedIndex() != -1 && com_catego_niveau.getSelectedIndex() != -1) {
@@ -203,10 +200,9 @@ public class AddSeanceForm extends javax.swing.JDialog {
 //            }
 //        }
 //    }
-    
-    public void changeDateOfDays(){
-        
-         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    public void changeDateOfDays() {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         LocalDate date = LocalDate.parse(txt_dat_first_seance.getText(), formatter);
         LocalDate dat_next;
         if (date.getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
@@ -219,14 +215,14 @@ public class AddSeanceForm extends javax.swing.JDialog {
             //lab_date_1.setText(dat_next.format(formatter) + "");
             lab_date_1.setText(dat_next.format(formatter) + "");
         }
-        
+
         lab_date_2.setText(dat_next.plusDays(1).format(formatter) + "");
         lab_date_3.setText(dat_next.plusDays(2).format(formatter) + "");
         lab_date_4.setText(dat_next.plusDays(3).format(formatter) + "");
         lab_date_5.setText(dat_next.plusDays(4).format(formatter) + "");
         lab_date_6.setText(dat_next.plusDays(5).format(formatter) + "");
         lab_date_7.setText(dat_next.plusDays(6).format(formatter) + "");
-        
+
 //        
 //        if (date.getDayOfWeek().equals(DayOfWeek.MONDAY)) {
 //            //dat_next = date;
@@ -377,6 +373,7 @@ public class AddSeanceForm extends javax.swing.JDialog {
         lab_error_matier = new javax.swing.JLabel();
         lab_error_check_day = new javax.swing.JLabel();
         lab_error_dat = new javax.swing.JLabel();
+        NbrSeanceInSemaine_db = new javax.swing.JLabel();
 
         dateChooser.setName(""); // NOI18N
         dateChooser.setTextRefernce(txt_dat_first_seance);
@@ -685,49 +682,50 @@ public class AddSeanceForm extends javax.swing.JDialog {
         lab_error_dat.setForeground(new java.awt.Color(255, 0, 0));
         lab_error_dat.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 
+        NbrSeanceInSemaine_db.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        NbrSeanceInSemaine_db.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        NbrSeanceInSemaine_db.setText("00");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(26, 26, 26)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(317, 317, 317)
-                        .addComponent(buttonRounder19, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(30, 30, 30)
-                        .addComponent(buttonRounder17, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lab_nbr_seance, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(buttonRounder17, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(34, 34, 34)
+                        .addComponent(buttonRounder19, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
                         .addComponent(lab_error_check_day, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(49, 49, 49))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addComponent(NbrSeanceInSemaine_db, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(com_ensieng, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(com_matiere, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(comb_niveau, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lab_error_dat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(txt_dat_first_seance, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(com_catego_niveau, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(104, 104, 104)
-                                .addComponent(com_ensieng, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(com_matiere, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(comb_niveau, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lab_error_dat, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(txt_dat_first_seance, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(com_catego_niveau, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                        .addComponent(lab_nbr_seance, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addGap(176, 176, 176)
-                                                .addComponent(lab_error_matier, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                    .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 841, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 0, Short.MAX_VALUE)))))
+                                .addGap(246, 246, 246)
+                                .addComponent(lab_error_matier, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 841, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 18, Short.MAX_VALUE)))
                 .addGap(11, 11, 11))
             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -735,19 +733,17 @@ public class AddSeanceForm extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(com_catego_niveau, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(com_matiere, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(com_ensieng, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(com_ensieng, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(NbrSeanceInSemaine_db, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(comb_niveau, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(5, 5, 5)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lab_nbr_seance, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel9)
-                        .addComponent(txt_dat_first_seance, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txt_dat_first_seance, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lab_error_matier, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(1, 1, 1)
                 .addComponent(lab_error_dat, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -758,7 +754,10 @@ public class AddSeanceForm extends javax.swing.JDialog {
                     .addComponent(lab_error_check_day, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(buttonRounder17, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(buttonRounder19, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(buttonRounder19, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(lab_nbr_seance, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING)))
                 .addContainerGap())
         );
 
@@ -769,35 +768,39 @@ public class AddSeanceForm extends javax.swing.JDialog {
 
 
     private void buttonRounder19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRounder19ActionPerformed
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-       
+        if (Integer.valueOf(NbrSeanceInSemaine_db.getText()) == 0
+                || (!Objects.equals(Integer.valueOf(NbrSeanceInSemaine_db.getText()), Integer.valueOf(lab_nbr_seance.getText())))) {
+            JOptionPane.showMessageDialog(null, "Error in Number Seance please check it");
+            return;
+        }
+
         if (com_matiere.getSelectedIndex() != -1 && !txt_dat_first_seance.getText().isEmpty() && !lab_nbr_seance.getText().equals("0")) {
             Matiere matiere = new MatiereDAOImpl(connection).getMatiereNiveauOfCategory(com_matiere.getSelectedItem().toString(),
                     comb_niveau.getSelectedItem().toString(), com_catego_niveau.getSelectedItem().toString());
-            JOptionPane.showMessageDialog(null, ""+matiere.getId());
+            JOptionPane.showMessageDialog(null, "" + matiere.getId());
             SeanceDAOImpl sceanceDAOImpl = new SeanceDAOImpl(connection);
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
             //  DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             java.util.Date debu_seance;
             java.util.Date fin_seance;
             int num_seance = 1;
-            List<Seance> listSceance=new ArrayList<>();
-            
+            List<Seance> listSceance = new ArrayList<>();
+
             try {
                 if (check_sund.isSelected()) {
-               LocalDate date = LocalDate.parse(lab_date_1.getText(), formatter);
+                    LocalDate date = LocalDate.parse(lab_date_1.getText(), formatter);
 
                     debu_seance = sdf.parse(pan_time_sund.getbignTime());
                     fin_seance = sdf.parse(pan_time_sund.getfinTime());
-                    
-                    
-                    
+
                     LocalTime start_seance = LocalTime.parse(pan_time_sund.getbignTime().substring(0, 5));
                     LocalTime end_seance = LocalTime.parse(pan_time_sund.getfinTime().substring(0, 5));
-                    
+
                     Seance seance_1 = new Seance(0, num_seance, start_seance, end_seance,
-                            check_sund.getText(), date,false, matiere);
-                    if (sceanceDAOImpl.save(seance_1)>0){
+                            check_sund.getText(), date, false, matiere);
+                    if (sceanceDAOImpl.save(seance_1) > 0) {
                         listSceance.add(seance_1);
                     }
 //                    seance_1 = sceanceDAOImpl.getlast();//m this return Sceance with Id != 0 //0 not id seance_1(id:0,num==ok ,....)
@@ -807,120 +810,117 @@ public class AddSeanceForm extends javax.swing.JDialog {
                 }
                 // الاثين
                 if (chec_mond.isSelected()) {
-                                   LocalDate date = LocalDate.parse(lab_date_2.getText(), formatter);
+                    LocalDate date = LocalDate.parse(lab_date_2.getText(), formatter);
 
                     num_seance = num_seance + 1;
                     debu_seance = sdf.parse(pan_time_mond.getbignTime());
                     fin_seance = sdf.parse(pan_time_mond.getfinTime());
                     LocalTime start_seance = LocalTime.parse(pan_time_sund.getbignTime().substring(0, 5));
                     LocalTime end_seance = LocalTime.parse(pan_time_sund.getfinTime().substring(0, 5));
-                    
+
                     Seance seance_2 = new Seance(0, num_seance, start_seance, end_seance,
-                            chec_mond.getText(), date,false, matiere);
-                    
+                            chec_mond.getText(), date, false, matiere);
+
                     //sceanceDAOImpl.save(seance_2);
-                    if (sceanceDAOImpl.save(seance_2)>0){
+                    if (sceanceDAOImpl.save(seance_2) > 0) {
                         listSceance.add(seance_2);
                     }
-                    
+
                     //seance_2 = sceanceDAOImpl.getlast();//m this return Sceance with Id != 0 //0 not id seance_1(id:0,num==ok ,....)
-                   
                 }
                 if (check_tues.isSelected()) {
-               LocalDate date = LocalDate.parse(lab_date_3.getText(), formatter);
+                    LocalDate date = LocalDate.parse(lab_date_3.getText(), formatter);
 
                     num_seance = num_seance + 1;
                     debu_seance = sdf.parse(pan_time_tuesd.getbignTime());
                     fin_seance = sdf.parse(pan_time_tuesd.getfinTime());
-                    
+
                     LocalTime start_seance = LocalTime.parse(pan_time_sund.getbignTime().substring(0, 5));
                     LocalTime end_seance = LocalTime.parse(pan_time_sund.getfinTime().substring(0, 5));
-                    
+
                     Seance seance_3 = new Seance(0, num_seance, start_seance, end_seance,
-                            check_tues.getText(), date,false, matiere);
+                            check_tues.getText(), date, false, matiere);
                     sceanceDAOImpl.save(seance_3);
-                    
-                    if (sceanceDAOImpl.save(seance_3)>0){
+
+                    if (sceanceDAOImpl.save(seance_3) > 0) {
                         listSceance.add(seance_3);
                     }
-                    
+
                 }
                 if (check_wed.isSelected()) {
-               LocalDate date = LocalDate.parse(lab_date_4.getText(), formatter);
+                    LocalDate date = LocalDate.parse(lab_date_4.getText(), formatter);
 
                     num_seance = num_seance + 1;
                     debu_seance = sdf.parse(pan_time_wednesd.getbignTime());
                     fin_seance = sdf.parse(pan_time_wednesd.getfinTime());
                     LocalTime start_seance = LocalTime.parse(pan_time_sund.getbignTime().substring(0, 5));
                     LocalTime end_seance = LocalTime.parse(pan_time_sund.getfinTime().substring(0, 5));
-                    
+
                     Seance seance_4 = new Seance(0, num_seance, start_seance, end_seance,
-                            check_wed.getText(), date,false, matiere);
+                            check_wed.getText(), date, false, matiere);
                     //sceanceDAOImpl.save(seance_4);
-                    if (sceanceDAOImpl.save(seance_4)>0){
+                    if (sceanceDAOImpl.save(seance_4) > 0) {
                         listSceance.add(seance_4);
                     }
                 }
                 if (check_thurs.isSelected()) {
-               LocalDate date = LocalDate.parse(lab_date_5.getText(), formatter);
+                    LocalDate date = LocalDate.parse(lab_date_5.getText(), formatter);
 
                     num_seance = num_seance + 1;
                     debu_seance = sdf.parse(pan_time_theursd.getbignTime());
                     fin_seance = sdf.parse(pan_time_theursd.getfinTime());
                     LocalTime start_seance = LocalTime.parse(pan_time_sund.getbignTime().substring(0, 5));
                     LocalTime end_seance = LocalTime.parse(pan_time_sund.getfinTime().substring(0, 5));
-                    
+
                     Seance seance_5 = new Seance(0, num_seance, start_seance, end_seance,
-                            check_thurs.getText(), date,false, matiere);
+                            check_thurs.getText(), date, false, matiere);
                     //sceanceDAOImpl.save(seance_5);
-                    if (sceanceDAOImpl.save(seance_5)>0){
+                    if (sceanceDAOImpl.save(seance_5) > 0) {
                         listSceance.add(seance_5);
                     }
                 }
 
                 if (check_frid.isSelected()) {
-               LocalDate date = LocalDate.parse(lab_date_6.getText(), formatter);
+                    LocalDate date = LocalDate.parse(lab_date_6.getText(), formatter);
                     num_seance = num_seance + 1;
                     debu_seance = sdf.parse(pan_time_frid.getbignTime());
                     fin_seance = sdf.parse(pan_time_frid.getfinTime());
                     LocalTime start_seance = LocalTime.parse(pan_time_sund.getbignTime().substring(0, 5));
                     LocalTime end_seance = LocalTime.parse(pan_time_sund.getfinTime().substring(0, 5));
                     Seance seance_6 = new Seance(0, num_seance, start_seance, end_seance,
-                            check_frid.getText(), date,false, matiere);
-                    if (sceanceDAOImpl.save(seance_6)>0){
+                            check_frid.getText(), date, false, matiere);
+                    if (sceanceDAOImpl.save(seance_6) > 0) {
                         listSceance.add(seance_6);
                     }
-                  
+
                 }
                 if (check_satur.isSelected()) {
-               LocalDate date = LocalDate.parse(lab_date_7.getText(), formatter);
+                    LocalDate date = LocalDate.parse(lab_date_7.getText(), formatter);
 
                     num_seance = num_seance + 1;
                     debu_seance = sdf.parse(pan_time_saturd.getbignTime());
                     fin_seance = sdf.parse(pan_time_saturd.getfinTime());
                     LocalTime start_seance = LocalTime.parse(pan_time_sund.getbignTime().substring(0, 5));
                     LocalTime end_seance = LocalTime.parse(pan_time_sund.getfinTime().substring(0, 5));
-                    Seance seance_6 = new Seance(0, num_seance, start_seance, end_seance,                     
-                            check_satur.getText(), date,false, matiere);
-                    if (sceanceDAOImpl.save(seance_6)>0){
+                    Seance seance_6 = new Seance(0, num_seance, start_seance, end_seance,
+                            check_satur.getText(), date, false, matiere);
+                    if (sceanceDAOImpl.save(seance_6) > 0) {
                         listSceance.add(seance_6);
                     }
-                    
+
                 }
-                
-                int numSceance = Integer.parseInt(lab_nbr_seance.getText());
-                 
-                for(int i=0; i<3;i++){
-                    
-                    for (Seance seance : listSceance) {
-                        seance.setNumSeance(++numSceance);
-                        seance.setDate_sceance(seance.getDate_sceance().plusWeeks(1));
-                        if (sceanceDAOImpl.save(seance)>0)
-                            System.out.println("Success Save");
-                    }
-                }
-                
-                
+
+//                int numSceance = Integer.parseInt(lab_nbr_seance.getText());
+//                 
+//                for(int i=0; i<3;i++){
+//                    
+//                    for (Seance seance : listSceance) {
+//                        seance.setNumSeance(++numSceance);
+//                        seance.setDate_sceance(seance.getDate_sceance().plusWeeks(1));
+//                        if (sceanceDAOImpl.save(seance)>0)
+//                            System.out.println("Success Save");
+//                    }
+//                }
             } catch (ParseException ex) {
                 Logger.getLogger(AddSeanceForm.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -943,52 +943,51 @@ public class AddSeanceForm extends javax.swing.JDialog {
         if (com_matiere.getSelectedIndex() != -1) {
             lab_error_matier.setText("");
         }
-        
+
         if (com_matiere.getSelectedIndex() != -1 && comb_niveau.getSelectedIndex() != -1
                 && com_catego_niveau.getSelectedIndex() != -1) {
-            
+            lab_error_matier.setText("");
             Matiere matiere = matiereDAOImpl.getMatiereNiveauOfCategory(com_matiere.getSelectedItem().toString(),
                     comb_niveau.getSelectedItem().toString(), com_catego_niveau.getSelectedItem().toString());
-    setInfoEnseignantByMatiere();
+
+            setInfoEnseignantByMatiere(matiere);
+            setNumbeSeanceInSemaineByMatiere(matiere);
+
         } else {
-            
+
             com_ensieng.removeAllItems();
-           //ComboGroup.removeAllItems();
+            NbrSeanceInSemaine_db.setText("00");
+            //ComboGroup.removeAllItems();
         }
-        
+
     }//GEN-LAST:event_com_matiereActionPerformed
 
-    public void setInfoEnseignantByMatiere(){
-        
-        
-        
+    public void setNumbeSeanceInSemaineByMatiere(Matiere matiere) {
+        NbrSeanceInSemaine_db.setText(String.valueOf(matiere.getNum_sceance_semaine()));
+    }
+
+    public void setInfoEnseignantByMatiere(Matiere matiere) {
         try {
-            Matiere matiere = matiereDAOImpl.getMatiereNiveauOfCategory(com_matiere.getSelectedItem().toString(),
-                    comb_niveau.getSelectedItem().toString(), com_catego_niveau.getSelectedItem().toString());
-            
-            
-            
             System.out.println(matiere);
-            
-            List<Enseignant> list_enseignat= MatiereEnseignat_dao_impl.findEnseignantByMatiereId(matiere);
-            
-            System.out.println("list enseignat:"+list_enseignat);
-            
+
+            List<Enseignant> list_enseignat = MatiereEnseignat_dao_impl.findEnseignantByMatiereId(matiere);
+
+            System.out.println("list enseignat:" + list_enseignat);
+
             com_ensieng.removeAllItems();
-            
+
             System.out.println("");
             for (Enseignant enseignat : list_enseignat) {
-                com_ensieng.addItem(enseignat.getNomAr()+"-"+enseignat.getPrenomAr());
+                com_ensieng.addItem(enseignat.getNomAr() + "-" + enseignat.getPrenomAr());
             }
-            
+
         } catch (SQLException ex) {
             ex.printStackTrace();
             Logger.getLogger(AddEtudiantForm.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-    
+
     }
-    
+
     private void com_matiereItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_com_matiereItemStateChanged
 
     }//GEN-LAST:event_com_matiereItemStateChanged
@@ -1011,6 +1010,8 @@ public class AddSeanceForm extends javax.swing.JDialog {
 
     private void comb_niveauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comb_niveauActionPerformed
         setInfoMatiereInCom(com_catego_niveau, comb_niveau, com_matiere);
+        //setInfoMatiereInCom(com_catego_niveau, comb_niveau, com_matiere);
+
     }//GEN-LAST:event_comb_niveauActionPerformed
 
     private void check_sundActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_check_sundActionPerformed
@@ -1094,7 +1095,7 @@ public class AddSeanceForm extends javax.swing.JDialog {
         if (!txt_dat_first_seance.getText().equals("")) {
             lab_error_check_day.setText("");
         }
-        
+
 
     }//GEN-LAST:event_txt_dat_first_seanceActionPerformed
 
@@ -1103,11 +1104,11 @@ public class AddSeanceForm extends javax.swing.JDialog {
     }//GEN-LAST:event_buttonRounder17ActionPerformed
 
     private void txt_dat_first_seanceHierarchyChanged(java.awt.event.HierarchyEvent evt) {//GEN-FIRST:event_txt_dat_first_seanceHierarchyChanged
-    
+
     }//GEN-LAST:event_txt_dat_first_seanceHierarchyChanged
 
     private void txt_dat_first_seancePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_txt_dat_first_seancePropertyChange
-      
+
     }//GEN-LAST:event_txt_dat_first_seancePropertyChange
 
     /**
@@ -1160,6 +1161,7 @@ public class AddSeanceForm extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel NbrSeanceInSemaine_db;
     private material.design.buttonRounder buttonRounder10;
     private material.design.buttonRounder buttonRounder17;
     private material.design.buttonRounder buttonRounder19;
