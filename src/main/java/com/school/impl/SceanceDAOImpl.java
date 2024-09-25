@@ -12,10 +12,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import main.java.com.school.DAO.AbstractDAO;
+import main.java.com.school.model.config.ConnectionDB;
+import main.java.com.school.model.config.DatabaseConnectionException;
 
 
 
@@ -70,8 +75,8 @@ public class SceanceDAOImpl extends AbstractDAO<Seance> {
         Seance seance = new Seance();
         seance.setId(resultSet.getInt("id"));
         seance.setNumSeance(resultSet.getInt("num_sceance"));
-        seance.setTimeSeance(resultSet.getObject("time_sceance",LocalTime.class));
-        seance.setFinTime(resultSet.getObject("fin_time",LocalTime.class));
+        seance.setTimeSeance(resultSet.getTime("time_sceance").toLocalTime());
+        seance.setFinTime(resultSet.getTime("fin_time").toLocalTime());
         seance.setDay_sceance(resultSet.getString("day_sceance"));       
         seance.setDate_sceance(resultSet.getDate("date_sceance").toLocalDate());
         seance.setTerminate(resultSet.getBoolean("termine"));
@@ -99,5 +104,34 @@ public class SceanceDAOImpl extends AbstractDAO<Seance> {
         return entitys;
     }
 
+         public List<Seance> getSeancesOfToday(LocalDate date) {
+        List<Seance> seances = new ArrayList<>();
+        try {
+            String query = " SELECT * From "+getTableName()+"  where date_sceance =? "; //delet id matiere 
+            
+           PreparedStatement statement = connection.prepareStatement(query);
+            ResultSet resultSet = statement.executeQuery();
+            statement.setDate(1,java.sql.Date.valueOf( date));
+            while (resultSet.next()) {
+                seances.add(mapResultSetToEntity(resultSet));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return seances;
+    }
+         
+         
+         public static void main(String[] args) {
+        try {
+            Seance sc=  new SceanceDAOImpl(ConnectionDB.getConnection()).findById(1);
+            System.out.println(sc);
+        } catch (DatabaseConnectionException ex) {
+            Logger.getLogger(SceanceDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+             
+    }
+         
+    
     
 }

@@ -67,7 +67,7 @@ public class MatiereEnseignantDAOImpl extends AbstractDAO<MatiereEnseignant> imp
 
     @Override
     public List<Enseignant> findEnseignantByMatiereId(Matiere Matiere) throws SQLException{
-        String Query="SELECT * from "+getTableName()+" WHERE id_matiere = ?";
+        String Query="SELECT * from "+getTableName()+" WHERE id_matiere=?";
         List <Enseignant> list_enseignant=new ArrayList<>();
         
         PreparedStatement statement=connection.prepareStatement(Query);
@@ -76,6 +76,7 @@ public class MatiereEnseignantDAOImpl extends AbstractDAO<MatiereEnseignant> imp
         ResultSet resultSet=statement.executeQuery();
         
         while (resultSet.next()) {
+            
                 list_enseignant.add(mapResultSetToEntity(resultSet).getEnseignant());
             }
         

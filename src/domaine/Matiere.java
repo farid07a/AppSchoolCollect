@@ -17,16 +17,38 @@ public class Matiere {
     private NiveauEtude niveau;
     private CategoreNiveau categoreNiveau;
     private Enseignant enseignant;
+    private int num_sceance_semaine; 
+    private int num_sceance_moins;
 
-    public Matiere(int id, String matiereEtdAr, String matiereEtdFr, double prix, NiveauEtude niveau,CategoreNiveau categoreNiveau, Enseignant enseignant) {
+    public Matiere(int id, String matiereEtdAr, String matiereEtdFr, double prix, NiveauEtude niveau, CategoreNiveau categoreNiveau, Enseignant enseignant, int num_sceance_semaine, int num_sceance_moins) {
         this.id = id;
         this.matiereEtdAr = matiereEtdAr;
         this.matiereEtdFr = matiereEtdFr;
         this.prix = prix;
         this.niveau = niveau;
-        this.categoreNiveau=categoreNiveau;
+        this.categoreNiveau = categoreNiveau;
         this.enseignant = enseignant;
+        this.num_sceance_semaine = num_sceance_semaine;
+        this.num_sceance_moins = num_sceance_moins;
     }
+
+    public void setNum_sceance_moins(int num_sceance_moins) {
+        this.num_sceance_moins = num_sceance_moins;
+    }
+
+    public void setNum_sceance_semaine(int num_sceance_semaine) {
+        this.num_sceance_semaine = num_sceance_semaine;
+    }
+
+    public int getNum_sceance_moins() {
+        return num_sceance_moins;
+    }
+
+    public int getNum_sceance_semaine() {
+        return num_sceance_semaine;
+    }
+
+    
 
     public Matiere() {
    

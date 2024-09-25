@@ -48,6 +48,12 @@ public class MAIN {
         try {
             connection = new ConnectionDB().getConnection();
             Seance seance = new SceanceDAOImpl(connection).findById(5);
+        
+      MatiereDAOImpl m = new MatiereDAOImpl(connection);
+           // m.getMatieresNiveauOfCategory(new CategoreNiveauDAOImpl(connection).findById(6),new NiveauEtudeDAOImpl(connection).findById(5)).get(0).getMatiereEtdAr();
+         System.out.println(
+                 m.getMatiereNiveauOfCategory("لغة عربية", "سنة أولى ابتدائي", "الابتدائي").getId());
+            
            // Seance_Matiere seance_Matiere =new SeanceMatiereDAOImpl(connection).getlasSeanceOfToday(day, 0)
            // LocalDate date_seance_ma= seance_Matiere.getDate().with(TemporalAdjusters.next(DayOfWeek.SUNDAY));                 
 

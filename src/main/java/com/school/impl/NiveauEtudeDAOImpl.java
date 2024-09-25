@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import main.java.com.school.DAO.AbstractDAO;
 import main.java.com.school.model.config.ConnectionDB;
 
@@ -72,8 +73,7 @@ public class NiveauEtudeDAOImpl extends AbstractDAO<NiveauEtude> {
         return niveauEtude;
     }
     
-    public NiveauEtude getNiveauOfCategory(String niveau, String Catego){
-        
+    public NiveauEtude getNiveauOfCategory(String niveau, String Catego){        
         NiveauEtude niveauEtude = null;
          String  SELECT_Niveau_By_Category="SELECT *\n" +
                                 "FROM niveau_etude,categore_niveau\n" + 
@@ -82,18 +82,17 @@ public class NiveauEtudeDAOImpl extends AbstractDAO<NiveauEtude> {
                                     "  and niveau_etude.categore_niveau_id= categore_niveau.id";
 
        PreparedStatement statement;
+            
         try {
             statement = connection.prepareStatement(SELECT_Niveau_By_Category);
             ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                niveauEtude.setId(resultSet.getInt(""));
+            if(resultSet.next()) {
+                niveauEtude =mapResultSetToEntity(resultSet);
             }
-        
         } catch (SQLException ex) {
             Logger.getLogger(NiveauEtudeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
+   
         return niveauEtude ;
     
     }

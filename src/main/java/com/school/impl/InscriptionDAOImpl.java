@@ -96,6 +96,25 @@ public class InscriptionDAOImpl extends AbstractDAO<Inscription> implements Insc
         return inscriptions;
         
     }
+       public Inscription findByEtudiantAndMatiere(Etudiant etudiant , Matiere matiere){
+        Inscription  inscription = null;
+        try {
+            String query = "SELECT * FROM " + getTableName() + " WHERE id_etudiant=?  and id_matiere=? ";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1,etudiant.getId() );
+             statement.setInt(2,matiere.getId() );
+            ResultSet resultSet = statement.executeQuery();
+            if(resultSet.next()) {
+                inscription = mapResultSetToEntity(resultSet);
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return inscription;      
+    }
+    
+    
 
     @Override
     public List<Inscription> findByMatiereId(int matiereId) {

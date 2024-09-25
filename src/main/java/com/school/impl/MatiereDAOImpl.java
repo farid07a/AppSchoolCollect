@@ -5,16 +5,22 @@
  */
 package main.java.com.school.impl;
 
+import domaine.CategoreNiveau;
 import domaine.Matiere;
 import domaine.NiveauEtude;
+import guis.home;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import main.java.com.school.DAO.AbstractDAO;
+import main.java.com.school.model.config.ConnectionDB;
+import main.java.com.school.model.config.DatabaseConnectionException;
 
 /**
  *
@@ -33,12 +39,12 @@ public class MatiereDAOImpl extends AbstractDAO<Matiere> {
 
     @Override
     protected String getInsertQuery() {
-        return "INSERT INTO matiere (matiere_etd_ar, matiere_etd_fr, prix, id_niveau, id_categore_niveau ,id_enseignant) VALUES (?, ?, ?,?, ?, ?)";
+        return "INSERT INTO matiere (matiere_etd_ar, matiere_etd_fr, prix, id_niveau, id_categore_niveau ,id_enseignant,num_sceance_semaine,num_sceance_moins) VALUES (?, ?, ?,?, ?, ?,?,?)";
     }
 
     @Override
     protected String getUpdateQuery() {
-        return "UPDATE matiere SET matiere_etd_ar=?, matiere_etd_fr=?, prix=?, id_niveau=?, id_categore_niveau=?,id_enseignant=? WHERE id=?";
+        return "UPDATE matiere SET matiere_etd_ar=?, matiere_etd_fr=?, prix=?, id_niveau=?, id_categore_niveau=?,id_enseignant=?,num_sceance_semaine=?,num_sceance_moins=? WHERE id=?";
     }
 
     @Override
@@ -48,7 +54,15 @@ public class MatiereDAOImpl extends AbstractDAO<Matiere> {
         statement.setDouble(3, matiere.getPrix());
         statement.setInt(4, matiere.getNiveau().getId());
         statement.setInt(5, matiere.getCategoreNiveau().getId());
-        statement.setInt(6, matiere.getEnseignant().getId());
+        if (matiere.getEnseignant() == null) {
+            statement.setInt(6, java.sql.Types.NULL);
+
+        } else {
+            statement.setInt(6, matiere.getEnseignant().getId());
+        }
+        statement.setInt(7, matiere.getNum_sceance_semaine());
+        statement.setInt(8, matiere.getNum_sceance_moins());
+        
 
     }
 
@@ -59,8 +73,14 @@ public class MatiereDAOImpl extends AbstractDAO<Matiere> {
         statement.setDouble(3, matiere.getPrix());
         statement.setInt(4, matiere.getNiveau().getId());
         statement.setInt(5, matiere.getCategoreNiveau().getId());
-        statement.setInt(6, matiere.getEnseignant().getId());
-        statement.setInt(7, matiere.getId());
+        if (matiere.getEnseignant() == null) {
+            statement.setInt(6, java.sql.Types.NULL);
+        } else {
+            statement.setInt(6, matiere.getEnseignant().getId());
+        }
+        statement.setInt(7, matiere.getNum_sceance_semaine());
+        statement.setInt(8, matiere.getNum_sceance_moins());
+        statement.setInt(9, matiere.getId());
     }
 
     @Override
@@ -77,6 +97,8 @@ public class MatiereDAOImpl extends AbstractDAO<Matiere> {
         matiere.setNiveau(niveau_dao.findById(resultSet.getInt("id_niveau")));
         matiere.setCategoreNiveau(categore_dao.findById(resultSet.getInt("id_categore_niveau")));
         matiere.setEnseignant(enseignant_dao.findById(resultSet.getInt("id_enseignant")));
+        matiere.setNum_sceance_semaine(resultSet.getInt("num_sceance_semaine"));
+        matiere.setNum_sceance_semaine(resultSet.getInt("num_sceance_moins"));
         return matiere;
     }
 
@@ -100,15 +122,15 @@ public class MatiereDAOImpl extends AbstractDAO<Matiere> {
 
     }
 
-    public Matiere getMatiereNiveauOfCategory(String Matiere_n,String niveau, String Catego) {
+    public Matiere getMatiereNiveauOfCategory(String Matiere_n, String niveau, String Catego) {
 
-        Matiere matiere = null;
-     
+        Matiere matiere = new Matiere();
+
         String SELECT_Matier_Niveau_Category = "SELECT matiere.id As matiere_id\n"
                 + "FROM niveau_etude,categore_niveau,matiere\n"
-                + "WHERE niveau_etude.niveau_initial_ar = N'"+niveau+"'\n"
-                + "  AND categore_niveau.categore_niveau_ar = N'"+Catego+"'\n"
-                + "  and matiere.matiere_etd_ar=N'"+Matiere_n+"'\n"
+                + "WHERE niveau_etude.niveau_initial_ar = N'" + niveau + "'\n"
+                + "  AND categore_niveau.categore_niveau_ar = N'" + Catego + "'\n"
+                + "  and matiere.matiere_etd_ar=N'" + Matiere_n + "'\n"
                 + "  and niveau_etude.categore_niveau_id= categore_niveau.id\n"
                 + "  and matiere.id_categore_niveau = categore_niveau.id and "
                 + "matiere.id_niveau=niveau_etude.id";
@@ -116,25 +138,10 @@ public class MatiereDAOImpl extends AbstractDAO<Matiere> {
         PreparedStatement statement;
         try {
             statement = connection.prepareStatement(SELECT_Matier_Niveau_Category);
-//            statement.setString(1, niveau.trim());
-//            statement.setString(2, Catego.trim());
-//            statement.setString(3, Matiere_n.trim());
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                int id_matiere =resultSet.getInt("matiere_id");
-              matiere=findById(id_matiere);
-                
-                /* matiere.setId(resultSet.getInt("id"));
-                matiere.setMatiereEtdAr(resultSet.getString("matiere_etd_ar"));
-                matiere.setMatiereEtdFr(resultSet.getString("matiere_etd_fr"));               
-                matiere.setPrix(resultSet.getDouble("prix"));                
-                niveauEtude.setId(resultSet.getInt("id"));
-                niveauEtude.setNiveauInitialAr("niveau_initial_ar");
-                niveauEtude.setNiveauInitialFr("niveau_initial_fr");
-                niveauEtude.setDescription("description");
-                niveauEtude.setCategore_niveau_id(0);
-                matiere.setNiveau(null);
-                matiere.setCategoreNiveau(null);*/
+                int id_matiere = resultSet.getInt("matiere_id");
+                matiere = findById(id_matiere);
             }
 
         } catch (SQLException ex) {
@@ -145,8 +152,32 @@ public class MatiereDAOImpl extends AbstractDAO<Matiere> {
 
     }
     
-    
-   
+    public List <Matiere> getMatieresNiveauOfCategory(CategoreNiveau Catego ,NiveauEtude niveau) {
+     
+        List <Matiere> matieres = new ArrayList<>();
+        String SELECT_Matier_Niveau_Category = "SELECT * FROM " +getTableName()+ "  WHERE   id_categore_niveau =?  and  id_niveau=? ";
+
+        PreparedStatement statement;
+        try {
+            statement = connection.prepareStatement(SELECT_Matier_Niveau_Category);
+            statement.setInt(1,Catego.getId() );
+            statement.setInt(2, niveau.getId());
+            ResultSet resultSet = statement.executeQuery();
+            System.out.println("************");      
+            while (resultSet.next()) {
+                 
+                Matiere matiere =mapResultSetToEntity(resultSet);
+                System.out.println(""+matiere.getMatiereEtdAr());
+                matieres.add(matiere);
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(NiveauEtudeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return matieres;
+    }
+  
 
     /* SELECT *
 FROM niveau_etude,categore_niveau,matiere

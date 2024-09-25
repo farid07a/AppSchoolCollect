@@ -4,18 +4,108 @@
  */
 package guis;
 
+import DialogFram.ValidationMessageDialog;
+import domaine.CategoreNiveau;
+import domaine.Enseignant;
+import domaine.Matiere;
+import domaine.MatiereEnseignant;
+import domaine.NiveauEtude;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JComboBox;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import main.java.com.school.impl.CategoreNiveauDAOImpl;
+import main.java.com.school.impl.EnseignantDAOImpl;
+import main.java.com.school.impl.MatiereDAOImpl;
+import main.java.com.school.impl.NiveauEtudeDAOImpl;
+import main.java.com.school.model.config.ConnectionDB;
+import main.java.com.school.model.config.DatabaseConnectionException;
+import material.design.ScrollBar;
+import ui.table.TableCustom;
+
 /**
  *
  * @author client
  */
 public class AddMatiereForm extends javax.swing.JDialog {
 
-    /**
-     * Creates new form NewJDialog
-     */
+    home home;
+    Connection connection;
+    CategoreNiveauDAOImpl categoreNiveauDAOImpl;
+    NiveauEtudeDAOImpl niveauEtudeDAOImpl;
+    ValidationMessageDialog message_validation;
+    MatiereDAOImpl matiereDAOImpl;
+    EnseignantDAOImpl enseignantDAOImpl;
+
     public AddMatiereForm(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+        super(parent);
+        this.home = (home) parent;
+        message_validation=new ValidationMessageDialog(this.home);
+        try {
+            connection = ConnectionDB.getConnection();
+        } catch (DatabaseConnectionException ex) {
+            Logger.getLogger(home.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        categoreNiveauDAOImpl = new CategoreNiveauDAOImpl(connection);
+        niveauEtudeDAOImpl = new NiveauEtudeDAOImpl(connection);
+        matiereDAOImpl = new MatiereDAOImpl(connection);
+        enseignantDAOImpl = new EnseignantDAOImpl(connection);
+
         initComponents();
+        setLocationRelativeTo(this);
+        setDesignTable(tab_matiere, jScrollPane2);
+
+        prapareUI();
+        com_ensig.setSelectedIndex(0);
+
+    }
+
+    public void prapareUI() {
+        setInfoCategoreNiveauInCombox();
+        setInfoEnsignInCom();
+
+
+    }
+
+    public void setInfoCategoreNiveauInCombox() {
+        List<CategoreNiveau> categoreNiveaus = categoreNiveauDAOImpl.findAll();
+        for (CategoreNiveau categoreNiveau_obj : categoreNiveaus) {
+            com_catego_niveau.addItem(categoreNiveau_obj.getCategore_niveau_ar());
+            //    jComboBox1.addItem(categoreNiveau_obj.getCategore_niveau_ar());
+        }
+    }
+
+    public void setInfoNiveauEtudeInCom() {
+        CategoreNiveau category = categoreNiveauDAOImpl.findByName(com_catego_niveau.getSelectedItem().toString(), "categore_niveau_ar");
+        List<NiveauEtude> niveauEtudes = niveauEtudeDAOImpl.findAll();
+        com_niveau.removeAllItems();
+        if (com_catego_niveau.getSelectedIndex() != -1) {
+            for (NiveauEtude obj : niveauEtudes) {
+                if (obj.getCategore_niveau_id() == category.getId()) {
+                    com_niveau.addItem(obj.getNiveauInitialAr());
+                }
+            }
+        }
+    }
+
+    public void setInfoEnsignInCom() {
+        List<Enseignant> enseignants = enseignantDAOImpl.findAll();
+        com_ensig.removeAll();
+
+        for (Enseignant enseignant : enseignants) {
+            com_ensig.addItem(enseignant.getNomAr() + "-" + enseignant.getPrenomAr());
+        }
+        com_ensig.addItem("/");
     }
 
     /**
@@ -28,73 +118,53 @@ public class AddMatiereForm extends javax.swing.JDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        textField2 = new material.design.TextField();
-        textField1 = new material.design.TextField();
-        jPanel2 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        buttonRounder1 = new material.design.buttonRounder();
+        txt_matier = new material.design.TextField();
+        txt_matier_fr = new material.design.TextField();
         com_niveau = new material.design.Combobox();
         com_catego_niveau = new material.design.Combobox();
         buttonRounder17 = new material.design.buttonRounder();
         buttonRounder19 = new material.design.buttonRounder();
         jLabel2 = new javax.swing.JLabel();
         txt_prix = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        tableScrollButton1 = new ui.table.TableScrollButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tab_matiere = new javax.swing.JTable();
+        btn_delet = new material.design.buttonRounder();
+        com_ensig = new material.design.Combobox();
+        btn_add_niveau = new material.design.buttonRounder();
+        lab_categ_niv = new javax.swing.JLabel();
+        lab_niv_ = new javax.swing.JLabel();
+        lab_ensig = new javax.swing.JLabel();
+        lab_ma = new javax.swing.JLabel();
+        lab_error_tabl = new javax.swing.JLabel();
+        nbrSceanceParSomaine = new material.design.TextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new java.awt.CardLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        textField2.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        textField2.setToolTipText("");
-        textField2.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        textField2.setLabelText("المــادة");
-
-        textField1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        textField1.setToolTipText("");
-        textField1.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        textField1.setLabelText("La Matiere");
-        textField1.setLangue(1);
-
-        jPanel2.setBackground(new java.awt.Color(101, 147, 252));
-
-        jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("اضافة المواد الدراسية");
-
-        buttonRounder1.setBackground(new java.awt.Color(117, 158, 255));
-        buttonRounder1.setForeground(new java.awt.Color(255, 255, 255));
-        buttonRounder1.setText("X");
-        buttonRounder1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonRounder1ActionPerformed(evt);
+        txt_matier.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txt_matier.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        txt_matier.setLabelText("المــادة");
+        txt_matier.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txt_matierKeyTyped(evt);
             }
         });
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(buttonRounder1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(79, 79, 79)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(buttonRounder1, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE))
-                .addContainerGap())
-        );
+        txt_matier_fr.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txt_matier_fr.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        txt_matier_fr.setLabelText("La Matiere");
+        txt_matier_fr.setLangue(1);
 
         com_niveau.setLabeText("القـسـم");
+        com_niveau.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                com_niveauActionPerformed(evt);
+            }
+        });
 
         com_catego_niveau.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
         com_catego_niveau.setLabeText("المستوى الدراسي");
@@ -138,66 +208,193 @@ public class AddMatiereForm extends javax.swing.JDialog {
             }
         });
 
-        jLabel3.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        jLabel3.setText("دج");
+        jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(153, 153, 153));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("اضافة المواد الدراسية");
+
+        tab_matiere.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "استاذ المادة", "المبلغ الشهري", "Matiere", "المادة", "القسم", "المستوى", "id_niveau", "id_catego", "id_ensig"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tab_matiere.setSelectionBackground(new java.awt.Color(235, 235, 235));
+        jScrollPane2.setViewportView(tab_matiere);
+
+        tableScrollButton1.add(jScrollPane2, java.awt.BorderLayout.CENTER);
+
+        btn_delet.setForeground(new java.awt.Color(255, 255, 255));
+        btn_delet.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/supprimer (1).png"))); // NOI18N
+        btn_delet.setToolTipText("Annnuler la command");
+        btn_delet.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_deletActionPerformed(evt);
+            }
+        });
+
+        com_ensig.setLabeText("أستاذ المادة");
+        com_ensig.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                com_ensigActionPerformed(evt);
+            }
+        });
+
+        btn_add_niveau.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/plus - Copie - Copie.png"))); // NOI18N
+        btn_add_niveau.setText("اضافة مــادة ");
+        btn_add_niveau.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_add_niveauActionPerformed(evt);
+            }
+        });
+
+        lab_categ_niv.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        lab_categ_niv.setForeground(new java.awt.Color(255, 0, 51));
+
+        lab_niv_.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        lab_niv_.setForeground(new java.awt.Color(255, 0, 51));
+
+        lab_ensig.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        lab_ensig.setForeground(new java.awt.Color(255, 0, 51));
+
+        lab_ma.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        lab_ma.setForeground(new java.awt.Color(255, 0, 51));
+
+        lab_error_tabl.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        lab_error_tabl.setForeground(new java.awt.Color(255, 0, 51));
+        lab_error_tabl.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+
+        nbrSceanceParSomaine.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        nbrSceanceParSomaine.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        nbrSceanceParSomaine.setLabelText("عدد الحصص في الاسبوع");
+        nbrSceanceParSomaine.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                nbrSceanceParSomaineKeyTyped(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(117, 117, 117)
-                .addComponent(buttonRounder19, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(31, 31, 31)
-                .addComponent(buttonRounder17, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(38, 38, 38)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(textField1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(lab_ensig, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(btn_delet, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(btn_add_niveau, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(nbrSceanceParSomaine, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(27, 27, 27)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(txt_prix, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel2))
+                            .addComponent(com_ensig, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addComponent(textField2, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(lab_categ_niv, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(txt_matier_fr, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(lab_niv_, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(com_niveau, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(txt_matier, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(com_catego_niveau, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(lab_ma, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(1, 1, 1)))
+                                .addGap(10, 10, 10))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(com_niveau, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(21, 21, 21)
-                        .addComponent(com_catego_niveau, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(24, 24, 24))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(110, Short.MAX_VALUE)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txt_prix, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addGap(71, 71, 71))
+                        .addGap(88, 88, 88)
+                        .addComponent(lab_error_tabl, javax.swing.GroupLayout.PREFERRED_SIZE, 389, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(17, 17, 17))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(117, 117, 117)
+                        .addComponent(buttonRounder19, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(31, 31, 31)
+                        .addComponent(buttonRounder17, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(169, 169, 169)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 566, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGap(23, 23, 23)
+                    .addComponent(tableScrollButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 795, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(36, Short.MAX_VALUE)))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(com_niveau, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
-                    .addComponent(com_catego_niveau, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(5, 5, 5)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(textField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(textField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(37, 37, 37)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(2, 2, 2)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txt_prix, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
+                        .addComponent(com_ensig, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(nbrSceanceParSomaine, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(com_niveau, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(com_catego_niveau, javax.swing.GroupLayout.DEFAULT_SIZE, 51, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lab_categ_niv, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lab_niv_, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lab_ensig, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txt_prix, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btn_add_niveau, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txt_matier, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txt_matier_fr, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lab_ma, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_delet, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 279, Short.MAX_VALUE)
+                .addComponent(lab_error_tabl, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(91, 91, 91)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(buttonRounder17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(buttonRounder19, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(14, 14, 14))
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGap(208, 208, 208)
+                    .addComponent(tableScrollButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(174, Short.MAX_VALUE)))
         );
 
         getContentPane().add(jPanel1, "card2");
@@ -205,23 +402,50 @@ public class AddMatiereForm extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void buttonRounder1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRounder1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_buttonRounder1ActionPerformed
-
     private void com_catego_niveauItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_com_catego_niveauItemStateChanged
-        if(com_catego_niveau.getSelectedIndex()!=-1){
+        if (com_catego_niveau.getSelectedIndex() != -1) {
             com_niveau.removeAllItems();
-           // setInfoNiveauEtudeInCom(com_catego_niveau.getSelectedIndex()+1);
+            // setInfoNiveauEtudeInCom(com_catego_niveau.getSelectedIndex()+1);
         }
     }//GEN-LAST:event_com_catego_niveauItemStateChanged
 
     private void com_catego_niveauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_com_catego_niveauActionPerformed
-
+        setInfoNiveauEtudeInCom();
+        lab_categ_niv.setText("");
     }//GEN-LAST:event_com_catego_niveauActionPerformed
 
     private void buttonRounder19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRounder19ActionPerformed
-        // TODO add your handling code here:
+        if (tab_matiere.getRowCount() != 0) {
+            for (int row = 0; row < tab_matiere.getRowCount(); row++) {
+                double prix = Double.parseDouble(tab_matiere.getValueAt(row, 1).toString());
+                int id_category = (int) tab_matiere.getValueAt(row, 7);
+                int id_niv = (int) tab_matiere.getValueAt(row, 6);
+                CategoreNiveau categoreNiveau = categoreNiveauDAOImpl.getCategory_by_name(tab_matiere.getValueAt(row, 5).toString());
+                NiveauEtude niveauEtude = niveauEtudeDAOImpl.getNiveauOfCategory(tab_matiere.getValueAt(row, 4).toString(), categoreNiveau.getCategore_niveau_ar());
+                Enseignant enseignant = null;
+                if (!tab_matiere.getValueAt(row, 0).equals("/")) {
+                    try {
+                        String name = tab_matiere.getValueAt(row, 0).toString();
+                        String nom = name.split("-")[0];
+                        String prenom = name.split("-")[1];
+
+                        enseignant = enseignantDAOImpl.findByFullName(nom, prenom);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(AddMatiereForm.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                String Txt_nbr_sceance_par_somaine=nbrSceanceParSomaine.getText();
+                int SceanceParSomaine=(Txt_nbr_sceance_par_somaine.equals(""))? 0:(Integer.parseInt(Txt_nbr_sceance_par_somaine));
+                
+                Matiere matiere = new Matiere(0, tab_matiere.getValueAt(row, 3).toString(), tab_matiere.getValueAt(row, 3).toString(),
+                        prix, niveauEtude, categoreNiveau, enseignant,SceanceParSomaine,SceanceParSomaine*4);
+                if(matiereDAOImpl.save(matiere)>0){
+                 this.message_validation.showMessage("تأكيد", "لقد تم الحفظ بنجاح");
+                }
+
+            }
+        }
+
     }//GEN-LAST:event_buttonRounder19ActionPerformed
 
     private void txt_prixKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_prixKeyTyped
@@ -232,6 +456,70 @@ public class AddMatiereForm extends javax.swing.JDialog {
             evt.consume(); // Ignore the key event
         }
     }//GEN-LAST:event_txt_prixKeyTyped
+
+    private void com_niveauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_com_niveauActionPerformed
+        lab_niv_.setText("");
+    }//GEN-LAST:event_com_niveauActionPerformed
+
+    private void btn_deletActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_deletActionPerformed
+        if (tab_matiere.getSelectedRow() != -1) {
+            DefaultTableModel model = (DefaultTableModel) tab_matiere.getModel();
+            model.removeRow(tab_matiere.getSelectedRow());
+        }
+    }//GEN-LAST:event_btn_deletActionPerformed
+
+    private void com_ensigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_com_ensigActionPerformed
+        lab_ensig.setText("");
+    }//GEN-LAST:event_com_ensigActionPerformed
+
+    private void btn_add_niveauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_add_niveauActionPerformed
+        if (com_catego_niveau.getSelectedIndex() != -1 && !txt_matier.getText().isEmpty() && com_ensig.getSelectedIndex() != -1) {
+            String matier_nam = txt_matier.getText();
+            String matier_nam_fr = txt_matier_fr.getText();
+            String prix = txt_prix.getText();
+            DefaultTableModel model = (DefaultTableModel) tab_matiere.getModel();
+
+            CategoreNiveau categoreNiveau = categoreNiveauDAOImpl.getCategory_by_name(com_catego_niveau.getSelectedItem().toString());
+            NiveauEtude niveauEtude = niveauEtudeDAOImpl.getNiveauOfCategory(com_niveau.getSelectedItem().toString(), com_catego_niveau.getSelectedItem().toString());
+            if (matiereDAOImpl.getMatiereNiveauOfCategory(txt_matier.getText(), com_niveau.getSelectedItem().toString(), com_catego_niveau.getSelectedItem().toString()) == null  ) {
+                if(!exist_matier()){
+                model.addRow(new Object[]{com_ensig.getSelectedItem(), txt_prix.getText(), txt_matier_fr.getText(), txt_matier.getText(),
+                com_niveau.getSelectedItem().toString(), com_catego_niveau.getSelectedItem().toString(),
+                categoreNiveau.getId(), niveauEtude.getId()});
+                txt_matier.setText("");
+                txt_matier_fr.setText("");
+                txt_prix.setText("0.0");
+                }
+            } else {
+                    lab_ma.setText("المادة متوفرة بالنسبة للمستوى "  + com_catego_niveau.getSelectedItem().toString() + " قسم " + com_niveau.getSelectedItem().toString());
+            }
+            
+            
+        } else {
+            if (com_catego_niveau.getSelectedIndex() == 1) {
+                lab_categ_niv.setText("اختر المستوى");
+            }
+            if (com_catego_niveau.getSelectedIndex() == 1) {
+                lab_niv_.setText("اختر القسم ");
+            }
+
+            if (com_ensig.getSelectedIndex() == 1) {
+                lab_ensig.setText("اختر الأستاذ أو حدد أنه لايوجد");
+            }
+            if (txt_matier.getText().isEmpty()) {
+                lab_ma.setText("أكتب اسم المادة");
+            }
+        }
+
+    }//GEN-LAST:event_btn_add_niveauActionPerformed
+
+    private void txt_matierKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_matierKeyTyped
+        lab_ma.setText("");
+    }//GEN-LAST:event_txt_matierKeyTyped
+
+    private void nbrSceanceParSomaineKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nbrSceanceParSomaineKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_nbrSceanceParSomaineKeyTyped
 
     /**
      * @param args the command line arguments
@@ -278,7 +566,8 @@ public class AddMatiereForm extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                AddMatiereForm dialog = new AddMatiereForm(new javax.swing.JFrame(), true);
+                home home = new home();
+                AddMatiereForm dialog = new AddMatiereForm(home, true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -291,18 +580,55 @@ public class AddMatiereForm extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private material.design.buttonRounder buttonRounder1;
+    private material.design.buttonRounder btn_add_niveau;
+    private material.design.buttonRounder btn_delet;
     private material.design.buttonRounder buttonRounder17;
     private material.design.buttonRounder buttonRounder19;
     private material.design.Combobox com_catego_niveau;
+    private material.design.Combobox com_ensig;
     private material.design.Combobox com_niveau;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private material.design.TextField textField1;
-    private material.design.TextField textField2;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel lab_categ_niv;
+    private javax.swing.JLabel lab_ensig;
+    private javax.swing.JLabel lab_error_tabl;
+    private javax.swing.JLabel lab_ma;
+    private javax.swing.JLabel lab_niv_;
+    private material.design.TextField nbrSceanceParSomaine;
+    private javax.swing.JTable tab_matiere;
+    private ui.table.TableScrollButton tableScrollButton1;
+    private material.design.TextField txt_matier;
+    private material.design.TextField txt_matier_fr;
     private javax.swing.JTextField txt_prix;
     // End of variables declaration//GEN-END:variables
+  public void setDesignTable(JTable tab, JScrollPane scrol) {
+        TableCustom.apply(scrol, TableCustom.TableType.DEFAULT);
+        tab.getTableHeader().setFont(new Font("", Font.BOLD, 15));
+        tab.setFont(new Font("", Font.BOLD, 14));
+        scrol.setVerticalScrollBar(new ScrollBar());
+        scrol.getVerticalScrollBar().setBackground(Color.WHITE);
+        scrol.getViewport().setBackground(Color.white);// make table without rouw white
+        JPanel p = new JPanel();
+        p.setBackground(Color.WHITE);
+        scrol.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
+
+    }
+
+    public boolean   exist_matier() {
+        for (int row = 0; row < tab_matiere.getRowCount(); row++) {
+            if (txt_matier.getText().equals(tab_matiere.getValueAt(row, 3).toString())
+                    && com_catego_niveau.getSelectedItem().equals(tab_matiere.getValueAt(row, 5))
+                    && com_niveau.getSelectedItem().equals(tab_matiere.getValueAt(row, 4))) {
+                lab_ma.setText("تم اضافة هذه المادة بنفس المستوى و القسم في الجدول");
+                tab_matiere.setRowSelectionInterval(row, row);
+                return true;
+            }
+        }
+        return false ;
+    }
+
+  
+
 }

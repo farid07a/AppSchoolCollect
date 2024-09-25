@@ -5,6 +5,7 @@
 package main.java.com.school.impl;
 
 import domaine.CategoreNiveau;
+import domaine.NiveauEtude;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -66,6 +67,29 @@ public class CategoreNiveauDAOImpl extends AbstractDAO<CategoreNiveau>{
         return categoreNiveau;
     }
 
+     public CategoreNiveau getCategory_by_name( String Catego){        
+        CategoreNiveau categoreNiveau = new CategoreNiveau();
+         String  SELECT_Category=" SELECT  * FROM   "
+                  + getTableName()+"  WHERE  categore_niveau.categore_niveau_ar = N'"+Catego+"' ";
+
+       PreparedStatement statement;
+            
+        try {
+            statement = connection.prepareStatement(SELECT_Category);
+            ResultSet resultSet = statement.executeQuery();
+            if(resultSet.next()) {
+                categoreNiveau =mapResultSetToEntity(resultSet);
+            }else{
+            categoreNiveau=null;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(NiveauEtudeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+   
+        return categoreNiveau ;
+   
+    }
+        
     public static void main(String[] args) {
         try {
             System.out.println(  new CategoreNiveauDAOImpl(new ConnectionDB().getConnection()).findById(6));

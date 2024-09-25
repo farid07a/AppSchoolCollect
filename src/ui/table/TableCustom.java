@@ -21,7 +21,7 @@ public class TableCustom {
         table.setSelectionBackground( new Color(123, 207, 255));
         table.getTableHeader().setReorderingAllowed(false);
         table.getTableHeader().setDefaultRenderer(new TableHeaderCustomCellRender(table));
-        table.setRowHeight(30);
+        table.setRowHeight(25);
         HoverIndex hoverRow = new HoverIndex();
         TableCellRenderer cellRender;
         if (type == TableType.DEFAULT) {

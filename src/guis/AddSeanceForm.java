@@ -211,62 +211,83 @@ public class AddSeanceForm extends javax.swing.JDialog {
         if (date.getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
             dat_next = date;
             lab_date_1.setText(dat_next.format(formatter) + "");
+            lab_date_1.setText(dat_next + "");
         } else {
 
             dat_next = date.with(TemporalAdjusters.next(DayOfWeek.SUNDAY));
+            //lab_date_1.setText(dat_next.format(formatter) + "");
             lab_date_1.setText(dat_next.format(formatter) + "");
         }
-
-        if (date.getDayOfWeek().equals(DayOfWeek.MONDAY)) {
-            dat_next = date;
-            lab_date_2.setText(dat_next.format(formatter) + "");
-        } else {
-            dat_next = date.with(TemporalAdjusters.next(DayOfWeek.MONDAY));
-            lab_date_2.setText(dat_next.format(formatter) + "");
-        }
-
-        if (date.getDayOfWeek().equals(DayOfWeek.TUESDAY)) {
-            dat_next = date;
-            lab_date_3.setText(dat_next.format(formatter) + "");
-        } else {
-
-            dat_next = date.with(TemporalAdjusters.next(DayOfWeek.TUESDAY));
-            lab_date_3.setText(dat_next.format(formatter) + "");
-        }
-
-        if (date.getDayOfWeek().equals(DayOfWeek.WEDNESDAY)) {
-            dat_next = date;
-            lab_date_4.setText(dat_next.format(formatter) + "");
-
-        } else {
-            dat_next = date.with(TemporalAdjusters.next(DayOfWeek.WEDNESDAY));
-            lab_date_4.setText(dat_next.format(formatter) + "");
-        }
-
-        if (date.getDayOfWeek().equals(DayOfWeek.THURSDAY)) {
-            dat_next = date;
-            lab_date_5.setText(dat_next.format(formatter) + "");
-        } else {
-            dat_next = date.with(TemporalAdjusters.next(DayOfWeek.THURSDAY));
-            lab_date_5.setText(dat_next.format(formatter) + "");
-        }
-
-        if (date.getDayOfWeek().equals(DayOfWeek.FRIDAY)) {
-            dat_next = date;
-            lab_date_6.setText(dat_next.format(formatter) + "");
-        } else {
-
-            dat_next = date.with(TemporalAdjusters.next(DayOfWeek.FRIDAY));
-            lab_date_6.setText(dat_next.format(formatter) + "");
-        }
-
-        if (date.getDayOfWeek().equals(DayOfWeek.SATURDAY)) {
-            dat_next = date;
-            lab_date_7.setText(dat_next.format(formatter) + "");
-        } else {
-            dat_next = date.with(TemporalAdjusters.next(DayOfWeek.SATURDAY));
-            lab_date_7.setText(dat_next.format(formatter) + "");
-        }
+        
+        lab_date_2.setText(dat_next.plusDays(1).format(formatter) + "");
+        lab_date_3.setText(dat_next.plusDays(2).format(formatter) + "");
+        lab_date_4.setText(dat_next.plusDays(3).format(formatter) + "");
+        lab_date_5.setText(dat_next.plusDays(4).format(formatter) + "");
+        lab_date_6.setText(dat_next.plusDays(5).format(formatter) + "");
+        lab_date_7.setText(dat_next.plusDays(6).format(formatter) + "");
+        
+//        
+//        if (date.getDayOfWeek().equals(DayOfWeek.MONDAY)) {
+//            //dat_next = date;
+//            //lab_date_2.setText(dat_next.format(formatter) + "");
+//            lab_date_2.setText(dat_next.plusDays(1).format(formatter) + "");
+//        } else {
+//            //dat_next = date.with(TemporalAdjusters.next(DayOfWeek.MONDAY));
+//            //lab_date_2.setText(dat_next.format(formatter) + "");
+//            lab_date_2.setText(dat_next.plusDays(1) + "");
+//        }
+//
+//        if (date.getDayOfWeek().equals(DayOfWeek.TUESDAY)) {
+//            //dat_next = date;
+//            //lab_date_3.setText(dat_next.format(formatter) + "");
+//            lab_date_3.setText(dat_next.plusDays(2) + "");
+//        } else {
+//
+//            //dat_next = date.with(TemporalAdjusters.next(DayOfWeek.TUESDAY));
+//            //lab_date_3.setText(dat_next.format(formatter) + "");
+//            lab_date_3.setText(dat_next.plusDays(2) + "");
+//        }
+//
+//        if (date.getDayOfWeek().equals(DayOfWeek.WEDNESDAY)) {
+//            //dat_next = date;
+//            //lab_date_4.setText(dat_next.format(formatter) + "");
+//            lab_date_4.setText(dat_next.plusDays(3) + "");
+//        } else {
+//            //dat_next = date.with(TemporalAdjusters.next(DayOfWeek.WEDNESDAY));
+//            //lab_date_4.setText(dat_next.format(formatter) + "");
+//            lab_date_4.setText(dat_next.plusDays(3) + "");
+//        }
+//
+//        if (date.getDayOfWeek().equals(DayOfWeek.THURSDAY)) {
+//            //dat_next = date;
+//            //lab_date_5.setText(dat_next.format(formatter) + "");
+//            lab_date_5.setText(dat_next.plusDays(4) + "");
+//        } else {
+//            //dat_next = date.with(TemporalAdjusters.next(DayOfWeek.THURSDAY));
+//            //lab_date_5.setText(dat_next.format(formatter) + "");
+//            lab_date_5.setText(dat_next.plusDays(4) + "");
+//        }
+//
+//        if (date.getDayOfWeek().equals(DayOfWeek.FRIDAY)) {
+//            //dat_next = date;
+//            //lab_date_6.setText(dat_next.format(formatter) + "");
+//            lab_date_6.setText(dat_next.plusDays(5) + "");
+//        } else {
+//
+//            //dat_next = date.with(TemporalAdjusters.next(DayOfWeek.FRIDAY));
+//            //lab_date_6.setText(dat_next.format(formatter) + "");
+//            lab_date_6.setText(dat_next.plusDays(5) + "");
+//        }
+//
+//        if (date.getDayOfWeek().equals(DayOfWeek.SATURDAY)) {
+//            //dat_next = date;
+//            //lab_date_7.setText(dat_next.format(formatter) + "");
+//            lab_date_7.setText(dat_next.plusDays(6) + "");
+//        } else {
+////            dat_next = date.with(TemporalAdjusters.next(DayOfWeek.SATURDAY));
+////            lab_date_7.setText(dat_next.format(formatter) + "");
+//            lab_date_7.setText(dat_next.plusDays(6) + "");
+//        }
     }
 
     /**

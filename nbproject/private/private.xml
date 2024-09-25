@@ -3,31 +3,17 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/farid/Downloads/appSchool%2016_09_2024/AppSchool/src/main/java/com/school/impl/MatiereEnseignantDAOImpl.java</file>
-            <file>file:/C:/Users/farid/Downloads/appSchool%2016_09_2024/AppSchool/src/domaine/Groupe.java</file>
-            <file>file:/C:/Users/farid/Downloads/appSchool%2016_09_2024/AppSchool/src/domaine/Seance.java</file>
-            <file>file:/C:/Users/farid/Downloads/appSchool%2016_09_2024/AppSchool/src/main/java/com/school/DAO/GroupeDAO.java</file>
-            <file>file:/C:/Users/farid/Downloads/appSchool%2016_09_2024/AppSchool/src/main/java/com/school/impl/InscriptionDAOImpl.java</file>
-            <file>file:/C:/Users/farid/Downloads/appSchool%2016_09_2024/AppSchool/src/main/java/com/school/DAO/PayementDAO.java</file>
-            <file>file:/C:/Users/farid/Downloads/appSchool%2016_09_2024/AppSchool/src/domaine/Payement.java</file>
-            <file>file:/C:/Users/farid/Downloads/appSchool%2016_09_2024/AppSchool/src/main/java/com/school/impl/MatiereDAOImpl.java</file>
-            <file>file:/C:/Users/farid/Downloads/appSchool%2016_09_2024/AppSchool/src/main/java/com/school/impl/CategoreNiveauDAOImpl.java</file>
-            <file>file:/C:/Users/farid/Downloads/appSchool%2016_09_2024/AppSchool/src/main/java/com/school/DAO/EnseignantDAO.java</file>
-            <file>file:/C:/Users/farid/Downloads/appSchool%2016_09_2024/AppSchool/src/main/java/com/school/DAO/InscriptionDAO.java</file>
-            <file>file:/C:/Users/farid/Downloads/appSchool%2016_09_2024/AppSchool/src/main/java/com/school/impl/EtudiantDAOImpl.java</file>
-            <file>file:/C:/Users/farid/Downloads/appSchool%2016_09_2024/AppSchool/src/domaine/GroupeMatiere.java</file>
-            <file>file:/C:/Users/farid/Downloads/appSchool%2016_09_2024/AppSchool/src/main/java/com/school/impl/EnseignantDAOImpl.java</file>
-            <file>file:/C:/Users/farid/Downloads/appSchool%2016_09_2024/AppSchool/src/domaine/MatiereEnseignant.java</file>
-            <file>file:/C:/Users/farid/Downloads/appSchool%2016_09_2024/AppSchool/src/guis/AddEtudiantForm.java</file>
-            <file>file:/C:/Users/farid/Downloads/appSchool%2016_09_2024/AppSchool/src/guis/AddSeanceForm.java</file>
-            <file>file:/C:/Users/farid/Downloads/appSchool%2016_09_2024/AppSchool/src/guis/home.java</file>
-            <file>file:/C:/Users/farid/Downloads/appSchool%2016_09_2024/AppSchool/src/main/java/com/school/DAO/SeanceMatiereDAO.java</file>
-            <file>file:/C:/Users/farid/Downloads/appSchool%2016_09_2024/AppSchool/src/main/java/com/school/impl/GroupeImpl.java</file>
-            <file>file:/C:/Users/farid/Downloads/appSchool%2016_09_2024/AppSchool/src/main/java/com/school/DAO/MatiereEnseignantDAO.java</file>
-            <file>file:/C:/Users/farid/Downloads/appSchool%2016_09_2024/AppSchool/src/main/java/com/school/impl/GroupeMatiereDAOImpl.java</file>
-            <file>file:/C:/Users/farid/Downloads/appSchool%2016_09_2024/AppSchool/src/main/java/com/school/impl/SceanceDAOImpl.java</file>
-            <file>file:/C:/Users/farid/Downloads/appSchool%2016_09_2024/AppSchool/src/main/java/com/school/DAO/AbstractDAO.java</file>
-            <file>file:/C:/Users/farid/Downloads/appSchool%2016_09_2024/AppSchool/src/main/java/com/school/DAO/GenericDAO.java</file>
+            <file>file:/C:/Users/client/Documents/NetBeansProjects/AppSchoolCollect/src/domaine/Seance.java</file>
+            <file>file:/C:/Users/client/Documents/NetBeansProjects/AppSchoolCollect/src/guis/AddCategoreNiveauForm.java</file>
+            <file>file:/C:/Users/client/Documents/NetBeansProjects/AppSchoolCollect/src/guis/home.java</file>
+            <file>file:/C:/Users/client/Documents/NetBeansProjects/AppSchoolCollect/src/main/java/com/school/impl/MatiereDAOImpl.java</file>
+            <file>file:/C:/Users/client/Documents/NetBeansProjects/AppSchoolCollect/src/DialogFram/ValidationMessageDialog.java</file>
+            <file>file:/C:/Users/client/Documents/NetBeansProjects/AppSchoolCollect/src/main/java/com/school/impl/SeanceMatiereDAOImpl.java</file>
+            <file>file:/C:/Users/client/Documents/NetBeansProjects/AppSchoolCollect/src/Service/MatiereService.java</file>
+            <file>file:/C:/Users/client/Documents/NetBeansProjects/AppSchoolCollect/src/guis/AddMatiereForm.java</file>
+            <file>file:/C:/Users/client/Documents/NetBeansProjects/AppSchoolCollect/src/guis/AddEtudiantForm.java</file>
+            <file>file:/C:/Users/client/Documents/NetBeansProjects/AppSchoolCollect/src/main/java/com/school/impl/SceanceDAOImpl.java</file>
+            <file>file:/C:/Users/client/Documents/NetBeansProjects/AppSchoolCollect/src/domaine/Matiere.java</file>
         </group>
     </open-files>
 </project-private>

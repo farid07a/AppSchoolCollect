@@ -32,21 +32,23 @@ public class customMenu extends javax.swing.JPanel {
      
  private void init(){
      //System.out.println("com.raven.component.Menu.init()");
-     listMenu121.addItem(new Model_Menu("1","Accueil",Model_Menu.MenuType.MENU));
-     listMenu121.addItem(new Model_Menu("1","التسجيلات",Model_Menu.MenuType.MENU));
-     listMenu121.addItem(new Model_Menu("8","قوائم الطلبة",Model_Menu.MenuType.MENU));//3
-     listMenu121.addItem(new Model_Menu("4","الاساتذة",Model_Menu.MenuType.MENU));
-     listMenu121.addItem(new Model_Menu("5","Reservation",Model_Menu.MenuType.MENU));
-     listMenu121.addItem(new Model_Menu("5","Facture",Model_Menu.MenuType.MENU));
-     listMenu121.addItem(new Model_Menu("","empty",Model_Menu.MenuType.EMPTY));
+     listMenu121.addItem(new Model_Menu("1","الصفحة الرئيسية",Model_Menu.MenuType.MENU));
+     listMenu121.addItem(new Model_Menu("1","الــتــســجــيــل",Model_Menu.MenuType.MENU));
+     listMenu121.addItem(new Model_Menu("8","الـطــلـــــبـــة",Model_Menu.MenuType.MENU));//3
+     listMenu121.addItem(new Model_Menu("4","الأســــاتــــذة",Model_Menu.MenuType.MENU));
+     listMenu121.addItem(new Model_Menu("5","الــحـــضــــور",Model_Menu.MenuType.MENU));
+     listMenu121.addItem(new Model_Menu("5","الـــدفــــــع",Model_Menu.MenuType.MENU));
+    listMenu121.addItem(new Model_Menu("5","المــداخــــيل",Model_Menu.MenuType.MENU));
+      listMenu121.addItem(new Model_Menu("9","الــتـــعــديـــلات",Model_Menu.MenuType.MENU));
+
+     listMenu121.addItem(new Model_Menu("","",Model_Menu.MenuType.EMPTY));
   
-     listMenu121.addItem(new Model_Menu("","Outils Systeme",Model_Menu.MenuType.TITLE));
+     listMenu121.addItem(new Model_Menu("","",Model_Menu.MenuType.TITLE));
      //listMenu1.addItem(new Model_Menu("","empty",Model_Menu.MenuType.EMPTY));
-     listMenu121.addItem(new Model_Menu("9","Configuration",Model_Menu.MenuType.MENU));
-     listMenu121.addItem(new Model_Menu("7","Rapports",Model_Menu.MenuType.MENU));
-     listMenu121.addItem(new Model_Menu("8","Contact",Model_Menu.MenuType.MENU));
+     listMenu121.addItem(new Model_Menu("7","",Model_Menu.MenuType.MENU));
+     listMenu121.addItem(new Model_Menu("8","",Model_Menu.MenuType.MENU));
      listMenu121.addItem(new Model_Menu("9","",Model_Menu.MenuType.MENU));
-     listMenu121.addItem(new Model_Menu("10","Chat",Model_Menu.MenuType.MENU));
+     listMenu121.addItem(new Model_Menu("10","",Model_Menu.MenuType.MENU));
      listMenu121.addItem(new Model_Menu("","",Model_Menu.MenuType.EMPTY));
    
  }

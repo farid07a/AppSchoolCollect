@@ -51,6 +51,13 @@ public class AddNiveauForm extends javax.swing.JDialog {
         setDesignTable(tab_niveau, jScrollPane2);
 
         prapareUI();
+
+        if (com_categore_niveau.getItemCount() == 0) {
+            lab_msg_error.setText("لاضافة الأقسام الدراسية عليك إدراج المستويات الدراسية أولا .");
+        } else {
+            lab_msg_error.setText("");
+        }
+
     }
 
     public void prapareUI() {
@@ -76,8 +83,6 @@ public class AddNiveauForm extends javax.swing.JDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         btn_annul = new material.design.buttonRounder();
         btn_save = new material.design.buttonRounder();
         txt_niveau = new material.design.TextField();
@@ -94,37 +99,15 @@ public class AddNiveauForm extends javax.swing.JDialog {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        lab_msg_error = new javax.swing.JLabel();
+        buttonRounder1 = new material.design.buttonRounder();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
         getContentPane().setLayout(new java.awt.CardLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-
-        jPanel2.setBackground(new java.awt.Color(101, 147, 252));
-
-        jLabel1.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("أقسام دراسية جدية");
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(202, 202, 202)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(201, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
 
         btn_annul.setBackground(new java.awt.Color(255, 51, 51));
         btn_annul.setForeground(new java.awt.Color(255, 255, 255));
@@ -140,8 +123,7 @@ public class AddNiveauForm extends javax.swing.JDialog {
         });
 
         txt_niveau.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txt_niveau.setToolTipText("");
-        txt_niveau.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        txt_niveau.setFont(new java.awt.Font("Times New Roman", 1, 15)); // NOI18N
         txt_niveau.setLabelText("قسم جديد\n");
         txt_niveau.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -150,8 +132,7 @@ public class AddNiveauForm extends javax.swing.JDialog {
         });
 
         txt_niveau_fr.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txt_niveau_fr.setToolTipText("");
-        txt_niveau_fr.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        txt_niveau_fr.setFont(new java.awt.Font("Times New Roman", 1, 15)); // NOI18N
         txt_niveau_fr.setLabelText("Nouveau classe");
         txt_niveau_fr.setLangue(1);
         txt_niveau_fr.addActionListener(new java.awt.event.ActionListener() {
@@ -162,7 +143,6 @@ public class AddNiveauForm extends javax.swing.JDialog {
 
         btn_add_niveau.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/plus - Copie - Copie.png"))); // NOI18N
         btn_add_niveau.setText("اضافة القسم ");
-        btn_add_niveau.setToolTipText("Nouvelle Type");
         btn_add_niveau.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_add_niveauActionPerformed(evt);
@@ -196,14 +176,23 @@ public class AddNiveauForm extends javax.swing.JDialog {
 
             },
             new String [] {
-                "الوصف", "classe", "القسم"
+                "الوصف", "classe", "القسم", "المستوى", "id_catego"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tab_niveau.setSelectionBackground(new java.awt.Color(235, 235, 235));
         jScrollPane2.setViewportView(tab_niveau);
 
         tableScrollButton1.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
+        com_categore_niveau.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         com_categore_niveau.setLabeText("المستوى الدراسي");
         com_categore_niveau.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -223,56 +212,96 @@ public class AddNiveauForm extends javax.swing.JDialog {
         jLabel5.setForeground(new java.awt.Color(255, 51, 51));
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 
+        jLabel1.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel1.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(153, 153, 153));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("اضافة الأقسام الدراسية");
+
+        lab_msg_error.setFont(new java.awt.Font("Times New Roman", 0, 15)); // NOI18N
+        lab_msg_error.setForeground(new java.awt.Color(255, 0, 0));
+        lab_msg_error.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+
+        buttonRounder1.setBackground(new java.awt.Color(0, 204, 204));
+        buttonRounder1.setForeground(new java.awt.Color(255, 255, 255));
+        buttonRounder1.setText("اضافة المستويات");
+        buttonRounder1.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
+        buttonRounder1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonRounder1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(9, 9, 9)
+                        .addComponent(buttonRounder1, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 364, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(204, 204, 204)
+                        .addComponent(btn_save, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btn_annul, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(15, 15, 15)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(383, 383, 383)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(com_categore_niveau, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addGroup(jPanel1Layout.createSequentialGroup()
                                     .addGap(21, 21, 21)
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(textAreaScroll1, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(btn_delet, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(tableScrollButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 630, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 611, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(tableScrollButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 630, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 611, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGroup(jPanel1Layout.createSequentialGroup()
                                             .addComponent(btn_add_niveau, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                             .addComponent(txt_niveau_fr, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(txt_niveau, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                            .addComponent(txt_niveau, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                            .addGap(8, 8, 8)
+                                            .addComponent(btn_delet, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addComponent(textAreaScroll1, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addGap(9, 9, 9)))))
                                     .addGap(9, 9, 9)))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(204, 204, 204)
-                        .addComponent(btn_save, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btn_annul, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(36, 36, 36)
+                        .addComponent(lab_msg_error, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(com_categore_niveau, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(com_categore_niveau, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(com_categore_niveau, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(5, 5, 5)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(25, 25, 25)
+                        .addComponent(buttonRounder1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lab_msg_error, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txt_niveau, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -283,13 +312,13 @@ public class AddNiveauForm extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(textAreaScroll1, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(2, 2, 2)
-                .addComponent(btn_delet, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tableScrollButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(textAreaScroll1, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_delet, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE)
+                .addComponent(tableScrollButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 1, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btn_save, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -303,46 +332,9 @@ public class AddNiveauForm extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_saveActionPerformed
-       boolean exist=false;
-        int id_categoryNiveau = 0;
-        DefaultTableModel model = (DefaultTableModel) tab_niveau.getModel();
-        if (tab_niveau.getRowCount() != 0) {
-            List<CategoreNiveau> categoreNiveaus = categoreNiveauDAOImpl.findAll();
-            List<NiveauEtude> niveauEtudes = niveauEtudeDAOImpl.findAll();
-            
-            for (CategoreNiveau categoreNiveauobj : categoreNiveaus) {
-                if (categoreNiveauobj.getCategore_niveau_ar().equals(com_categore_niveau.getSelectedItem())) {
-                    id_categoryNiveau = categoreNiveauobj.getId();
-                     break;
-                }
-            }
-            
-            List<String > list_niveau_exist = new ArrayList<>();
-            for(NiveauEtude niveauEtude_ob :niveauEtudes){
-                for (int row = 0; row < model.getRowCount(); row++) {
-                   
-                if(niveauEtude_ob.getNiveauInitialAr().equals(model.getValueAt(row, 2).toString()) &&
-                        niveauEtude_ob.getCategore_niveau_id() == id_categoryNiveau ){
-                list_niveau_exist.add(model.getValueAt(row, 2).toString());
-                exist =true;
-                }    
-                 }
-            }
-            
-                if(!exist){   // new
-                for (int row = 0; row < model.getRowCount(); row++) {
-                    JOptionPane.showMessageDialog(null, "in save model");
-                    NiveauEtude niveauEtude = new NiveauEtude(0, model.getValueAt(row, 2).toString(), model.getValueAt(row, 1).toString(), model.getValueAt(row, 0).toString(), id_categoryNiveau);
-                    niveauEtudeDAOImpl.save(niveauEtude);
-                }
-                 this.dispose();
-                message_validation =new ValidationMessageDialog(AddNiveauForm.this,home);
-                message_validation.showMessage(" تأكيد العملية","تمت إضافةالأقسام الدراسية بنجاج  .");               
-                }
-                else{   // exist
-                  jLabel5.setText(list_niveau_exist.toString() + " : " + " موجودة" );
-                }         
-        }
+
+        save_niveau_from_table();
+
     }//GEN-LAST:event_btn_saveActionPerformed
 
     private void btn_deletActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_deletActionPerformed
@@ -354,19 +346,32 @@ public class AddNiveauForm extends javax.swing.JDialog {
     }//GEN-LAST:event_btn_deletActionPerformed
 
     private void btn_add_niveauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_add_niveauActionPerformed
-        if (com_categore_niveau.getSelectedIndex() != -1) {
-            if (!txt_niveau.getText().isEmpty()) {
-                String niveau = txt_niveau.getText();
-                String niveau_fr = txt_niveau_fr.getText();
-                String descrip = txt_descrp.getText();
-                DefaultTableModel model = (DefaultTableModel) tab_niveau.getModel();
-                model.addRow(new Object[]{descrip, niveau_fr,niveau});
-                cleanItems();
+        if (com_categore_niveau.getSelectedIndex() != -1 && !txt_niveau.getText().isEmpty()) {
+            String niveau = txt_niveau.getText();
+            String niveau_fr = txt_niveau_fr.getText();
+            String descrip = txt_descrp.getText();
+
+            if (niveauEtudeDAOImpl.getNiveauOfCategory(niveau, com_categore_niveau.getSelectedItem().toString()) == null) {
+                if (!exist_niveau()) {
+                    CategoreNiveau categoreNiveau = categoreNiveauDAOImpl.getCategory_by_name(com_categore_niveau.getSelectedItem().toString());
+                    DefaultTableModel model = (DefaultTableModel) tab_niveau.getModel();
+                    model.addRow(new Object[]{descrip, niveau_fr, niveau, com_categore_niveau.getSelectedItem().toString(), categoreNiveau.getId()});
+                    cleanItems();
+                }
             } else {
+                String str = "القسم " + txt_niveau.getText() + " موجود بالنسبة للمستوى : " + com_categore_niveau.getSelectedItem().toString();
+                jLabel3.setText(str);
+            }
+
+            
+            
+        } else {
+            if (com_categore_niveau.getSelectedIndex() == -1) {
+                jLabel4.setText("إختر المستوى");
+            }
+            if (txt_niveau.getText().isEmpty()) {
                 jLabel3.setText("ادخل اسم القسم");
             }
-        } else {
-            jLabel4.setText("إختر المستوى");
         }
 
 
@@ -385,6 +390,10 @@ public class AddNiveauForm extends javax.swing.JDialog {
         jLabel3.setText("");
     }//GEN-LAST:event_txt_niveauKeyTyped
 
+    private void buttonRounder1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRounder1ActionPerformed
+
+    }//GEN-LAST:event_buttonRounder1ActionPerformed
+
     public void setDesignTable(JTable tab, JScrollPane scrol) {
         TableCustom.apply(scrol, TableCustom.TableType.DEFAULT);
         tab.getTableHeader().setFont(new Font("", Font.BOLD, 15));
@@ -397,14 +406,13 @@ public class AddNiveauForm extends javax.swing.JDialog {
         scrol.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
 
     }
-    
-    public void cleanItems(){
-    txt_niveau.setText("");
-            txt_niveau_fr.setText("");
-            txt_descrp.setText("");
-            jLabel3.setText("");
-         
-    
+
+    public void cleanItems() {
+        txt_niveau.setText("");
+        txt_niveau_fr.setText("");
+        txt_descrp.setText("");
+        jLabel3.setText("");
+
     }
 
     /**
@@ -457,6 +465,7 @@ public class AddNiveauForm extends javax.swing.JDialog {
     private material.design.buttonRounder btn_annul;
     private material.design.buttonRounder btn_delet;
     private material.design.buttonRounder btn_save;
+    private material.design.buttonRounder buttonRounder1;
     private material.design.Combobox com_categore_niveau;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -464,8 +473,8 @@ public class AddNiveauForm extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel lab_msg_error;
     private javax.swing.JTable tab_niveau;
     private ui.table.TableScrollButton tableScrollButton1;
     private material.design.TextAreaScroll textAreaScroll1;
@@ -473,4 +482,34 @@ public class AddNiveauForm extends javax.swing.JDialog {
     private material.design.TextField txt_niveau;
     private material.design.TextField txt_niveau_fr;
     // End of variables declaration//GEN-END:variables
+public void save_niveau_from_table() {
+        boolean save = false;
+        for (int row = 0; row < tab_niveau.getRowCount(); row++) {
+            int id_category = (int) tab_niveau.getValueAt(row, 4);
+            String niveauInitialAr = tab_niveau.getValueAt(row, 2).toString();
+            String niveauInitialFr = tab_niveau.getValueAt(row, 1).toString();
+            String description = tab_niveau.getValueAt(row, 0).toString();
+            NiveauEtude niveauEtude = new NiveauEtude(0, niveauInitialAr, niveauInitialFr, description, id_category);
+            if (niveauEtudeDAOImpl.save(niveauEtude) > 0) {
+                save = true;
+            }
+            if (save) {
+                tab_niveau.removeAll();
+
+            }
+        }
+
+    }
+
+    public boolean exist_niveau() {
+        for (int row = 0; row < tab_niveau.getRowCount(); row++) {
+            if (txt_niveau.getText().equals(tab_niveau.getValueAt(row, 2).toString())
+                    && com_categore_niveau.getSelectedItem().equals(tab_niveau.getValueAt(row, 3))) {
+                jLabel3.setText("تم اضافة هذا القسم بنفس المستوى  في الجدول");
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
