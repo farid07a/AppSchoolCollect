@@ -13,7 +13,7 @@ public class PayementForm extends javax.swing.JFrame {
     /**
      * Creates new form PayementForm
      */
-       home home;
+       Home home;
     public PayementForm() {
         initComponents();
     }

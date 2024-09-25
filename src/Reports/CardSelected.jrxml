@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" columnCount="2" pageWidth="595" pageHeight="842" columnWidth="277" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="64837df1-837c-4158-9850-80d818459f3c">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[SELECT   matricule, code_bare, prenom, nom, date_birth,adress,tel,
+email, renseignement_pere, id_categore_niveau,id_niveau,etudiant.image,niveau_etude.niveau_initial_ar,categore_niveau.categore_niveau_ar
+from etudiant,niveau_etude,categore_niveau
+WHERE 
+etudiant.id_niveau=niveau_etude.id 
+AND niveau_etude.categore_niveau_id=categore_niveau.id]]>
+	</queryString>
+	<field name="matricule" class="java.lang.String"/>
+	<field name="code_bare" class="java.lang.String"/>
+	<field name="prenom" class="java.lang.String"/>
+	<field name="nom" class="java.lang.String"/>
+	<field name="date_birth" class="java.sql.Timestamp"/>
+	<field name="adress" class="java.lang.String"/>
+	<field name="tel" class="java.lang.String"/>
+	<field name="email" class="java.lang.String"/>
+	<field name="renseignement_pere" class="java.lang.String"/>
+	<field name="id_categore_niveau" class="java.lang.Integer"/>
+	<field name="id_niveau" class="java.lang.Integer"/>
+	<field name="image" class="java.io.InputStream"/>
+	<field name="niveau_initial_ar" class="java.lang.String"/>
+	<field name="categore_niveau_ar" class="java.lang.String"/>
+	<detail>
+		<band height="138" splitType="Stretch">
+			<rectangle>
+				<reportElement x="10" y="10" width="245" height="125" uuid="deceaf3a-0805-466d-bcb8-edc7e1bae013"/>
+				<graphicElement>
+					<pen lineWidth="1.5" lineStyle="Double"/>
+				</graphicElement>
+			</rectangle>
+			<image scaleImage="FillFrame">
+				<reportElement x="10" y="10" width="245" height="125" uuid="f6386e42-77bb-4ea1-bf9a-03edc4652aa1"/>
+				<imageExpression><![CDATA["D:\\Image_Signature\\Back7.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="197" y="54" width="54" height="19" uuid="cf5ffba6-467c-4f8f-8752-47a9410802b7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[الاسم  و اللقب:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="186" y="96" width="63" height="15" uuid="aa7ba69e-47f2-42ce-b41a-293ca6029fc7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[ألمستوى الدراسي:]]></text>
+			</staticText>
+			<image scaleImage="FillFrame">
+				<reportElement x="15" y="19" width="63" height="50" uuid="dc2ab854-b218-4fc2-bb4c-84c476b04d9e"/>
+				<imageExpression><![CDATA[$F{image}]]></imageExpression>
+			</image>
+			<componentElement>
+				<reportElement x="10" y="99" width="73" height="29" uuid="d7ebd9ed-c834-4125-a478-f4b054c46dbb"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128C" drawText="false" checksumRequired="false" barHeight="95">
+					<jr:codeExpression><![CDATA[$F{code_bare}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<staticText>
+				<reportElement x="186" y="75" width="62" height="20" uuid="6e65e7f3-e3f9-4077-9675-7b1379364558"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[الطور الدراسي:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="125" y="10" width="123" height="31" uuid="cce201ea-aea1-4d58-906c-dfb4dab75e5a"/>
+				<textElement textAlignment="Center">
+					<font size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[مدرسة نهال سكول]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="136" y="54" width="68" height="19" uuid="419908dd-9da8-40f1-b121-7c9ed1d7bc42"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{prenom}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="83" y="54" width="53" height="17" uuid="dff115ad-e258-4839-8ce2-e65afc101a0c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="78" y="19" width="47" height="22" uuid="bee6ffc3-45ec-4154-a429-2ba143fddf61"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{matricule}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="83" y="96" width="100" height="17" uuid="41fbae3e-5966-472b-935f-f413f9dd8337"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{niveau_initial_ar}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="83" y="75" width="103" height="20" uuid="090ece89-97b2-4d59-a717-9cf242bae8cf"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{categore_niveau_ar}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

@@ -30,7 +30,7 @@ import main.java.com.school.model.config.DatabaseConnectionException;
 public class ModifyEnseignant extends javax.swing.JDialog {
 
     Enseignant enseignant;
-    home home;
+    Home home;
     EnseignantDAOImpl enseignantDAOImpl;
     ValidationMessageDialog message_validation;
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
@@ -41,12 +41,12 @@ public class ModifyEnseignant extends javax.swing.JDialog {
 
         initComponents();
         setLocationRelativeTo(this);
-         home = (home) parent;
+         home = (Home) parent;
         this.enseignant=enseignant;
         try {
             connection = new ConnectionDB().getConnection();
         } catch (DatabaseConnectionException ex) {
-            Logger.getLogger(home.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
         }
         enseignantDAOImpl = new EnseignantDAOImpl(connection);
         message_validation = new ValidationMessageDialog(this, home);

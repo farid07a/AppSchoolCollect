@@ -90,8 +90,11 @@ public class UpdatSeanceInfo extends javax.swing.JDialog {
         pan_time_sund.setbignTime(seance.getTimeSeance().toString());
         pan_time_sund.setfinTime(seance.getFinTime().toString());
         com_days.setSelectedItem(seance.getDay_sceance());
+        SelectedDate slcDate=new SelectedDate(this.seance.getDate_sceance().getDayOfMonth(),
+        this.seance.getDate_sceance().getMonthValue(),this.seance.getDate_sceance().getYear());
+        dateChooser.setSelectedDate(slcDate);
         //check_sund.setText(seance.getDay_sceance());
-        lab_date_1.setText(seance.getDate_sceance().toString());
+        //lab_date_1.setText(seance.getDate_sceance().toString());
     }
     
     public void FullSeanceTable(Matiere matiere){
@@ -278,7 +281,6 @@ public class UpdatSeanceInfo extends javax.swing.JDialog {
         txt_dat_first_seance.setText(this.seance.getDate_sceance().format(formatter));
         SelectedDate slcDate=new SelectedDate(this.seance.getDate_sceance().getDayOfMonth(),
                 this.seance.getDate_sceance().getMonthValue(),this.seance.getDate_sceance().getYear());
-        
         dateChooser.setSelectedDate(slcDate);
         
         

@@ -48,7 +48,7 @@ import main.java.com.school.model.config.DatabaseConnectionException;
  */
 public class PayemmentParMoin extends javax.swing.JDialog {
 
-    home home;
+    Home home;
     Connection connection;
     CategoreNiveauDAOImpl categoreNiveauDAOImpl;
     NiveauEtudeDAOImpl niveauEtudeDAOImpl;
@@ -64,13 +64,13 @@ public class PayemmentParMoin extends javax.swing.JDialog {
 
     public PayemmentParMoin(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        this.home = (home) parent;
+        this.home = (Home) parent;
         initComponents();
         setLocationRelativeTo(this);
         try {
             connection = new ConnectionDB().getConnection();
         } catch (DatabaseConnectionException ex) {
-            Logger.getLogger(home.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
         }
         etudiantDAOImpl = new EtudiantDAOImpl(connection);
         categoreNiveauDAOImpl = new CategoreNiveauDAOImpl(connection);
@@ -707,7 +707,7 @@ public class PayemmentParMoin extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                PayemmentParMoin dialog = new PayemmentParMoin(new home(), true);
+                PayemmentParMoin dialog = new PayemmentParMoin(new Home(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

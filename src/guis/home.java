@@ -785,30 +785,11 @@ public class home extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         lab_matric_1 = new javax.swing.JLabel();
         lab_codbar_1 = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
-        com_1 = new material.design.Combobox();
-        pan_catego = new javax.swing.JPanel();
-        pan_cour_1 = new javax.swing.JPanel();
-        combobox3 = new material.design.Combobox();
-        com_group1 = new material.design.Combobox();
-        jLabel7 = new javax.swing.JLabel();
-        com_matiere_1 = new material.design.Combobox();
-        com_prof_1 = new material.design.Combobox();
-        lab_prix_matiere_1 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        CheckAllGroups = new javax.swing.JCheckBox();
-        pan_lang_1 = new javax.swing.JPanel();
-        combobox2 = new material.design.Combobox();
-        Groupe4 = new material.design.Combobox();
-        Groupe5 = new material.design.Combobox();
-        pan_formation_1 = new javax.swing.JPanel();
-        الدورات = new material.design.Combobox();
-        Groupe3 = new material.design.Combobox();
         tableScrollButton1 = new ui.table.TableScrollButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         buttonRounder31 = new material.design.buttonRounder();
-        buttonRounder39 = new material.design.buttonRounder();
+        SaveEtudiantFullData = new material.design.buttonRounder();
         pan_etudiant = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         tableScrollButton2 = new ui.table.TableScrollButton();
@@ -1146,7 +1127,7 @@ public class home extends javax.swing.JFrame {
         pan_saise.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(204, 204, 204)), "المعلومات الشخصية", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(153, 153, 153))); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(204, 204, 204)), "المعلومات الشخصية", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(153, 153, 153))); // NOI18N
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         txt_name_1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
@@ -1212,7 +1193,7 @@ public class home extends javax.swing.JFrame {
         pan_saise.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 80, 680, 250));
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(204, 204, 204)), "الصورة الشخصية", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(153, 153, 153))); // NOI18N
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(204, 204, 204)), "الصورة الشخصية", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(153, 153, 153))); // NOI18N
 
         btn_imag_1.setBackground(new java.awt.Color(224, 175, 175));
         btn_imag_1.setText("تحميل الصورة");
@@ -1265,7 +1246,7 @@ public class home extends javax.swing.JFrame {
         pan_saise.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 10, 330, 160));
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(204, 204, 204)), "معلومات الاتصال", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(153, 153, 153))); // NOI18N
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(204, 204, 204)), "معلومات الاتصال", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(153, 153, 153))); // NOI18N
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setText("Tel :");
@@ -1287,7 +1268,7 @@ public class home extends javax.swing.JFrame {
         pan_saise.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 170, 330, 110));
 
         jPanel5.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(204, 204, 204)), "", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(153, 153, 153))); // NOI18N
+        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(204, 204, 204)), "", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(153, 153, 153))); // NOI18N
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         jLabel3.setText("N°");
@@ -1333,136 +1314,6 @@ public class home extends javax.swing.JFrame {
 
         pan_saise.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 20, 680, 60));
 
-        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(204, 204, 204)), "تسجيل الدروس", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(153, 153, 153))); // NOI18N
-        jPanel2.setForeground(new java.awt.Color(0, 51, 204));
-
-        com_1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "دروس خصوصية", "لغات", "دورات تكوينية", " ", " " }));
-        com_1.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
-        com_1.setLabeText("الــنــوع");
-        com_1.setLightWeightPopupEnabled(false);
-        com_1.setPreferredSize(new java.awt.Dimension(64, 46));
-        com_1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                com_1ActionPerformed(evt);
-            }
-        });
-
-        pan_catego.setBackground(new java.awt.Color(255, 255, 255));
-        pan_catego.setLayout(new java.awt.CardLayout());
-
-        pan_cour_1.setBackground(new java.awt.Color(255, 255, 255));
-        pan_cour_1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        combobox3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "ابتدائي", "متوسط", "ثانوي", "جامعي", "/", " ", " ", " " }));
-        combobox3.setSelectedIndex(-1);
-        combobox3.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
-        combobox3.setLabeText("المستوى الدراسي ");
-        combobox3.setPreferredSize(new java.awt.Dimension(64, 46));
-        pan_cour_1.add(combobox3, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 410, 146, -1));
-
-        com_group1.setLabeText("الفــوج");
-        pan_cour_1.add(com_group1, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 20, 100, 50));
-        pan_cour_1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(613, 161, 53, 35));
-
-        com_matiere_1.setLabeText("المــواد ");
-        com_matiere_1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                com_matiere_1ActionPerformed(evt);
-            }
-        });
-        pan_cour_1.add(com_matiere_1, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 20, 210, 50));
-
-        com_prof_1.setLabeText("الأستاذ");
-        com_prof_1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                com_prof_1ActionPerformed(evt);
-            }
-        });
-        pan_cour_1.add(com_prof_1, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 20, 180, 50));
-
-        lab_prix_matiere_1.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        lab_prix_matiere_1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lab_prix_matiere_1.setText("00.0");
-        lab_prix_matiere_1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
-        pan_cour_1.add(lab_prix_matiere_1, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 100, 130, 50));
-
-        jLabel9.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        jLabel9.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel9.setText("المبلغ الشهري");
-        pan_cour_1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 100, -1, 40));
-
-        CheckAllGroups.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        CheckAllGroups.setForeground(new java.awt.Color(153, 153, 153));
-        CheckAllGroups.setText("الكل");
-        CheckAllGroups.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        CheckAllGroups.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        pan_cour_1.add(CheckAllGroups, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 40, 50, 30));
-
-        pan_catego.add(pan_cour_1, "card2");
-
-        pan_lang_1.setBackground(new java.awt.Color(255, 255, 255));
-        pan_lang_1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        combobox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Français", "Anglais" }));
-        combobox2.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
-        combobox2.setLabeText("لــغــات");
-        combobox2.setPreferredSize(new java.awt.Dimension(64, 46));
-        combobox2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                combobox2ActionPerformed(evt);
-            }
-        });
-        pan_lang_1.add(combobox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(471, 17, 198, 50));
-
-        Groupe4.setLabeText("الفوج");
-        pan_lang_1.add(Groupe4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 21, 198, 50));
-
-        Groupe5.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "السبت", "الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة" }));
-        Groupe5.setSelectedIndex(-1);
-        Groupe5.setLabeText("المستوى");
-        pan_lang_1.add(Groupe5, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 20, 198, 50));
-
-        pan_catego.add(pan_lang_1, "card3");
-
-        pan_formation_1.setBackground(new java.awt.Color(255, 255, 255));
-        pan_formation_1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        الدورات.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
-        الدورات.setLabeText("الدورات التكوينية ");
-        الدورات.setPreferredSize(new java.awt.Dimension(64, 46));
-        pan_formation_1.add(الدورات, new org.netbeans.lib.awtextra.AbsoluteConstraints(314, 6, 349, -1));
-
-        Groupe3.setLabeText("الــفــوج");
-        pan_formation_1.add(Groupe3, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 10, 105, 40));
-
-        pan_catego.add(pan_formation_1, "card4");
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addContainerGap(399, Short.MAX_VALUE)
-                        .addComponent(com_1, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addComponent(pan_catego, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(com_1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
-                .addComponent(pan_catego, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(12, Short.MAX_VALUE))
-        );
-
-        pan_saise.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 340, 680, 250));
-
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -1491,15 +1342,15 @@ public class home extends javax.swing.JFrame {
         });
         pan_saise.add(buttonRounder31, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 600, 100, 30));
 
-        buttonRounder39.setBackground(new java.awt.Color(102, 102, 255));
-        buttonRounder39.setForeground(new java.awt.Color(255, 255, 255));
-        buttonRounder39.setText("حفظ");
-        buttonRounder39.addActionListener(new java.awt.event.ActionListener() {
+        SaveEtudiantFullData.setBackground(new java.awt.Color(102, 102, 255));
+        SaveEtudiantFullData.setForeground(new java.awt.Color(255, 255, 255));
+        SaveEtudiantFullData.setText("حفظ");
+        SaveEtudiantFullData.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonRounder39ActionPerformed(evt);
+                SaveEtudiantFullDataActionPerformed(evt);
             }
         });
-        pan_saise.add(buttonRounder39, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 600, 100, 30));
+        pan_saise.add(SaveEtudiantFullData, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 600, 100, 30));
 
         pan_center.add(pan_saise, "card2");
 
@@ -2729,22 +2580,6 @@ public class home extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void combobox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combobox2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_combobox2ActionPerformed
-
-    private void com_1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_com_1ActionPerformed
-        if (com_1.getSelectedItem().toString().equals("Cours")) {
-            setForm(pan_catego, pan_cour_1);
-        } else {
-            if (com_1.getSelectedItem().toString().equals("Formation")) {
-                setForm(pan_catego, pan_formation_1);
-            } else {
-                setForm(pan_catego, pan_lang_1);
-            }
-        }
-    }//GEN-LAST:event_com_1ActionPerformed
-
     private void btn_imag_1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_imag_1ActionPerformed
         PlatformImpl.startup(() -> {
             FileChooser fileChooser = new FileChooser();
@@ -3191,7 +3026,7 @@ public class home extends javax.swing.JFrame {
         InitialiseFields();
     }//GEN-LAST:event_buttonRounder31ActionPerformed
 
-    private void buttonRounder39ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRounder39ActionPerformed
+    private void SaveEtudiantFullDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SaveEtudiantFullDataActionPerformed
         String matricule = lab_matric_1.getText();
         String codeBare = lab_codbar_1.getText();
         String prenom = txt_name_1.getText();
@@ -3228,7 +3063,7 @@ public class home extends javax.swing.JFrame {
                     imagefile = null;
                     // save inscription  //
                     JOptionPane.showMessageDialog(null, "  befor iscripton ");
-                    Matiere matiere = matiereDAOImpl.findByName(com_matiere_1.getSelectedItem().toString(), "matiere_etd_ar");
+                    Matiere matiere = null; //matiereDAOImpl.findByName(com_matiere_1.getSelectedItem().toString(), "matiere_etd_ar");
                     Inscription inscription = new Inscription(0, newEtudiant, matiere, LocalDate.now());
                     if (inscriptionDAOImpl.save(inscription) > 0) {
                         message_validation.showMessage("تأكـيد", "تم التسجيل بنجاح");
@@ -3252,61 +3087,11 @@ public class home extends javax.swing.JFrame {
         } catch (IOException ex) {
             Logger.getLogger(AddEtudiantForm.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_buttonRounder39ActionPerformed
+    }//GEN-LAST:event_SaveEtudiantFullDataActionPerformed
 
     private void com_niveau_1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_com_niveau_1ActionPerformed
-        setInfoMatiereInCom(com_catego_niveau_1, com_niveau_1, com_matiere_1);
+        //setInfoMatiereInCom(com_catego_niveau_1, com_niveau_1, com_matiere_1);
     }//GEN-LAST:event_com_niveau_1ActionPerformed
-
-    private void com_matiere_1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_com_matiere_1ActionPerformed
-        if (com_matiere_1.getSelectedIndex() != -1 && com_niveau_1.getSelectedIndex() != -1
-                && com_catego_niveau_1.getSelectedIndex() != -1) {
-
-            Matiere matiere = matiereDAOImpl.getMatiereNiveauOfCategory(com_matiere_1.getSelectedItem().toString(),
-                    com_niveau_1.getSelectedItem().toString(), com_catego_niveau_1.getSelectedItem().toString());
-
-            lab_prix_matiere_1.setText(matiere.getPrix() + "");
-
-            setInfoEnseignantByMatiere();
-        } else {
-            lab_prix_matiere_1.setText("0.00");
-            com_prof_1.removeAllItems();
-            com_group1.removeAllItems();
-        }
-
-    }//GEN-LAST:event_com_matiere_1ActionPerformed
-
-    private void com_prof_1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_com_prof_1ActionPerformed
-        if (com_matiere_1.getSelectedIndex() != -1 && com_niveau_1.getSelectedIndex() != -1
-                && com_catego_niveau_1.getSelectedIndex() != -1 && com_prof_1.getSelectedIndex() != -1) {
-            try {
-                Matiere matiere = matiereDAOImpl.getMatiereNiveauOfCategory(com_matiere_1.getSelectedItem().toString(),
-                        com_niveau_1.getSelectedItem().toString(), com_catego_niveau_1.getSelectedItem().toString());
-                String FullName = (String) com_prof_1.getSelectedItem();
-                String Nom = FullName.split("-")[0];
-                String Prenom = FullName.split("-")[1];
-
-                System.out.println(Nom + "  -- " + Prenom);
-
-                Enseignant enseignat = enseignantDAOImpl.findByFullName(Nom, Prenom);
-
-                System.out.println(enseignat);
-
-                if (enseignat != null) {
-                    List<Groupe> list_group_etude = group_dao_imp.findGroupsByMatiereAndEnseignat(new EnseignantMatiere(0, enseignat, matiere, LocalDate.MAX, 0, 0), CheckAllGroups.isSelected());
-                    System.out.println("List Groups :" + list_group_etude);
-
-                    com_group1.removeAllItems();
-
-                    for (Groupe groupe : list_group_etude) {
-                        com_group1.addItem(groupe.getName_group());
-                    }
-                }
-            } catch (SQLException ex) {
-                Logger.getLogger(AddEtudiantForm.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }//GEN-LAST:event_com_prof_1ActionPerformed
 
     private void buttonRounder9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRounder9ActionPerformed
         new AddEnseignantForm(this, true).setVisible(true);
@@ -3497,11 +3282,8 @@ public class home extends javax.swing.JFrame {
     private ui.card.Card CardEmployer;
     private ui.card.Card CardEnsigniant;
     private ui.card.Card CardEtudtaint;
-    private javax.swing.JCheckBox CheckAllGroups;
     private javax.swing.JPanel Dashboard;
-    private material.design.Combobox Groupe3;
-    private material.design.Combobox Groupe4;
-    private material.design.Combobox Groupe5;
+    private material.design.buttonRounder SaveEtudiantFullData;
     private material.design.buttonRounder btn_imag_1;
     private material.design.buttonRounder btn_level_conf;
     private material.design.buttonRounder btn_serv_conf;
@@ -3533,7 +3315,6 @@ public class home extends javax.swing.JFrame {
     private material.design.buttonRounder buttonRounder36;
     private material.design.buttonRounder buttonRounder37;
     private material.design.buttonRounder buttonRounder38;
-    private material.design.buttonRounder buttonRounder39;
     private material.design.buttonRounder buttonRounder4;
     private material.design.buttonRounder buttonRounder40;
     private material.design.buttonRounder buttonRounder41;
@@ -3542,14 +3323,8 @@ public class home extends javax.swing.JFrame {
     private material.design.buttonRounder buttonRounder6;
     private material.design.buttonRounder buttonRounder8;
     private material.design.buttonRounder buttonRounder9;
-    private material.design.Combobox com_1;
     private material.design.Combobox com_catego_niveau_1;
-    private material.design.Combobox com_group1;
-    private material.design.Combobox com_matiere_1;
     private material.design.Combobox com_niveau_1;
-    private material.design.Combobox com_prof_1;
-    private material.design.Combobox combobox2;
-    private material.design.Combobox combobox3;
     private chart.costumChart costumChart1;
     private ui.menufr.customMenu customMenu1;
     private datechooser.DateChooser dateChooser;
@@ -3588,14 +3363,11 @@ public class home extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel51;
     private javax.swing.JLabel jLabel57;
     private javax.swing.JLabel jLabel59;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel14;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
@@ -3627,27 +3399,22 @@ public class home extends javax.swing.JFrame {
     private javax.swing.JLabel lab_niveau_presence;
     private javax.swing.JLabel lab_num_seance_presence;
     private javax.swing.JLabel lab_prenom_presence;
-    private javax.swing.JLabel lab_prix_matiere_1;
     private material.design.buttonRounder link_Instgram;
     private material.design.buttonRounder link_facebook;
     private material.design.buttonRounder link_facebook1;
     private material.design.buttonRounder link_location;
     private material.design.buttonRounder link_webSite;
     private javax.swing.JPanel pan_buttom;
-    private javax.swing.JPanel pan_catego;
     private javax.swing.JPanel pan_center;
     private javax.swing.JPanel pan_conf_inter;
     private javax.swing.JPanel pan_config;
-    private javax.swing.JPanel pan_cour_1;
     private javax.swing.JPanel pan_cour_formati_lang_;
     private javax.swing.JPanel pan_cours_conf;
     private javax.swing.JPanel pan_dashbord;
     private javax.swing.JPanel pan_dashbord1;
     private javax.swing.JPanel pan_ensign;
     private javax.swing.JPanel pan_etudiant;
-    private javax.swing.JPanel pan_formation_1;
     private javax.swing.JPanel pan_formation_conf;
-    private javax.swing.JPanel pan_lang_1;
     private javax.swing.JPanel pan_lang_conf;
     private javax.swing.JPanel pan_level;
     private javax.swing.JPanel pan_menu;
@@ -3691,7 +3458,6 @@ public class home extends javax.swing.JFrame {
     private material.design.TextField txt_parebt_1;
     private material.design.TextField txt_prenom_1;
     private javax.swing.JTextField txt_tel_1;
-    private material.design.Combobox الدورات;
     // End of variables declaration//GEN-END:variables
 
     public int getidNiveauOfTabNiveaus() {
@@ -3720,9 +3486,9 @@ public class home extends javax.swing.JFrame {
         txt_gmail_1.setText("");
         com_catego_niveau_1.setSelectedIndex(0);
         com_niveau_1.setSelectedIndex(0);
-        com_1.setSelectedIndex(0);
+       // com_1.setSelectedIndex(0);
         lab_imag_1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/diplome (4).png")));
-        setForm(pan_catego, pan_cour_1);
+        //setForm(pan_catego, pan_cour_1);
     }
 
     public void setInfoMatiereInCom(JComboBox com_catego_niv, JComboBox com_niv, JComboBox com_matier) {
@@ -3753,29 +3519,7 @@ public class home extends javax.swing.JFrame {
         }
     }
 
-    public void setInfoEnseignantByMatiere() {
-
-        try {
-            Matiere matiere = matiereDAOImpl.getMatiereNiveauOfCategory(com_matiere_1.getSelectedItem().toString(),
-                    com_niveau_1.getSelectedItem().toString(), com_catego_niveau_1.getSelectedItem().toString());
-
-            System.out.println(matiere);
-
-            List<Enseignant> list_enseignat = enseignantMatiereDAOImpl.findEnseignantByMatiereId(matiere);
-
-            System.out.println("list enseignat:" + list_enseignat);
-            com_prof_1.removeAllItems();
-
-            for (Enseignant enseignat : list_enseignat) {
-                com_prof_1.addItem(enseignat.getNomAr() + "-" + enseignat.getPrenomAr());
-            }
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            Logger.getLogger(AddEtudiantForm.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }
+    
     public Pan_payement getpan_payement(){
         return pan_payement;
     }

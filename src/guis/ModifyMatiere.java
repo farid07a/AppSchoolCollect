@@ -30,7 +30,7 @@ public class ModifyMatiere extends javax.swing.JDialog {
     /**
      * Creates new form ModifyMatiere
      */
-    home home;
+    Home home;
     Connection connection;
     CategoreNiveauDAOImpl categoreNiveauDAOImpl;
     NiveauEtudeDAOImpl niveauEtudeDAOImpl;
@@ -42,12 +42,12 @@ public class ModifyMatiere extends javax.swing.JDialog {
 
     public ModifyMatiere(java.awt.Frame parent, boolean modal, Matiere matiere) {
         super(parent, modal);
-        this.home = (home) parent;
+        this.home = (Home) parent;
         this.matiere = matiere;
         try {
             connection = new ConnectionDB().getConnection();
         } catch (DatabaseConnectionException ex) {
-            Logger.getLogger(home.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
         }
         categoreNiveauDAOImpl = new CategoreNiveauDAOImpl(connection);
         niveauEtudeDAOImpl = new NiveauEtudeDAOImpl(connection);
@@ -61,6 +61,7 @@ public class ModifyMatiere extends javax.swing.JDialog {
         txt_matier.setText(matiere.getMatiereEtdAr());
         txt_matire_fr.setText(matiere.getMatiereEtdFr());
         txt_prix.setText(matiere.getPrix() + "");
+        
         if (matiere.getEnseignant() == null) {
             com_ensig.setSelectedItem("/");
         } else {

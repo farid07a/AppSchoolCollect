@@ -72,7 +72,7 @@ public class Pan_payement extends javax.swing.JPanel {
         try {
             connection = ConnectionDB.getConnection();
         } catch (DatabaseConnectionException ex) {
-            Logger.getLogger(home.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
         }
         payementDAOImpl = new PayementDAOImpl(connection);
         etudiantDAOImpl = new EtudiantDAOImpl(connection);

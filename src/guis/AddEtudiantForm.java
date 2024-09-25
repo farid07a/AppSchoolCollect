@@ -73,7 +73,7 @@ import ui.table.TableCustom;
  */
 public class AddEtudiantForm extends javax.swing.JDialog {
 
-    home home;
+    Home home;
     Connection connection;
     EtudiantDAOImpl etudiantDAOImpl;
     CategoreNiveauDAOImpl categoreNiveauDAOImpl;
@@ -89,13 +89,13 @@ public class AddEtudiantForm extends javax.swing.JDialog {
 
     public AddEtudiantForm(java.awt.Frame parent, boolean model) {
         super(parent, model);
-        this.home = (home) parent;
+        this.home = (Home) parent;
         initComponents();
         setLocationRelativeTo(this);
         try {
             connection = new ConnectionDB().getConnection();
         } catch (DatabaseConnectionException ex) {
-            Logger.getLogger(home.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
         }
         etudiantDAOImpl = new EtudiantDAOImpl(connection);
         categoreNiveauDAOImpl = new CategoreNiveauDAOImpl(connection);
@@ -1176,19 +1176,18 @@ public class AddEtudiantForm extends javax.swing.JDialog {
             
             System.out.println(Nom +"  -- "+Prenom );
             
-            Enseignant enseignat = enseignantDAOImpl.findByFullName(Nom, Prenom);
+            Enseignant enseignant = enseignantDAOImpl.findByFullName(Nom, Prenom);
             
-            System.out.println(enseignat);
+            System.out.println(enseignant);
             
-            if (enseignat!=null){
-            List<Groupe> list_group_etude=group_dao_imp.findGroupsByMatiereAndEnseignat(new EnseignantMatiere(0, enseignat, matiere, LocalDate.MAX,0,0),CheckAllGroups.isSelected());
+            if (enseignant!=null){
+            EnseignantMatiere enseignant_matiere=MatiereEnseignat_dao_impl.findByNamesEnseignantMatiere(enseignant, matiere);
+            List<Groupe> list_group_etude=group_dao_imp.findGroupsByMatiereAndEnseignat(enseignant_matiere,CheckAllGroups.isSelected());
                 System.out.println("List Groups :"+list_group_etude);
-            
             ComboGroup.removeAllItems();
-            
-            for (Groupe groupe : list_group_etude) {
+            list_group_etude.forEach((groupe) -> {
                 ComboGroup.addItem(groupe.getName_group());
-            }
+                });
             
             }
             
@@ -1301,7 +1300,7 @@ public class AddEtudiantForm extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                AddEtudiantForm dialog = new AddEtudiantForm(new home(), true);
+                AddEtudiantForm dialog = new AddEtudiantForm(new Home(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

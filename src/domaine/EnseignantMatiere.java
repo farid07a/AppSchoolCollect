@@ -18,17 +18,25 @@ public class EnseignantMatiere {
     private LocalDate date_start;
     private int num_sceance_semaine;
     private int num_sceance_moins;
+    private double prix;
 
-    public EnseignantMatiere(int id, Enseignant enseignant, Matiere matiere, LocalDate date_start, int num_sceance_semaine, int num_sceance_moins) {
+    public EnseignantMatiere(int id, Enseignant enseignant, Matiere matiere, LocalDate date_start, int num_sceance_semaine, int num_sceance_moins, double prix) {
         this.id = id;
         this.enseignant = enseignant;
         this.matiere = matiere;
         this.date_start = date_start;
         this.num_sceance_semaine = num_sceance_semaine;
         this.num_sceance_moins = num_sceance_moins;
+        this.prix = prix;
     }
 
-    
+    public void setPrix(double prix) {
+        this.prix = prix;
+    }
+
+    public double getPrix() {
+        return prix;
+    }
 
     public int getNum_sceance_semaine() {
         return num_sceance_semaine;

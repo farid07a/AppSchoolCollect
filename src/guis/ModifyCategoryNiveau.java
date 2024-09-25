@@ -20,7 +20,7 @@ import main.java.com.school.model.config.DatabaseConnectionException;
  */
 public class ModifyCategoryNiveau extends javax.swing.JDialog {
 
-     home home;
+     Home home;
     Connection connection;
     CategoreNiveauDAOImpl categoreNiveauDAOImpl;
     NiveauEtudeDAOImpl niveauEtudeDAOImpl;
@@ -28,13 +28,13 @@ public class ModifyCategoryNiveau extends javax.swing.JDialog {
     CategoreNiveau categoreNiveau;
     public ModifyCategoryNiveau(java.awt.Frame parent, boolean modal,CategoreNiveau categoreNiveau) {
           super(parent,modal);
-        this.home = (home) parent;
+        this.home = (Home) parent;
         this.categoreNiveau=categoreNiveau;
         
          try {
             connection = new ConnectionDB().getConnection();
         } catch (DatabaseConnectionException ex) {
-            Logger.getLogger(home.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
         }
         categoreNiveauDAOImpl = new CategoreNiveauDAOImpl(connection);
         niveauEtudeDAOImpl = new NiveauEtudeDAOImpl(connection);

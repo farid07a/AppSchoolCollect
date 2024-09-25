@@ -11,7 +11,7 @@ import domaine.Matiere;
 import domaine.NiveauEtude;
 import domaine.Seance;
 import domaine.Seance_Matiere;
-import static guis.home.getDayOfWeekFromArabic;
+import static guis.Home.getDayOfWeekFromArabic;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

@@ -18,6 +18,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -39,7 +40,7 @@ import main.java.com.school.model.config.DatabaseConnectionException;
  */
 public class AddInscription extends javax.swing.JDialog {
 
-    home home;
+    Home home;
     Connection connection;
     CategoreNiveauDAOImpl categoreNiveauDAOImpl;
     NiveauEtudeDAOImpl niveauEtudeDAOImpl;
@@ -57,12 +58,12 @@ public class AddInscription extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
           setLocationRelativeTo(this);
-        this.home = (home) parent;
+        this.home = (Home) parent;
         this.etudiant = etudiant;
         try {
             connection = new ConnectionDB().getConnection();
         } catch (DatabaseConnectionException ex) {
-            Logger.getLogger(home.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
         }
         categoreNiveauDAOImpl = new CategoreNiveauDAOImpl(connection);
         niveauEtudeDAOImpl = new NiveauEtudeDAOImpl(connection);
@@ -96,26 +97,26 @@ public class AddInscription extends javax.swing.JDialog {
     }
 
     public void setInfoEnseignantByMatiere() {
-JOptionPane.showMessageDialog(null, matiere_comb.getSelectedItem().toString()+
-                    lab_catego_niv.getText()+lab_niv.getText());
+        
+//JOptionPane.showMessageDialog(null, matiere_comb.getSelectedItem().toString()+
+//                    lab_catego_niv.getText()+lab_niv.getText());
         try {
             Matiere matiere = matiereDAOImpl.getMatiereNiveauOfCategory(matiere_comb.getSelectedItem().toString(),
                    lab_niv.getText(), lab_catego_niv.getText());
             
-JOptionPane.showMessageDialog(null, "matier ensig*********** " + matiere.getId());
+//JOptionPane.showMessageDialog(null, "matier ensig*********** " + matiere.getId());
    List<Enseignant> list_enseignat = matiereEnseignantDAOImpl.findEnseignantByMatiereId(matiere);
-if(list_enseignat!=null){
-JOptionPane.showMessageDialog(null, "nULL");
-
-
+   if (list_enseignat.isEmpty()){
+   HintMsgEnsignant.setText("لا يوجد استاذ لهذه المادة");
+   
+   }else{
+            HintMsgEnsignant.setText("");
             System.out.println("list enseignat:" + list_enseignat);
-
             Enseignantcombo.removeAllItems();
-
             for (Enseignant enseignat : list_enseignat) {
                 Enseignantcombo.addItem(enseignat.getNomAr() + "-" + enseignat.getPrenomAr());
             }
-}
+   }
         } catch (SQLException ex) {
             ex.printStackTrace();
             Logger.getLogger(AddEtudiantForm.class.getName()).log(Level.SEVERE, null, ex);
@@ -154,6 +155,7 @@ JOptionPane.showMessageDialog(null, "nULL");
         ComboGroup = new material.design.Combobox();
         lab_error = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
+        HintMsgEnsignant = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -164,23 +166,23 @@ JOptionPane.showMessageDialog(null, "nULL");
         lab_mtr.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lab_mtr.setText("00");
         lab_mtr.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
-        jPanel1.add(lab_mtr, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 50, 320, 30));
+        jPanel1.add(lab_mtr, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 50, 30));
 
         jLabel3.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(153, 153, 153));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel3.setText("N°");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 50, 20, -1));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 10, 20, -1));
 
         lab_codbar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lab_codbar.setText("00");
         lab_codbar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
-        jPanel1.add(lab_codbar, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 50, 270, 30));
+        jPanel1.add(lab_codbar, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 70, 170, 30));
 
         jLabel1.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel1.setText("CodBar");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 50, 20));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("الرقم التسلسلي:");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 40, 70, 20));
 
         jLabel2.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(153, 153, 153));
@@ -228,22 +230,30 @@ JOptionPane.showMessageDialog(null, "nULL");
         });
         jPanel1.add(Enseignantcombo, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 260, 170, -1));
 
+        lab_Nom_mod.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lab_Nom_mod.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lab_Nom_mod.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
         jPanel1.add(lab_Nom_mod, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 130, 170, 30));
 
+        lab_prenom_mod.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lab_prenom_mod.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lab_prenom_mod.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
         jPanel1.add(lab_prenom_mod, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 130, 170, 30));
 
+        lab_catego_niv.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lab_catego_niv.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lab_catego_niv.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
         jPanel1.add(lab_catego_niv, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 190, 170, 30));
 
+        lab_niv.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lab_niv.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lab_niv.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
         jPanel1.add(lab_niv, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 190, 170, 30));
 
         CheckAllGroups.setText("الكل");
         CheckAllGroups.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         CheckAllGroups.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        jPanel1.add(CheckAllGroups, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 280, -1, -1));
+        jPanel1.add(CheckAllGroups, new org.netbeans.lib.awtextra.AbsoluteConstraints(365, 340, 110, -1));
 
         buttonRounder31.setBackground(new java.awt.Color(153, 153, 153));
         buttonRounder31.setForeground(new java.awt.Color(255, 255, 255));
@@ -271,14 +281,20 @@ JOptionPane.showMessageDialog(null, "nULL");
                 ComboGroupActionPerformed(evt);
             }
         });
-        jPanel1.add(ComboGroup, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 260, 150, -1));
+        jPanel1.add(ComboGroup, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 320, 170, -1));
 
         lab_error.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         lab_error.setForeground(new java.awt.Color(255, 0, 51));
-        jPanel1.add(lab_error, new org.netbeans.lib.awtextra.AbsoluteConstraints(497, 310, 170, 30));
+        jPanel1.add(lab_error, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 360, 170, 30));
 
+        jLabel20.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        jLabel20.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel20.setText("00.00");
-        jPanel1.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 210, -1, -1));
+        jPanel1.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 270, 170, 30));
+
+        HintMsgEnsignant.setForeground(new java.awt.Color(204, 0, 0));
+        HintMsgEnsignant.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jPanel1.add(HintMsgEnsignant, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 370, 340, 20));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -295,14 +311,23 @@ JOptionPane.showMessageDialog(null, "nULL");
     }// </editor-fold>//GEN-END:initComponents
 
     private void matiere_combActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_matiere_combActionPerformed
- if (matiere_comb.getSelectedIndex() != -1 ) {
-            
-            Matiere matiere = matiereDAOImpl.getMatiereNiveauOfCategory(matiere_comb.getSelectedItem().toString(),
+ 
+        
+        if (matiere_comb.getSelectedIndex() == -1 || lab_catego_niv.getText().equals("")|| lab_niv.getText().equals(""))
+        {
+            JOptionPane.showMessageDialog(null, "الرجاء تأكد من تعبئة المعلومات");
+            return;
+        }
+        
+        
+        if (matiere_comb.getSelectedIndex() != -1 ) {            
+            Matiere matiere 
+                    = matiereDAOImpl.getMatiereNiveauOfCategory(matiere_comb.getSelectedItem().toString(),
                     lab_niv.getText(), lab_catego_niv.getText());
 
-            jLabel20.setText(matiere.getPrix() + "");
             
             setInfoEnseignantByMatiere();
+            jLabel20.setText(matiere.getPrix() + "");
             
         } else {
             jLabel20.setText("0.00");
@@ -336,8 +361,10 @@ JOptionPane.showMessageDialog(null, "nULL");
                 if (enseignat != null) {
                     
               //      EnseignantMatiere enseignantMatiere=matiereEnseignantDAOImpl.
-                    
-                 List<Groupe> list_group_etude=groupeImpl.findGroupsByMatiereAndEnseignat(new EnseignantMatiere(0, enseignat, matiere, LocalDate.MAX,0,0),CheckAllGroups.isSelected());
+                 
+                EnseignantMatiere enseignantMatiere = matiereEnseignantDAOImpl.findByNamesEnseignantMatiere(enseignat, matiere);
+                 List<Groupe> list_group_etude=groupeImpl.findGroupsByMatiereAndEnseignat(
+                         enseignantMatiere,CheckAllGroups.isSelected());
                 System.out.println("List Groups :"+list_group_etude);
            //  List<Groupe> list_group_etude = groupeImpl.findGroupsByMatiereAndEnseignat(
             //                new EnseignantMatiere, rootPaneCheckingEnabled)
@@ -366,7 +393,8 @@ JOptionPane.showMessageDialog(null, "nULL");
         if (matiere_comb.getSelectedIndex() != -1) {
             Matiere matiere = matiereDAOImpl.getMatiereNiveauOfCategory(matiere_comb.getSelectedItem().toString(),
                     lab_niv.getText(), lab_catego_niv.getText());
-            if (inscriptionDAOImpl.findByEtudiantAndMatiere(etudiant, matiere) == null) {
+            Inscription inscription_obj = inscriptionDAOImpl.findByEtudiantAndMatiere(etudiant, matiere);
+            if (Objects.isNull(inscription_obj)) {
                 Inscription inscription = new Inscription(0, etudiant, matiere, LocalDate.now());
                 if (inscriptionDAOImpl.save(inscription) > 0) {
                     this.dispose();
@@ -429,6 +457,7 @@ JOptionPane.showMessageDialog(null, "nULL");
     private javax.swing.JCheckBox CheckAllGroups;
     private material.design.Combobox ComboGroup;
     private material.design.Combobox Enseignantcombo;
+    private javax.swing.JLabel HintMsgEnsignant;
     private material.design.buttonRounder buttonRounder30;
     private material.design.buttonRounder buttonRounder31;
     private javax.swing.JLabel jLabel1;

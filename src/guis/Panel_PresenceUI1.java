@@ -79,7 +79,7 @@ public class Panel_PresenceUI1 extends javax.swing.JPanel {
         try {
             connection = new ConnectionDB().getConnection();
         } catch (DatabaseConnectionException ex) {
-            Logger.getLogger(home.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
         }
         etudiantDAOImpl = new EtudiantDAOImpl(connection);
         inscriptionDAOImpl = new InscriptionDAOImpl(connection);
@@ -251,7 +251,7 @@ public class Panel_PresenceUI1 extends javax.swing.JPanel {
                     presence.getEtudiant().getId(), presence.getSeance().getId(), presence.getId()});
             }
         } catch (DatabaseConnectionException ex) {
-            Logger.getLogger(home.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
 
         }
     }

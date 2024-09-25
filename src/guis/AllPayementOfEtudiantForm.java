@@ -44,7 +44,7 @@ import ui.table.TableCustom;
  */
 public class AllPayementOfEtudiantForm extends javax.swing.JDialog {
 
-    home home;
+    Home home;
     Connection connection;
     CategoreNiveauDAOImpl categoreNiveauDAOImpl;
     NiveauEtudeDAOImpl niveauEtudeDAOImpl;
@@ -63,7 +63,7 @@ public class AllPayementOfEtudiantForm extends javax.swing.JDialog {
 
     public AllPayementOfEtudiantForm(java.awt.Frame parent, boolean modal, Etudiant etudiant) {
         super(parent, modal);
-        this.home = (home) parent;
+        this.home = (Home) parent;
         initComponents();
         setLocationRelativeTo(this.home);
         this.etudiant = etudiant;
@@ -71,7 +71,7 @@ public class AllPayementOfEtudiantForm extends javax.swing.JDialog {
         try {
             connection = new ConnectionDB().getConnection();
         } catch (DatabaseConnectionException ex) {
-            Logger.getLogger(home.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
         }
         etudiantDAOImpl = new EtudiantDAOImpl(connection);
         categoreNiveauDAOImpl = new CategoreNiveauDAOImpl(connection);

@@ -40,12 +40,12 @@ public class EnseignantMatiereDAOImpl extends AbstractDAO<EnseignantMatiere> imp
 
     @Override
     protected String getInsertQuery() {
-        return "INSERT INTO " + getTableName() + " (id_enseignant,id_matiere,date_start,num_sceance_semaine,num_sceance_moins) VALUES(?,?,?,?,?)";
+        return "INSERT INTO " + getTableName() + " (id_enseignant,id_matiere,date_start,num_sceance_semaine,num_sceance_moins,prix) VALUES(?,?,?,?,?,?)";
     }
 
     @Override
     protected String getUpdateQuery() {
-        return "UPDATE " + getTableName() + " SET id_enseignant=?, id_matiere=?,date_start=?,num_sceance_semaine=?,num_sceance_moins=? WHERE id=? ";
+        return "UPDATE " + getTableName() + " SET id_enseignant=?, id_matiere=?,date_start=?,num_sceance_semaine=?,num_sceance_moins=?,prix=? WHERE id=? ";
     }
 
     @Override
@@ -55,6 +55,7 @@ public class EnseignantMatiereDAOImpl extends AbstractDAO<EnseignantMatiere> imp
         statement.setDate(3, java.sql.Date.valueOf(t.getDate_start()));
         statement.setInt(4, t.getNum_sceance_semaine());
         statement.setInt(5, t.getNum_sceance_moins());
+        statement.setDouble(6, t.getPrix());
 
     }
 
@@ -65,7 +66,8 @@ public class EnseignantMatiereDAOImpl extends AbstractDAO<EnseignantMatiere> imp
         statement.setDate(3, java.sql.Date.valueOf(t.getDate_start()));
         statement.setInt(4, t.getNum_sceance_semaine());
         statement.setInt(5, t.getNum_sceance_moins());
-        statement.setInt(6, t.getId());
+        statement.setDouble(6, t.getPrix());
+        statement.setInt(7, t.getId());
     }
 
     @Override
@@ -76,7 +78,8 @@ public class EnseignantMatiereDAOImpl extends AbstractDAO<EnseignantMatiere> imp
         LocalDate date_start = (resultSet.getDate("date_start") == null) ? LocalDate.now() : resultSet.getDate("date_start").toLocalDate();
         int num_sceance_semaine = resultSet.getInt("num_sceance_semaine");
         int num_sceance_moins = resultSet.getInt("num_sceance_moins");
-        return new EnseignantMatiere(id, enseignat, matiere, date_start, num_sceance_semaine, num_sceance_moins);
+        double prix=resultSet.getDouble("prix");
+        return new EnseignantMatiere(id, enseignat, matiere, date_start, num_sceance_semaine, num_sceance_moins,prix);
     }
 // t
     @Override
@@ -139,7 +142,8 @@ public class EnseignantMatiereDAOImpl extends AbstractDAO<EnseignantMatiere> imp
                 + "matiere_by_enseignant.id_enseignant,"
                 + "date_start,"
                 + "matiere_by_enseignant.num_sceance_semaine,"
-                + "matiere_by_enseignant.num_sceance_moins\n"
+                + "matiere_by_enseignant.num_sceance_moins,"
+                + "matiere_by_enseignant.prix\n"
                 + "FROM sceance,enseignant,matiere_by_enseignant,matiere\n"
                 + "WHERE sceance.id_enseignant=enseignant.id \n"
                 + "AND enseignant.id = matiere_by_enseignant.id_enseignant\n"
@@ -162,9 +166,7 @@ public class EnseignantMatiereDAOImpl extends AbstractDAO<EnseignantMatiere> imp
     public static void main(String[] args) {
         try {
             System.out.println(new EnseignantMatiereDAOImpl(ConnectionDB.getConnection()).findEnseignantMatiereByDate("الاثنين"));
-        } catch (DatabaseConnectionException ex) {
-            Logger.getLogger(EnseignantMatiereDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        } catch (DatabaseConnectionException | SQLException ex) {
             Logger.getLogger(EnseignantMatiereDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

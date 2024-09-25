@@ -26,6 +26,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import main.java.com.school.impl.CategoreNiveauDAOImpl;
 import main.java.com.school.impl.EnseignantDAOImpl;
+import main.java.com.school.impl.EnseignantMatiereDAOImpl;
 import main.java.com.school.impl.MatiereDAOImpl;
 import main.java.com.school.impl.NiveauEtudeDAOImpl;
 import main.java.com.school.model.config.ConnectionDB;
@@ -39,27 +40,29 @@ import ui.table.TableCustom;
  */
 public class AddMatiereForm extends javax.swing.JDialog {
 
-    home home;
+    Home home;
     Connection connection;
     CategoreNiveauDAOImpl categoreNiveauDAOImpl;
     NiveauEtudeDAOImpl niveauEtudeDAOImpl;
     ValidationMessageDialog message_validation;
     MatiereDAOImpl matiereDAOImpl;
     EnseignantDAOImpl enseignantDAOImpl;
+    EnseignantMatiereDAOImpl enseignant_matiere_dao;
 
     public AddMatiereForm(java.awt.Frame parent, boolean modal) {
         super(parent);
-        this.home = (home) parent;
+        this.home = (Home) parent;
         message_validation=new ValidationMessageDialog(this.home);
         try {
             connection = ConnectionDB.getConnection();
         } catch (DatabaseConnectionException ex) {
-            Logger.getLogger(home.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
         }
         categoreNiveauDAOImpl = new CategoreNiveauDAOImpl(connection);
         niveauEtudeDAOImpl = new NiveauEtudeDAOImpl(connection);
         matiereDAOImpl = new MatiereDAOImpl(connection);
         enseignantDAOImpl = new EnseignantDAOImpl(connection);
+        enseignant_matiere_dao=new EnseignantMatiereDAOImpl(connection);
 
         initComponents();
         setLocationRelativeTo(this);
@@ -439,8 +442,10 @@ public class AddMatiereForm extends javax.swing.JDialog {
                 
                 Matiere matiere = new Matiere(0, tab_matiere.getValueAt(row, 3).toString(), tab_matiere.getValueAt(row, 3).toString(),
                         prix, niveauEtude, categoreNiveau, enseignant,SceanceParSomaine,SceanceParSomaine*4);
+                
                 if(matiereDAOImpl.save(matiere)>0){
-                this.dispose();
+                    
+                    this.dispose();
                 home.setInfoMatiereInTab(home.getidCategoryOfTabCategorys(), home.getidNiveauOfTabNiveaus());
                  this.message_validation.showMessage("تأكيد", "لقد تم الحفظ بنجاح");
                  
@@ -476,7 +481,8 @@ public class AddMatiereForm extends javax.swing.JDialog {
     }//GEN-LAST:event_com_ensigActionPerformed
 
     private void btn_add_niveauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_add_niveauActionPerformed
-        if (com_catego_niveau.getSelectedIndex() != -1 && !txt_matier.getText().isEmpty() && com_ensig.getSelectedIndex() != -1) {
+        if (com_catego_niveau.getSelectedIndex() != -1 && !txt_matier.getText().isEmpty() 
+                && com_ensig.getSelectedIndex() != -1 && !nbrSceanceParSomaine.getText().equals("")) {
             String matier_nam = txt_matier.getText();
             String matier_nam_fr = txt_matier_fr.getText();
             String prix = txt_prix.getText();
@@ -512,6 +518,7 @@ public class AddMatiereForm extends javax.swing.JDialog {
             if (txt_matier.getText().isEmpty()) {
                 lab_ma.setText("أكتب اسم المادة");
             }
+            
         }
 
     }//GEN-LAST:event_btn_add_niveauActionPerformed
@@ -569,7 +576,7 @@ public class AddMatiereForm extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                home home = new home();
+                Home home = new Home();
                 AddMatiereForm dialog = new AddMatiereForm(home, true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override

@@ -49,7 +49,7 @@ import ui.table.TableCustom;
  */
 public class NewJFrame1 extends javax.swing.JFrame {
 
-    home home;
+    Home home;
     Connection connection;
     CategoreNiveauDAOImpl categoreNiveauDAOImpl;
     NiveauEtudeDAOImpl niveauEtudeDAOImpl;
@@ -70,7 +70,7 @@ public class NewJFrame1 extends javax.swing.JFrame {
         try {
             connection = new ConnectionDB().getConnection();
         } catch (DatabaseConnectionException ex) {
-            Logger.getLogger(home.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
         }
         etudiantDAOImpl = new EtudiantDAOImpl(connection);
         categoreNiveauDAOImpl = new CategoreNiveauDAOImpl(connection);

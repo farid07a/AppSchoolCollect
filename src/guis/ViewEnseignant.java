@@ -13,14 +13,14 @@ import domaine.Enseignant;
 public class ViewEnseignant extends javax.swing.JDialog {
 
     Enseignant enseignant;
-    home home;
+    Home home;
 
     public ViewEnseignant(java.awt.Frame parent, boolean modal, Enseignant enseignant) {
         super(parent, modal);
 
         initComponents();
         setLocationRelativeTo(this);
-        home = (home) parent;
+        home = (Home) parent;
         this.enseignant = enseignant;
         setInfoInPan();
     }

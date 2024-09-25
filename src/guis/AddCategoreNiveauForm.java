@@ -33,7 +33,7 @@ import ui.table.TableCustom;
  */
 public class AddCategoreNiveauForm extends javax.swing.JDialog {
 
-    home home;
+    Home home;
     Connection connection;
     CategoreNiveauDAOImpl categoreNiveauDAOImpl;
     NiveauEtudeDAOImpl niveauEtudeDAOImpl;
@@ -41,7 +41,7 @@ public class AddCategoreNiveauForm extends javax.swing.JDialog {
 
     public AddCategoreNiveauForm(java.awt.Frame parent) {
         super(parent);
-        this.home = (home) parent;
+        this.home = (Home) parent;
 
         initComponents();
         setLocationRelativeTo(this);
@@ -50,7 +50,7 @@ public class AddCategoreNiveauForm extends javax.swing.JDialog {
         try {
             connection = new ConnectionDB().getConnection();
         } catch (DatabaseConnectionException ex) {
-            Logger.getLogger(home.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
         }
         categoreNiveauDAOImpl = new CategoreNiveauDAOImpl(connection);
         niveauEtudeDAOImpl = new NiveauEtudeDAOImpl(connection);
@@ -440,7 +440,7 @@ public class AddCategoreNiveauForm extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                AddCategoreNiveauForm dialog = new AddCategoreNiveauForm(new home());
+                AddCategoreNiveauForm dialog = new AddCategoreNiveauForm(new Home());
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

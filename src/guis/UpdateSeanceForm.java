@@ -57,7 +57,7 @@ import ui.table.TableCustom;
  */
 public class UpdateSeanceForm extends javax.swing.JDialog {
     
-    home home;
+    Home home;
     Connection connection;
     CategoreNiveauDAOImpl categoreNiveauDAOImpl;
     NiveauEtudeDAOImpl niveauEtudeDAOImpl;
@@ -68,13 +68,13 @@ public class UpdateSeanceForm extends javax.swing.JDialog {
     
     public UpdateSeanceForm(java.awt.Frame parent, boolean modal, Seance seance) {
         super(parent, modal);
-        home = (home) parent;
+        home = (Home) parent;
         initComponents();
         
         try {
             connection = new ConnectionDB().getConnection();
         } catch (DatabaseConnectionException ex) {
-            Logger.getLogger(home.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
         }
         categoreNiveauDAOImpl = new CategoreNiveauDAOImpl(connection);
         niveauEtudeDAOImpl = new NiveauEtudeDAOImpl(connection);
@@ -1299,11 +1299,7 @@ public class UpdateSeanceForm extends javax.swing.JDialog {
 //                            System.out.println("Success Save");
 //                    }
 //                }
-            } catch (ParseException ex) {
-                Logger.getLogger(UpdateSeanceForm.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (SQLException ex) {
-                Logger.getLogger(UpdateSeanceForm.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (DatabaseConnectionException ex) {
+            } catch (ParseException | SQLException | DatabaseConnectionException ex) {
                 Logger.getLogger(UpdateSeanceForm.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
@@ -1601,7 +1597,7 @@ public class UpdateSeanceForm extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                UpdateSeanceForm dialog = new UpdateSeanceForm(new home(), true, null);
+                UpdateSeanceForm dialog = new UpdateSeanceForm(new Home(), true, null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

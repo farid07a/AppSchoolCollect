@@ -52,7 +52,7 @@ import ui.table.TableCustom;
  */
 public class AddSeanceForm extends javax.swing.JDialog {
 
-    home home;
+    Home home;
     Connection connection;
     CategoreNiveauDAOImpl categoreNiveauDAOImpl;
     NiveauEtudeDAOImpl niveauEtudeDAOImpl;
@@ -63,13 +63,13 @@ public class AddSeanceForm extends javax.swing.JDialog {
 
     public AddSeanceForm(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        home = (home) parent;
+        home = (Home) parent;
         initComponents();
 
         try {
             connection = new ConnectionDB().getConnection();
         } catch (DatabaseConnectionException ex) {
-            Logger.getLogger(home.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
         }
         categoreNiveauDAOImpl = new CategoreNiveauDAOImpl(connection);
         niveauEtudeDAOImpl = new NiveauEtudeDAOImpl(connection);
@@ -1190,7 +1190,7 @@ public class AddSeanceForm extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                AddSeanceForm dialog = new AddSeanceForm(new home(), true);
+                AddSeanceForm dialog = new AddSeanceForm(new Home(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

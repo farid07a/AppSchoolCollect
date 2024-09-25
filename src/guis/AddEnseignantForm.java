@@ -29,21 +29,21 @@ import main.java.com.school.model.config.DatabaseConnectionException;
  */
 public class AddEnseignantForm extends javax.swing.JDialog {
 
-    home home;
+    Home home;
     Connection connection;
     EnseignantDAOImpl enseignantDAOImpl;
     ValidationMessageDialog message_validation;
 
     public AddEnseignantForm(java.awt.Frame parent,boolean model ) {
         super(parent,model);
-        this.home = (home) parent;
+        this.home = (Home) parent;
         initComponents();
         setLocationRelativeTo(this);
 
         try {
             connection = new ConnectionDB().getConnection();
         } catch (DatabaseConnectionException ex) {
-            Logger.getLogger(home.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
         }
         enseignantDAOImpl = new EnseignantDAOImpl(connection);
        
@@ -61,19 +61,18 @@ public class AddEnseignantForm extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         buttonRounder17 = new material.design.buttonRounder();
         buttonRounder19 = new material.design.buttonRounder();
-        textField2 = new material.design.TextField();
-        textField1 = new material.design.TextField();
-        textField3 = new material.design.TextField();
-        textField4 = new material.design.TextField();
+        txt_prenom_ar = new material.design.TextField();
+        txt_specialite = new material.design.TextField();
+        txt_nom_ar = new material.design.TextField();
+        txt_nom_fr = new material.design.TextField();
+        txt_prenom_fr = new material.design.TextField();
         lab_imag = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        Order_enseignant = new javax.swing.JLabel();
         buttonRounder2 = new material.design.buttonRounder();
-        jTextField2 = new javax.swing.JTextField();
+        txt_N_tel = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        txt_email = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        textField5 = new material.design.TextField();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -95,39 +94,41 @@ public class AddEnseignantForm extends javax.swing.JDialog {
             }
         });
 
-        textField2.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        textField2.setToolTipText("");
-        textField2.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
-        textField2.setLabelText("الـتـخـصص");
+        txt_prenom_ar.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txt_prenom_ar.setToolTipText("");
+        txt_prenom_ar.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        txt_prenom_ar.setLabelText("الاســم");
 
-        textField1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        textField1.setToolTipText("");
-        textField1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        textField1.setLabelText("الــلـقـب");
+        txt_specialite.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txt_specialite.setToolTipText("");
+        txt_specialite.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        txt_specialite.setLabelText("الـتـخـصص");
 
-        textField3.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        textField3.setToolTipText("");
-        textField3.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        textField3.setLabelText("Nom");
-        textField3.setLangue(1);
+        txt_nom_ar.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txt_nom_ar.setToolTipText("");
+        txt_nom_ar.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        txt_nom_ar.setLabelText("الــلـقـب");
 
-        textField4.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        textField4.setToolTipText("");
-        textField4.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        textField4.setLabelText("Prénom");
-        textField4.setLangue(1);
-        textField4.addActionListener(new java.awt.event.ActionListener() {
+        txt_nom_fr.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txt_nom_fr.setToolTipText("");
+        txt_nom_fr.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        txt_nom_fr.setLabelText("Nom");
+        txt_nom_fr.setLangue(1);
+
+        txt_prenom_fr.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txt_prenom_fr.setToolTipText("");
+        txt_prenom_fr.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        txt_prenom_fr.setLabelText("Prénom");
+        txt_prenom_fr.setLangue(1);
+        txt_prenom_fr.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textField4ActionPerformed(evt);
+                txt_prenom_frActionPerformed(evt);
             }
         });
 
         lab_imag.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
 
-        jLabel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
-
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setText("BarrCod");
+        Order_enseignant.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
 
         buttonRounder2.setBackground(new java.awt.Color(224, 175, 175));
         buttonRounder2.setText("تحميل الصورة");
@@ -146,11 +147,6 @@ public class AddEnseignantForm extends javax.swing.JDialog {
         jLabel6.setForeground(new java.awt.Color(150, 150, 150));
         jLabel6.setText("البريد الإلكتروني ");
 
-        textField5.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        textField5.setToolTipText("");
-        textField5.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        textField5.setLabelText("الاســم");
-
         jLabel1.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(153, 153, 153));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -161,12 +157,7 @@ public class AddEnseignantForm extends javax.swing.JDialog {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(buttonRounder19, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(buttonRounder17, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(159, 159, 159))
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -174,11 +165,11 @@ public class AddEnseignantForm extends javax.swing.JDialog {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txt_N_tel, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGap(30, 30, 30)
                                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txt_email, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGap(10, 10, 10)
                                     .addComponent(jLabel6)))
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -188,30 +179,31 @@ public class AddEnseignantForm extends javax.swing.JDialog {
                                 .addGap(50, 50, 50)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(textField3, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txt_nom_fr, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(5, 5, 5)
-                                        .addComponent(textField4, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(textField2, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txt_prenom_fr, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(txt_specialite, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(textField1, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txt_nom_ar, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(textField5, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                        .addComponent(txt_prenom_ar, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(78, 78, 78)
+                        .addComponent(Order_enseignant, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(buttonRounder17, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27)
+                .addComponent(buttonRounder19, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(80, 80, 80))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(Order_enseignant, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -219,31 +211,31 @@ public class AddEnseignantForm extends javax.swing.JDialog {
                         .addComponent(lab_imag, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(textField1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(textField5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txt_nom_ar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txt_prenom_ar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(10, 10, 10)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(textField3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txt_nom_fr, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(10, 10, 10)
-                                .addComponent(textField4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))))
+                                .addComponent(txt_prenom_fr, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(buttonRounder2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(textField2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txt_specialite, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(36, 36, 36)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txt_N_tel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
                 .addGap(10, 10, 10)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txt_email, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(128, 128, 128)
+                .addGap(119, 119, 119)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(buttonRounder17, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(buttonRounder19, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20))
+                .addGap(29, 29, 29))
         );
 
         getContentPane().add(jPanel1, "card2");
@@ -253,25 +245,26 @@ public class AddEnseignantForm extends javax.swing.JDialog {
 
     private void buttonRounder19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRounder19ActionPerformed
       
-        String nomAr = textField5.getText();
-        String nomFr = textField4.getText();
-        String prenomAr = textField1.getText();
-        String prenomFr = textField3.getText();
-        String specialite = textField2.getText();
-        String phoneNum = jTextField2.getText();
-        String email = jTextField3.getText();
+        String prenomAr = txt_prenom_ar.getText();
+        String prenomFr = txt_prenom_fr.getText();
+        String nomAr = txt_nom_ar.getText();
+        String nomFr = txt_nom_fr.getText();
+        String specialite = txt_specialite.getText();
+        String phoneNum = txt_N_tel.getText();
+        String email = txt_email.getText();
         
         Enseignant enseignant = new Enseignant(0, nomAr, nomFr, prenomAr, prenomFr, specialite, phoneNum, email);
-        enseignantDAOImpl.save(enseignant);
-        message_validation =new ValidationMessageDialog(this,home);
-        this.dispose();
-        home.setInfoEnsignInTab();
-        message_validation.showMessage(" تأكيد ","لقد تم اضافة أستاذ جديد بنجاح .");
+        if (enseignantDAOImpl.save(enseignant)>0){
+            message_validation =new ValidationMessageDialog(this,home);
+            this.dispose();
+            home.setInfoEnsignInTab();
+            message_validation.showMessage(" تأكيد ","لقد تم اضافة أستاذ جديد بنجاح .");
+        }
     }//GEN-LAST:event_buttonRounder19ActionPerformed
 
-    private void textField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textField4ActionPerformed
+    private void txt_prenom_frActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_prenom_frActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_textField4ActionPerformed
+    }//GEN-LAST:event_txt_prenom_frActionPerformed
 
     private void buttonRounder2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRounder2ActionPerformed
         PlatformImpl.startup(() -> {
@@ -350,7 +343,7 @@ public class AddEnseignantForm extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                home home = new home();
+                Home home = new Home();
                 AddEnseignantForm dialog = new AddEnseignantForm(home,true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
@@ -364,22 +357,21 @@ public class AddEnseignantForm extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel Order_enseignant;
     private material.design.buttonRounder buttonRounder17;
     private material.design.buttonRounder buttonRounder19;
     private material.design.buttonRounder buttonRounder2;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
     private javax.swing.JLabel lab_imag;
-    private material.design.TextField textField1;
-    private material.design.TextField textField2;
-    private material.design.TextField textField3;
-    private material.design.TextField textField4;
-    private material.design.TextField textField5;
+    private javax.swing.JTextField txt_N_tel;
+    private javax.swing.JTextField txt_email;
+    private material.design.TextField txt_nom_ar;
+    private material.design.TextField txt_nom_fr;
+    private material.design.TextField txt_prenom_ar;
+    private material.design.TextField txt_prenom_fr;
+    private material.design.TextField txt_specialite;
     // End of variables declaration//GEN-END:variables
 }

@@ -28,7 +28,7 @@ import main.java.com.school.model.config.DatabaseConnectionException;
 
 public class FormPayement extends javax.swing.JDialog {
 
-    home home;
+    Home home;
      Etudiant etudiant;
      Seance_Matiere seance_Matiere;
      PayementDAOImpl payementDAOImpl;
@@ -37,12 +37,12 @@ public class FormPayement extends javax.swing.JDialog {
     Connection connection;
     public FormPayement(java.awt.Frame parent, boolean modal , Etudiant etudiant, Seance_Matiere seance_Matiere) {
         super(parent, modal);
-        this.home = (home) parent;
+        this.home = (Home) parent;
         this.etudiant=etudiant;
          try {
             connection = new ConnectionDB().getConnection();
         } catch (DatabaseConnectionException ex) {
-             Logger.getLogger(home.class.getName()).log(Level.SEVERE, null, ex);
+             Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
         }
          this.seance_Matiere=seance_Matiere;
         sceanceDAOImpl= new SeanceDAOImpl(connection);
