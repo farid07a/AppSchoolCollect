@@ -6,6 +6,7 @@ package guis;
 
 import com.sun.javafx.application.PlatformImpl;
 import domaine.CategoreNiveau;
+
 import domaine.Enseignant;
 import domaine.Etudiant;
 import domaine.Groupe;
@@ -268,9 +269,7 @@ public class AddEtudiantForm extends javax.swing.JDialog {
     }
     
     public void setInfoEnseignantByMatiere(){
-        
-        
-        
+       
         try {
             Matiere matiere = matiereDAOImpl.getMatiereNiveauOfCategory(matiere_comb.getSelectedItem().toString(),
                     ClassInNiveau.getSelectedItem().toString(), NiveauCatg_Etude.getSelectedItem().toString());
@@ -310,8 +309,6 @@ public class AddEtudiantForm extends javax.swing.JDialog {
     private void initComponents() {
 
         dateChooser = new datechooser.DateChooser();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jEditorPane1 = new javax.swing.JEditorPane();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -326,12 +323,12 @@ public class AddEtudiantForm extends javax.swing.JDialog {
         lab_matricul = new javax.swing.JLabel();
         lab_codBar = new javax.swing.JLabel();
         panel_info_student = new javax.swing.JPanel();
-        textField2 = new material.design.TextField();
-        textField1 = new material.design.TextField();
-        textField4 = new material.design.TextField();
-        textField3 = new material.design.TextField();
+        txt_name = new material.design.TextField();
+        txt_prenom = new material.design.TextField();
+        txt_prenom_fr = new material.design.TextField();
+        txt_nom_fr = new material.design.TextField();
         txt_dat_birth = new material.design.TextField();
-        textField6 = new material.design.TextField();
+        txt_renseignementPe = new material.design.TextField();
         txt_adress = new material.design.TextField();
         comb_catego_niv = new material.design.Combobox();
         com_niv = new material.design.Combobox();
@@ -341,7 +338,6 @@ public class AddEtudiantForm extends javax.swing.JDialog {
         txt_tel = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         txt_email = new javax.swing.JTextField();
-        txt_renseignementPe = new javax.swing.JTextField();
         buttonRounder3 = new material.design.buttonRounder();
         pan_etud_cour_insc = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
@@ -405,8 +401,6 @@ public class AddEtudiantForm extends javax.swing.JDialog {
 
         dateChooser.setName(""); // NOI18N
         dateChooser.setTextRefernce(txt_dat_birth);
-
-        jScrollPane2.setViewportView(jEditorPane1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -475,7 +469,7 @@ public class AddEtudiantForm extends javax.swing.JDialog {
         pan_info_etudiant_insc.setBackground(new java.awt.Color(255, 255, 255));
 
         Code.setBackground(new java.awt.Color(255, 255, 255));
-        Code.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(204, 204, 204)), "", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(153, 153, 153))); // NOI18N
+        Code.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(204, 204, 204)), "", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(153, 153, 153))); // NOI18N
         Code.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel5.setText("CodeBare");
@@ -492,34 +486,34 @@ public class AddEtudiantForm extends javax.swing.JDialog {
         Code.add(lab_codBar, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 10, 190, 30));
 
         panel_info_student.setBackground(new java.awt.Color(255, 255, 255));
-        panel_info_student.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(204, 204, 204)), "المعلومات الشخصية", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(150, 150, 150))); // NOI18N
+        panel_info_student.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(204, 204, 204)), "المعلومات الشخصية", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(150, 150, 150))); // NOI18N
 
-        textField2.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        textField2.setToolTipText("");
-        textField2.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-        textField2.setLabelText("الاســم");
+        txt_name.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txt_name.setToolTipText("");
+        txt_name.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+        txt_name.setLabelText("الاســم");
 
-        textField1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        textField1.setToolTipText("");
-        textField1.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-        textField1.setLabelText("الــلـقـب");
+        txt_prenom.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txt_prenom.setToolTipText("");
+        txt_prenom.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+        txt_prenom.setLabelText("الــلـقـب");
 
-        textField4.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        textField4.setToolTipText("");
-        textField4.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-        textField4.setLabelText("Prénom");
-        textField4.setLangue(1);
-        textField4.addActionListener(new java.awt.event.ActionListener() {
+        txt_prenom_fr.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txt_prenom_fr.setToolTipText("");
+        txt_prenom_fr.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+        txt_prenom_fr.setLabelText("Prénom");
+        txt_prenom_fr.setLangue(1);
+        txt_prenom_fr.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textField4ActionPerformed(evt);
+                txt_prenom_frActionPerformed(evt);
             }
         });
 
-        textField3.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        textField3.setToolTipText("");
-        textField3.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-        textField3.setLabelText("Nom");
-        textField3.setLangue(1);
+        txt_nom_fr.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txt_nom_fr.setToolTipText("");
+        txt_nom_fr.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+        txt_nom_fr.setLabelText("Nom");
+        txt_nom_fr.setLangue(1);
 
         txt_dat_birth.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txt_dat_birth.setToolTipText("");
@@ -531,11 +525,9 @@ public class AddEtudiantForm extends javax.swing.JDialog {
             }
         });
 
-        textField6.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        textField6.setText("12/02/2000");
-        textField6.setToolTipText("");
-        textField6.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-        textField6.setLabelText("مكان الميلاد");
+        txt_renseignementPe.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txt_renseignementPe.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+        txt_renseignementPe.setLabelText("اسم الأب");
 
         txt_adress.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txt_adress.setToolTipText("");
@@ -570,8 +562,9 @@ public class AddEtudiantForm extends javax.swing.JDialog {
         jLabel6.setOpaque(true);
 
         buttonRounder2.setBackground(new java.awt.Color(224, 175, 175));
+        buttonRounder2.setForeground(new java.awt.Color(255, 255, 255));
         buttonRounder2.setText("تحميل الصورة");
-        buttonRounder2.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        buttonRounder2.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         buttonRounder2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonRounder2ActionPerformed(evt);
@@ -591,34 +584,28 @@ public class AddEtudiantForm extends javax.swing.JDialog {
         panel_info_studentLayout.setHorizontalGroup(
             panel_info_studentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel_info_studentLayout.createSequentialGroup()
+                .addGap(49, 49, 49)
+                .addGroup(panel_info_studentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(buttonRounder2, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 103, Short.MAX_VALUE)
                 .addGroup(panel_info_studentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panel_info_studentLayout.createSequentialGroup()
-                        .addGap(49, 49, 49)
-                        .addGroup(panel_info_studentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(buttonRounder2, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 99, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_info_studentLayout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(txt_renseignementPe, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGroup(panel_info_studentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(8, 8, 8)
+                        .addComponent(txt_adress, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txt_dat_birth, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panel_info_studentLayout.createSequentialGroup()
-                        .addGap(5, 5, 5)
+                        .addGap(9, 9, 9)
                         .addGroup(panel_info_studentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_info_studentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_info_studentLayout.createSequentialGroup()
-                                    .addComponent(textField1, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(12, 12, 12)
-                                    .addComponent(textField2, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_info_studentLayout.createSequentialGroup()
-                                    .addComponent(textField3, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(textField4, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(panel_info_studentLayout.createSequentialGroup()
-                                    .addComponent(textField6, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(txt_dat_birth, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(txt_adress, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_info_studentLayout.createSequentialGroup()
+                                .addComponent(txt_prenom, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(12, 12, 12)
+                                .addComponent(txt_name, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_info_studentLayout.createSequentialGroup()
+                                .addComponent(txt_nom_fr, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txt_prenom_fr, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_info_studentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(panel_info_studentLayout.createSequentialGroup()
                             .addComponent(txt_tel, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -631,38 +618,38 @@ public class AddEtudiantForm extends javax.swing.JDialog {
                         .addGroup(panel_info_studentLayout.createSequentialGroup()
                             .addComponent(com_niv, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(comb_catego_niv, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(comb_catego_niv, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(txt_renseignementPe, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10))
         );
         panel_info_studentLayout.setVerticalGroup(
             panel_info_studentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel_info_studentLayout.createSequentialGroup()
                 .addGroup(panel_info_studentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(textField2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(textField1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(txt_name, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txt_prenom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panel_info_studentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panel_info_studentLayout.createSequentialGroup()
                         .addGroup(panel_info_studentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(textField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(textField4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(77, 77, 77)
+                            .addComponent(txt_nom_fr, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txt_prenom_fr, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txt_adress, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10))
+                        .addGap(28, 28, 28))
                     .addGroup(panel_info_studentLayout.createSequentialGroup()
                         .addGap(68, 68, 68)
-                        .addGroup(panel_info_studentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(textField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txt_dat_birth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, Short.MAX_VALUE)))
+                        .addComponent(txt_dat_birth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addComponent(txt_renseignementPe, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panel_info_studentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(com_niv, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(comb_catego_niv, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(panel_info_studentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txt_tel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7)
-                    .addComponent(txt_renseignementPe, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel7))
                 .addGap(10, 10, 10)
                 .addGroup(panel_info_studentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txt_email, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -795,7 +782,7 @@ public class AddEtudiantForm extends javax.swing.JDialog {
         pan_cour.add(jTextField8, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 120, 60, 30));
 
         jPanel6.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(204, 204, 204)), "الوقت و الأستاذ", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(204, 204, 204))); // NOI18N
+        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(204, 204, 204)), "الوقت و الأستاذ", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(204, 204, 204))); // NOI18N
 
         jLabel10.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(150, 150, 150));
@@ -1175,7 +1162,7 @@ public class AddEtudiantForm extends javax.swing.JDialog {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 626, Short.MAX_VALUE)
+            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(170, 170, 170)
                 .addComponent(buttonRounder17, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1204,9 +1191,9 @@ public class AddEtudiantForm extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_buttonRounder1ActionPerformed
 
-    private void textField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textField4ActionPerformed
+    private void txt_prenom_frActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_prenom_frActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_textField4ActionPerformed
+    }//GEN-LAST:event_txt_prenom_frActionPerformed
 
     private void txt_dat_birthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_dat_birthActionPerformed
         dateChooser.showPopup();
@@ -1261,8 +1248,8 @@ public class AddEtudiantForm extends javax.swing.JDialog {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         String matricule = lab_matricul.getText();
         String codeBare = lab_codBar.getText();
-        String prenom = textField2.getText();
-        String nom = textField1.getText();
+        String prenom = txt_name.getText();
+        String nom = txt_prenom.getText();
         LocalDate date_birth = LocalDate.parse(txt_dat_birth.getText(), formatter);//txt_dat_birth
         String adress = txt_adress.getText();
         String tel = txt_tel.getText();
@@ -1288,7 +1275,7 @@ public class AddEtudiantForm extends javax.swing.JDialog {
                 }
                 byte[] imag = arrayOutputStream.toByteArray();
 
-                Etudiant etudiant = new Etudiant(0, matricule, codeBare, prenom, nom, date_birth, adress, tel, email, renseignementPe, ctegore_niveau, niveau, imag);
+                Etudiant etudiant = new Etudiant(0, matricule, codeBare, nom ,prenom, date_birth, adress, tel, email, renseignementPe, ctegore_niveau, niveau, imag);
                 if (etudiantDAOImpl.save(etudiant)>0){
                     
                     Etudiant newEtudiant = etudiantDAOImpl.getlast();
@@ -1463,7 +1450,6 @@ public class AddEtudiantForm extends javax.swing.JDialog {
     }//GEN-LAST:event_jCheckBoxCustom7ActionPerformed
 
     private void EnseignantcomboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EnseignantcomboActionPerformed
-
        if (matiere_comb.getSelectedIndex() != -1 && ClassInNiveau.getSelectedIndex() != -1
                 && NiveauCatg_Etude.getSelectedIndex() != -1 && Enseignantcombo.getSelectedIndex()!=-1) {
         try {
@@ -1650,7 +1636,6 @@ public class AddEtudiantForm extends javax.swing.JDialog {
     private material.design.JCheckBoxCustomfr jCheckBoxCustom6;
     private material.design.JCheckBoxCustomfr jCheckBoxCustom7;
     private material.design.JCheckBoxCustomfr jCheckBoxCustom8;
-    private javax.swing.JEditorPane jEditorPane1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1680,7 +1665,6 @@ public class AddEtudiantForm extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
@@ -1700,15 +1684,14 @@ public class AddEtudiantForm extends javax.swing.JDialog {
     private javax.swing.JPanel pan_lang;
     private javax.swing.JPanel panel_info_student;
     private ui.table.TableScrollButton tableScrollButton1;
-    private material.design.TextField textField1;
-    private material.design.TextField textField2;
-    private material.design.TextField textField3;
-    private material.design.TextField textField4;
-    private material.design.TextField textField6;
     private material.design.TextField txt_adress;
     private material.design.TextField txt_dat_birth;
     private javax.swing.JTextField txt_email;
-    private javax.swing.JTextField txt_renseignementPe;
+    private material.design.TextField txt_name;
+    private material.design.TextField txt_nom_fr;
+    private material.design.TextField txt_prenom;
+    private material.design.TextField txt_prenom_fr;
+    private material.design.TextField txt_renseignementPe;
     private javax.swing.JTextField txt_tel;
     private material.design.Combobox الدورات;
     // End of variables declaration//GEN-END:variables

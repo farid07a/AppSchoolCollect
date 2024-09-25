@@ -10,17 +10,6 @@
         </Property>
       </Properties>
     </Component>
-    <Container class="javax.swing.JScrollPane" name="jScrollPane2">
-      <AuxValues>
-        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
-      </AuxValues>
-
-      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-      <SubComponents>
-        <Component class="javax.swing.JEditorPane" name="jEditorPane1">
-        </Component>
-      </SubComponents>
-    </Container>
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="2"/>
@@ -61,7 +50,7 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Component id="jPanel2" alignment="0" max="32767" attributes="0"/>
-              <Component id="jPanel5" alignment="0" pref="626" max="32767" attributes="0"/>
+              <Component id="jPanel5" alignment="0" max="32767" attributes="0"/>
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="170" max="-2" attributes="0"/>
                   <Component id="buttonRounder17" min="-2" pref="142" max="-2" attributes="0"/>
@@ -336,42 +325,32 @@
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="49" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <EmptySpace min="-2" pref="49" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="jLabel6" min="-2" pref="110" max="-2" attributes="0"/>
-                                          <Component id="buttonRounder2" min="-2" pref="99" max="-2" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace pref="99" max="32767" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="1" attributes="0">
-                                      <EmptySpace max="32767" attributes="0"/>
-                                      <Component id="txt_renseignementPe" min="-2" pref="210" max="-2" attributes="0"/>
-                                  </Group>
+                                  <Component id="jLabel6" min="-2" pref="110" max="-2" attributes="0"/>
+                                  <Component id="buttonRounder2" min="-2" pref="99" max="-2" attributes="0"/>
                               </Group>
+                              <EmptySpace pref="103" max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
-                                      <EmptySpace min="5" pref="5" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
+                                      <Component id="txt_adress" min="-2" pref="160" max="-2" attributes="0"/>
+                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      <Component id="txt_dat_birth" min="-2" pref="152" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" attributes="0">
+                                      <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="103" alignment="1" groupAlignment="0" attributes="0">
-                                              <Group type="102" alignment="1" attributes="0">
-                                                  <Component id="textField1" min="-2" pref="158" max="-2" attributes="0"/>
-                                                  <EmptySpace min="12" pref="12" max="-2" attributes="0"/>
-                                                  <Component id="textField2" min="-2" pref="146" max="-2" attributes="0"/>
-                                              </Group>
-                                              <Group type="102" alignment="1" attributes="0">
-                                                  <Component id="textField3" min="-2" pref="160" max="-2" attributes="0"/>
-                                                  <EmptySpace max="-2" attributes="0"/>
-                                                  <Component id="textField4" min="-2" pref="150" max="-2" attributes="0"/>
-                                              </Group>
-                                              <Group type="102" alignment="0" attributes="0">
-                                                  <Component id="textField6" min="-2" pref="159" max="-2" attributes="0"/>
-                                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                                  <Component id="txt_dat_birth" min="-2" pref="152" max="-2" attributes="0"/>
-                                              </Group>
+                                          <Group type="102" alignment="1" attributes="0">
+                                              <Component id="txt_prenom" min="-2" pref="158" max="-2" attributes="0"/>
+                                              <EmptySpace min="12" pref="12" max="-2" attributes="0"/>
+                                              <Component id="txt_name" min="-2" pref="146" max="-2" attributes="0"/>
                                           </Group>
-                                          <Component id="txt_adress" alignment="1" min="-2" pref="327" max="-2" attributes="0"/>
+                                          <Group type="102" alignment="1" attributes="0">
+                                              <Component id="txt_nom_fr" min="-2" pref="160" max="-2" attributes="0"/>
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="txt_prenom_fr" min="-2" pref="150" max="-2" attributes="0"/>
+                                          </Group>
                                       </Group>
                                   </Group>
                                   <Group type="103" alignment="1" groupAlignment="0" attributes="0">
@@ -391,6 +370,7 @@
                                           <Component id="comb_catego_niv" min="-2" pref="146" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
+                                  <Component id="txt_renseignementPe" alignment="1" min="-2" pref="159" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                           </Group>
@@ -400,29 +380,28 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="textField2" max="32767" attributes="0"/>
-                                  <Component id="textField1" max="32767" attributes="0"/>
+                                  <Component id="txt_name" max="32767" attributes="0"/>
+                                  <Component id="txt_prenom" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
                                       <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="textField3" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="textField4" alignment="3" max="32767" attributes="0"/>
+                                          <Component id="txt_nom_fr" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="txt_prenom_fr" alignment="3" max="32767" attributes="0"/>
                                       </Group>
-                                      <EmptySpace min="-2" pref="77" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
                                       <Component id="txt_adress" min="-2" pref="56" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
                                       <EmptySpace min="-2" pref="68" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="textField6" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="txt_dat_birth" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace type="separate" max="32767" attributes="0"/>
+                                      <Component id="txt_dat_birth" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="32767" attributes="0"/>
                                   </Group>
                               </Group>
+                              <Component id="txt_renseignementPe" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                   <Component id="com_niv" alignment="0" max="32767" attributes="0"/>
                                   <Component id="comb_catego_niv" alignment="0" min="-2" pref="50" max="-2" attributes="0"/>
@@ -431,7 +410,6 @@
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="txt_tel" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                                   <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="txt_renseignementPe" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
@@ -450,7 +428,7 @@
                     </DimensionLayout>
                   </Layout>
                   <SubComponents>
-                    <Component class="material.design.TextField" name="textField2">
+                    <Component class="material.design.TextField" name="txt_name">
                       <Properties>
                         <Property name="horizontalAlignment" type="int" value="0"/>
                         <Property name="toolTipText" type="java.lang.String" value=""/>
@@ -460,7 +438,7 @@
                         <Property name="labelText" type="java.lang.String" value="&#x627;&#x644;&#x627;&#x633;&#x640;&#x640;&#x645;"/>
                       </Properties>
                     </Component>
-                    <Component class="material.design.TextField" name="textField1">
+                    <Component class="material.design.TextField" name="txt_prenom">
                       <Properties>
                         <Property name="horizontalAlignment" type="int" value="0"/>
                         <Property name="toolTipText" type="java.lang.String" value=""/>
@@ -470,7 +448,7 @@
                         <Property name="labelText" type="java.lang.String" value="&#x627;&#x644;&#x640;&#x640;&#x644;&#x640;&#x642;&#x640;&#x628;"/>
                       </Properties>
                     </Component>
-                    <Component class="material.design.TextField" name="textField4">
+                    <Component class="material.design.TextField" name="txt_prenom_fr">
                       <Properties>
                         <Property name="horizontalAlignment" type="int" value="0"/>
                         <Property name="toolTipText" type="java.lang.String" value=""/>
@@ -481,10 +459,10 @@
                         <Property name="langue" type="int" value="1"/>
                       </Properties>
                       <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="textField4ActionPerformed"/>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txt_prenom_frActionPerformed"/>
                       </Events>
                     </Component>
-                    <Component class="material.design.TextField" name="textField3">
+                    <Component class="material.design.TextField" name="txt_nom_fr">
                       <Properties>
                         <Property name="horizontalAlignment" type="int" value="0"/>
                         <Property name="toolTipText" type="java.lang.String" value=""/>
@@ -508,15 +486,13 @@
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txt_dat_birthActionPerformed"/>
                       </Events>
                     </Component>
-                    <Component class="material.design.TextField" name="textField6">
+                    <Component class="material.design.TextField" name="txt_renseignementPe">
                       <Properties>
                         <Property name="horizontalAlignment" type="int" value="0"/>
-                        <Property name="text" type="java.lang.String" value="12/02/2000"/>
-                        <Property name="toolTipText" type="java.lang.String" value=""/>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Times New Roman" size="13" style="1"/>
                         </Property>
-                        <Property name="labelText" type="java.lang.String" value="&#x645;&#x643;&#x627;&#x646; &#x627;&#x644;&#x645;&#x64a;&#x644;&#x627;&#x62f;"/>
+                        <Property name="labelText" type="java.lang.String" value="&#x627;&#x633;&#x645; &#x627;&#x644;&#x623;&#x628;"/>
                       </Properties>
                     </Component>
                     <Component class="material.design.TextField" name="txt_adress">
@@ -572,9 +548,12 @@
                         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                           <Color blue="af" green="af" red="e0" type="rgb"/>
                         </Property>
+                        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                          <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                        </Property>
                         <Property name="text" type="java.lang.String" value="&#x62a;&#x62d;&#x645;&#x64a;&#x644; &#x627;&#x644;&#x635;&#x648;&#x631;&#x629;"/>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Segoe UI" size="12" style="0"/>
+                          <Font name="Times New Roman" size="14" style="1"/>
                         </Property>
                       </Properties>
                       <Events>
@@ -606,8 +585,6 @@
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JTextField" name="txt_email">
-                    </Component>
-                    <Component class="javax.swing.JTextField" name="txt_renseignementPe">
                     </Component>
                   </SubComponents>
                 </Container>
