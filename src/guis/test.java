@@ -8,8 +8,8 @@ package guis;
  *
  * @author client
  */
-public class test extends javax.swing.JFrame {
-
+public class test extends    javax.swing.JFrame {
+//test///
     /**
      * Creates new form test
      */
