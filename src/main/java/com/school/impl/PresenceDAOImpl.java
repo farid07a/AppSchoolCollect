@@ -5,6 +5,7 @@
 package main.java.com.school.impl;
 
 import domaine.Etudiant;
+import domaine.Matiere;
 import domaine.Presence;
 import domaine.Seance;
 import domaine.Seance_Matiere;
@@ -17,7 +18,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import main.java.com.school.DAO.AbstractDAO;
+import main.java.com.school.model.config.ConnectionDB;
+import main.java.com.school.model.config.DatabaseConnectionException;
 
 /**
  *
@@ -55,7 +59,6 @@ public class PresenceDAOImpl extends AbstractDAO<Presence> {
 
     @Override
     protected void setUpdateStatementParameters(PreparedStatement statement, Presence presence) throws SQLException {
-
         statement.setInt(1, presence.getEtudiant().getId());
         statement.setInt(2, presence.getMatiere().getId());
         statement.setInt(3, presence.getSeance().getId());
@@ -116,6 +119,29 @@ public class PresenceDAOImpl extends AbstractDAO<Presence> {
         return presences;
     }
 
+    public List<Presence> getPresenceByTowDates(Etudiant etudiant, Matiere matiere, LocalDate date_start, LocalDate date_fin) {
+        List<Presence> presences = new ArrayList<>();
+        try {
+            String Query = "SELECT * FROM  " + getTableName()
+                    + "  WHERE id_etudiant =? AND id_matiere=? AND date_presence >= ? AND date_presence <= ?";
+
+            PreparedStatement statement = connection.prepareStatement(Query);
+            statement.setInt(1, etudiant.getId());
+            statement.setInt(2, matiere.getId());
+            statement.setDate(3, java.sql.Date.valueOf(date_start));
+            statement.setDate(4, java.sql.Date.valueOf(date_fin));
+
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Presence presence = mapResultSetToEntity(resultSet);
+                presences.add(presence);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(PresenceDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return presences;
+    }
+
     public List<Presence> getPresenceByEtudiant(Etudiant etudiant) {
         List<Presence> presences = new ArrayList<>();
         try {
@@ -135,4 +161,31 @@ public class PresenceDAOImpl extends AbstractDAO<Presence> {
         }
         return presences;
     }
+
+    public static void main(String[] args) {
+        Etudiant etudiant;
+        try {
+            etudiant = new EtudiantDAOImpl(ConnectionDB.getConnection()).findById(2);
+            Seance seance = new SeanceDAOImpl(ConnectionDB.getConnection()).findById(30);
+            Presence presence = new PresenceDAOImpl(ConnectionDB.getConnection()).getPresenceOFetudiantInSeance(etudiant, seance, LocalDate.now());
+            
+            JOptionPane.showMessageDialog(null, "etat : "+presence.isEtat());
+            
+            if(!presence.isEtat()){
+            JOptionPane.showMessageDialog(null, "etat : "+presence.isEtat());
+            presence.setEtat(true);
+            }
+            if( new PresenceDAOImpl(ConnectionDB.getConnection()).update(presence)>0){
+               JOptionPane.showMessageDialog(null, "update ");
+               
+           }else{
+               JOptionPane.showMessageDialog(null, "error ");
+           
+           }
+        } catch (DatabaseConnectionException ex) {
+            Logger.getLogger(PresenceDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
 }

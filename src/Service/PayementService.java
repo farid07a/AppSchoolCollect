@@ -32,7 +32,7 @@ public class PayementService {
         if (Last_payement != null && Last_payement.getNb_seance() > 0) {
             return true;
         } else {
-            JOptionPane.showMessageDialog(null, " check message ");
+           // JOptionPane.showMessageDialog(null, " check message ");
             return false;
         }
 
@@ -80,7 +80,7 @@ public class PayementService {
  
     }
 
-    
+
     public void existCredit(Etudiant etudiant, Matiere matiere) throws DatabaseConnectionException {
         List<Payement> payements_Dettes = new PayementDAOImpl(ConnectionDB.getConnection()).getPayementOfEtudiantByMatier(etudiant, matiere, "ديون");
 

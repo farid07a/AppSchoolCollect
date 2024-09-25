@@ -241,7 +241,24 @@ public class PayementDAOImpl extends AbstractDAO<Payement> {
         }
         return payements;
     }
-    
+    public List<Payement> getAll_Payement_Credit_Etudiant(Etudiant etudiant) {
+        List<Payement> payements = new ArrayList<>();
+        try {
+            String query = " SELECT * From " + getTableName() + " where  id_etudiant =?";
+
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, etudiant.getId());    
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Payement entity = mapResultSetToEntity(resultSet);
+                payements.add(entity);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return payements;
+    }
+       
      public  int SavePayementParMoin( Payement payement) throws SQLException {
         String  Query=" INSERT INTO payement (id_etudiant, id_matiere,  type_payement, prix,"
                 + "prix_paye,prix_total,date ,nb_seance) VALUES (?,?, ?,?, ?, ?,?,?)";

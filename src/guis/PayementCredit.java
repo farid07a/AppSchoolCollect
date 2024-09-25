@@ -13,6 +13,7 @@ import domaine.NiveauEtude;
 import domaine.Payement;
 import domaine.Seance_Matiere;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Frame;
 import java.awt.Toolkit;
 import java.sql.Connection;
@@ -30,6 +31,7 @@ import javax.swing.RowFilter;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -92,10 +94,34 @@ public class PayementCredit extends javax.swing.JDialog {
         
         setDesignTable(jTable5, jScrollPane16);
       //  SearchTable(jTable5, jTextField1);
-        if (etudiant != null) {
+        
+         jTable5.setDefaultRenderer(Object.class, new DefaultTableCellRenderer(){
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+               Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+               
+                if (column == 4) {
+                int val= (int)value;
+                Object columnValue = table.getValueAt(row, 3); // Get value from the fourth column
+              //  if (value instanceof Number && ((Number) value).intValue() == 0 ) {
+               if (val > 0 ) {
+                    cell.setBackground(Color.WHITE);
+                    cell.setBackground(new Color(255,163,163));
+                }
+                   // return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody           
+            }
+                        return cell;
+
+         } 
+    });
+        jTable5.repaint();
+jTable5.revalidate();
+if (etudiant != null) {
             setInfoEtudiantInPan(etudiant);
             setInfoCridetInTab(etudiant);
         }
+        
+    
     }
     
     public void setInfoCridetInTab(Etudiant etudiant) {
@@ -171,6 +197,7 @@ public class PayementCredit extends javax.swing.JDialog {
         jLabel13 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -202,18 +229,19 @@ public class PayementCredit extends javax.swing.JDialog {
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 50, -1, 25));
 
         lab_id_categ.setText("id level");
-        jPanel1.add(lab_id_categ, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 110, 59, -1));
+        jPanel1.add(lab_id_categ, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 10, 59, -1));
 
         lab_id_niv.setText("id_class");
-        jPanel1.add(lab_id_niv, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, -1, 21));
+        jPanel1.add(lab_id_niv, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 10, -1, 21));
 
+        jButton1.setBackground(new java.awt.Color(255, 163, 163));
         jButton1.setText("jButton1");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 90, -1, -1));
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 50, -1, -1));
 
         lab_prenom.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         lab_prenom.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
@@ -249,7 +277,7 @@ public class PayementCredit extends javax.swing.JDialog {
         jLabel1.setForeground(new java.awt.Color(153, 153, 153));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("دفع مستحقات الديون");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 0, 1090, 30));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(146, 0, 950, 30));
 
         jTable5.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -365,7 +393,7 @@ public class PayementCredit extends javax.swing.JDialog {
                 buttonRounder19ActionPerformed(evt);
             }
         });
-        jPanel1.add(buttonRounder19, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 590, 93, -1));
+        jPanel1.add(buttonRounder19, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 590, 93, -1));
 
         buttonRounder17.setBackground(new java.awt.Color(255, 0, 51));
         buttonRounder17.setForeground(new java.awt.Color(255, 255, 255));
@@ -382,7 +410,7 @@ public class PayementCredit extends javax.swing.JDialog {
         jCheckBoxCustomfr1.setText("تأكيد الدفع");
         jCheckBoxCustomfr1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jCheckBoxCustomfr1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        jPanel1.add(jCheckBoxCustomfr1, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 530, 126, 37));
+        jPanel1.add(jCheckBoxCustomfr1, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 530, 126, 37));
 
         buttonRounder5.setBackground(new java.awt.Color(102, 153, 255));
         buttonRounder5.setForeground(new java.awt.Color(255, 255, 255));
@@ -409,7 +437,7 @@ public class PayementCredit extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE)
         );
 
         pack();
@@ -492,11 +520,13 @@ public class PayementCredit extends javax.swing.JDialog {
             String cod_bar=jTextField2.getText();
             Etudiant etudiant = etudiantDAOImpl.getEtudiantByCodbar(cod_bar);
             Matiere matiere = matiereDAOImpl.getMatiereNiveauOfCategory(jLabel6.getText(), lab_niveau.getText(), lab_catego.getText());
-            if(jCheckBoxCustomfr1.isSelected() && jTable5.getSelectedRow()!=-1){
-                int row =jTable5.getSelectedRow();
+            
+            if(jCheckBoxCustomfr1.isSelected() && jTable5.getSelectedRow()!=-1 ){
+               int row =jTable5.getSelectedRow();
+                int nb_seance_credit=(int)jTable5.getValueAt(row, 4);
+                if(nb_seance_credit >0){ //exist  credit
                 int id_payement_credit=(int)jTable5.getValueAt(row, 12);
                 Payement payement_credit = payementDAOImpl.findById(id_payement_credit);
-                int nb_seance_credit=(int)jTable5.getValueAt(row, 4);
                 int nb_seance_payee = Integer.parseInt(   txt_nb_seance.getText());
                 int nbr_seance_rest=nb_seance_credit-nb_seance_payee;
                 double prix_seance=Double.parseDouble(lab_prix_seance.getText());
@@ -517,7 +547,9 @@ public class PayementCredit extends javax.swing.JDialog {
                    
                    setInfoCridetInTab(etudiant);
                 }
+                }else{
                 
+                } 
             }else{
             
             }

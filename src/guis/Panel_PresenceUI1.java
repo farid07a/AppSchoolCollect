@@ -72,6 +72,7 @@ public class Panel_PresenceUI1 extends javax.swing.JPanel {
     PresenceDAOImpl presenceDAOImpl;
     PresenceService PresenceService = new PresenceService();
     PayementDAOImpl payementDAOImpl;
+
     public Panel_PresenceUI1() {
         initComponents();
 
@@ -84,7 +85,7 @@ public class Panel_PresenceUI1 extends javax.swing.JPanel {
         inscriptionDAOImpl = new InscriptionDAOImpl(connection);
         seanceDAOImpl = new SeanceDAOImpl(connection);
         presenceDAOImpl = new PresenceDAOImpl(connection);
-         payementDAOImpl = new PayementDAOImpl(connection);
+        payementDAOImpl = new PayementDAOImpl(connection);
         ValidationMessageDialog message_validation = new ValidationMessageDialog((JFrame) getParent());
         setDesignTable(tab_presence, jScrollPane12);
         SearchTable(tab_presence, searchText6);
@@ -113,7 +114,7 @@ public class Panel_PresenceUI1 extends javax.swing.JPanel {
     }
 
     public void SavePresenceInTable() {
-        JOptionPane.showMessageDialog(null, "excute save in table ");
+//        JOptionPane.showMessageDialog(null, "excute save in table ");
         DefaultTableModel model = (DefaultTableModel) tab_presence.getModel();
         model.setRowCount(0);
         System.out.println("list_seance_about_all_matieres = " + list_seance_about_all_matieres.size());
@@ -124,20 +125,20 @@ public class Panel_PresenceUI1 extends javax.swing.JPanel {
             if (presence.isEtat()) {
                 str = "حاضر";
                 model.addRow(new Object[]{LocalTime.now(), str, presence.getMatiere().getMatiereEtdAr(),
-                presence.getEtudiant().getNiveau().getNiveauInitialAr(),
-                presence.getEtudiant().getCtegore_niveau().getCategore_niveau_ar(),
-                presence.getEtudiant().getNom() + " " + presence.getEtudiant().getPrenom(),
-                presence.getEtudiant().getId(), presence.getSeance().getId(), presence.getId()});
+                    presence.getEtudiant().getNiveau().getNiveauInitialAr(),
+                    presence.getEtudiant().getCtegore_niveau().getCategore_niveau_ar(),
+                    presence.getEtudiant().getNom() + " " + presence.getEtudiant().getPrenom(),
+                    presence.getEtudiant().getId(), presence.getSeance().getId(), presence.getId()});
             } else {
-                JOptionPane.showMessageDialog(null, "list presence In table");
+                //      JOptionPane.showMessageDialog(null, "list presence In table");
                 str = "غائب";
                 model.addRow(new Object[]{"", str, presence.getMatiere().getMatiereEtdAr(),
-                presence.getEtudiant().getNiveau().getNiveauInitialAr(),
-                presence.getEtudiant().getCtegore_niveau().getCategore_niveau_ar(),
-                presence.getEtudiant().getNom() + " " + presence.getEtudiant().getPrenom(),
-                presence.getEtudiant().getId(), presence.getSeance().getId(), presence.getId()});
+                    presence.getEtudiant().getNiveau().getNiveauInitialAr(),
+                    presence.getEtudiant().getCtegore_niveau().getCategore_niveau_ar(),
+                    presence.getEtudiant().getNom() + " " + presence.getEtudiant().getPrenom(),
+                    presence.getEtudiant().getId(), presence.getSeance().getId(), presence.getId()});
             }
-            
+
         }
 
     }
@@ -160,14 +161,14 @@ public class Panel_PresenceUI1 extends javax.swing.JPanel {
                 list_previeux = seance_service.getListAllSeancePrevieuSemaine(matiere); // list [sceance(1....30) ]
                 System.out.println("Seance is Null AFter inser database change to :" + seance_service.GetSeanceByTody(matiere));
                 //- get last seance si diference <=7
-                JOptionPane.showMessageDialog(null, "null seance and matiere id ==" + matiere.getId());
-                JOptionPane.showMessageDialog(null, "existe vacance  : " + seance_service.ExistVacances(matiere));
+                // JOptionPane.showMessageDialog(null, "null seance and matiere id ==" + matiere.getId());
+                // JOptionPane.showMessageDialog(null, "existe vacance  : " + seance_service.ExistVacances(matiere));
                 if (!seance_service.ExistVacances(matiere)) {  //ExistVacances = false
                     seance_service.saveAllNextSeances(list_previeux);// save next seances about Matiere
                     list_seance_about_all_matieres.add(seance_service.GetSeanceByTody(matiere));
 
                 } else {    // disable all components and show add seance
-                    JOptionPane.showMessageDialog(null, "existe vacance . . . " + list_previeux.size());
+                    //     JOptionPane.showMessageDialog(null, "existe vacance . . . " + list_previeux.size());
                     seance_service.saveAllNextSeancesSiExistVacance(list_previeux);
                     System.out.println("Seance is Null AFter inser database change to :" + seance_service.GetSeanceByTody(matiere));
                     list_seance_about_all_matieres.add(seance_service.GetSeanceByTody(matiere));
@@ -242,7 +243,8 @@ public class Panel_PresenceUI1 extends javax.swing.JPanel {
             DefaultTableModel model = (DefaultTableModel) tab_presence.getModel();
             model.setRowCount(0);
             for (Presence presence : presences) {
-                model.addRow(new Object[]{presence.getDatePresence(), presence.getMatiere().getMatiereEtdAr(),
+                model.addRow(new Object[]{presence.getDatePresence(), 
+                    presence.getMatiere().getMatiereEtdAr(),
                     presence.getMatiere().getNiveau().getNiveauInitialAr(),
                     presence.getMatiere().getCategoreNiveau().getCategore_niveau_ar(),
                     presence.getEtudiant().getNom() + " " + presence.getEtudiant().getPrenom(),
@@ -497,59 +499,79 @@ public class Panel_PresenceUI1 extends javax.swing.JPanel {
     }//GEN-LAST:event_buttonRounder33ActionPerformed
 
     private void buttonRounder2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRounder2ActionPerformed
- if (!txt_cod_barr_presence.getText().isEmpty()) {
+        if (!txt_cod_barr_presence.getText().isEmpty()) {
             Etudiant etudiant = etudiantDAOImpl.getEtudiantByCodbar(txt_cod_barr_presence.getText());// matier of today
             setInfoEtudiantInPanPresence(etudiant);
-            JOptionPane.showMessageDialog(null, "seance etudiant" + list_seance_about_all_matieres.size());
+            //  JOptionPane.showMessageDialog(null, "seance etudiant" + list_seance_about_all_matieres.size());
             List<Seance> Seance_of_today_for_etudtaint = getSeanceOfTodayWithInscriptionEtud(list_seance_about_all_matieres, etudiant);
-            JOptionPane.showMessageDialog(null, "seance etudiant" + Seance_of_today_for_etudtaint.size());
+            // JOptionPane.showMessageDialog(null, "seance etudiant" + Seance_of_today_for_etudtaint.size());
             if (!Seance_of_today_for_etudtaint.isEmpty()) {
                 // seance etudeé to day 1,2,3
                 Matiere matiere = matiere_service.getMatier_Of_TimNow_Etud(Seance_of_today_for_etudtaint);//
-                if(matiere !=null){
-                lab_matiere_presence.setText(matiere.getMatiereEtdAr());
-                Seance seance = getSeanceFromTab(matiere);
-                JOptionPane.showMessageDialog(null, "matiere now " + matiere.getMatiereEtdAr());
-                Presence presence = presenceDAOImpl.getPresenceOFetudiantInSeance(etudiant, seance,LocalDate.now());
-                //presence.setEtat(true);
-                JOptionPane.showMessageDialog(null, "Presence  : " + presence.getId());               
-                Payement Last_payement = payementDAOImpl.getlasPayementEtudiantOfMatier(etudiant.getId(), matiere.getId());              
-                if(jCheckBox1.isSelected()){  // payee
-                   if(new PayementService().CheckIfSeanceTODayPayeeAndSave(Last_payement)){// payee
-                    int nbr_seance_payee=Last_payement.getNb_seance();
-                    Last_payement.setSeance(seance);
-                    Last_payement.setNb_seance(nbr_seance_payee-1);
-                    payementDAOImpl.update(Last_payement);  
-                      lab_msg_error.setText("الحصة مدفوعة");
-                   }else{ // no payéé
-                       try {                                                                                        
-                        Payement  Last_payement_credit = new PayementDAOImpl(ConnectionDB.getConnection()).getlastCreditEtudiantOfMatier(etudiant.getId(), matiere.getId());          
-                           new PayementService().SaveDettesInPayement(Last_payement_credit, etudiant, matiere, seance);                          
-                           lab_msg_error.setText("الحضور بديون");
-                       } catch (DatabaseConnectionException ex) {
-                           Logger.getLogger(Panel_PresenceUI1.class.getName()).log(Level.SEVERE, null, ex);
-                       }                  
-                   }   
-                }else{  //  payee
-                 if(new PayementService().CheckIfSeanceTODayPayeeAndSave(Last_payement)){
-                    int nbr_seance_payee=Last_payement.getNb_seance();
-                    Last_payement.setSeance(seance);
-                    Last_payement.setNb_seance(nbr_seance_payee-1);
-                    payementDAOImpl.update(Last_payement);  
-                      lab_msg_error.setText("الحصة مدفوعة");
-                   }else{
-                      lab_msg_error.setText("الشهر غير مدفوع");
-                 }
-                    
+                if (matiere != null) {
+                    lab_matiere_presence.setText(matiere.getMatiereEtdAr());
+                    Seance seance = getSeanceFromTab(matiere);
+                    //  JOptionPane.showMessageDialog(null, "matiere now " + matiere.getMatiereEtdAr());
+                    Presence presence = presenceDAOImpl.getPresenceOFetudiantInSeance(etudiant, seance, LocalDate.now());
+                    //presence.setEtat(true);
+                    if(presence != null && presence.isEtat()==false){
+                    //  JOptionPane.showMessageDialog(null, "Presence  : " + presence.getId());               
+                    Payement Last_payement = payementDAOImpl.getlasPayementEtudiantOfMatier(etudiant.getId(), matiere.getId());
+                    if (jCheckBox1.isSelected()) {  // payee
+                        if (new PayementService().CheckIfSeanceTODayPayeeAndSave(Last_payement)) {// payee
+                            int nbr_seance_payee = Last_payement.getNb_seance();
+                            Last_payement.setSeance(seance);
+                            Last_payement.setNb_seance(nbr_seance_payee - 1);
+                            payementDAOImpl.update(Last_payement);
+                            presence.setEtat(true);
+                          
+                           presenceDAOImpl.update(presence);                        
+                            lab_msg_error.setText("الحصة مدفوعة");
+                            SavePresenceInTable();
+                        } else { // no payéé
+                            try {
+                                Payement Last_payement_credit = new PayementDAOImpl(ConnectionDB.getConnection()).getlastCreditEtudiantOfMatier(etudiant.getId(), matiere.getId());
+                                new PayementService().SaveDettesInPayement(Last_payement_credit, etudiant, matiere, seance);
+                                presence.setEtat(true);
+                                presenceDAOImpl.update(presence);
+                                lab_msg_error.setText("الحضور بديون");
+                                SavePresenceInTable(); 
+                            } catch (DatabaseConnectionException ex) {
+                                Logger.getLogger(Panel_PresenceUI1.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                    } else {  //  payee
+                        if (new PayementService().CheckIfSeanceTODayPayeeAndSave(Last_payement)) {
+                            int nbr_seance_payee = Last_payement.getNb_seance();
+                            Last_payement.setSeance(seance);
+                            Last_payement.setNb_seance(nbr_seance_payee - 1);
+                            payementDAOImpl.update(Last_payement);
+                            presence.setEtat(true);
+                            presenceDAOImpl.update(presence);
+                            lab_msg_error.setText("الحضور بديون");
+                            SavePresenceInTable(); 
+                            lab_msg_error.setText("الحصة مدفوعة");
+                        } else {
+                            lab_msg_error.setText("الشهر غير مدفوع");
+                        }
+
+                    }
+                }else{// presence true
+                if(presence ==null){ // etudiant n'exist pas dans table presence // new etud
+                 Presence new_presence = new Presence(0, etudiant, matiere, seance, LocalDate.now(),false);
+                 presenceDAOImpl.save(presence);
+                 SavePresenceInTable();
                 }
-                }else{
-                   lab_msg_error.setText("لا تتوفر لديك حصة بهذا التوقيت حاليا");
+                }    
+
+                } else {
+                    lab_msg_error.setText("لا تتوفر لديك حصة بهذا التوقيت حاليا");
                 }
-            }else{
-           lab_msg_error.setText("لا تتوفر لديك حصة بهذا اليوم ");
+            } else {
+                lab_msg_error.setText("لا تتوفر لديك حصة بهذا اليوم ");
 
             }
- }
+        }
 
 //        try {
 //        if (!txt_cod_barr_presence.getText().isEmpty()) {
@@ -611,7 +633,7 @@ public class Panel_PresenceUI1 extends javax.swing.JPanel {
     }//GEN-LAST:event_searchText6ActionPerformed
 
     private void buttonRounder3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRounder3ActionPerformed
-      new PayemmentParMoin((Frame) SwingUtilities.getWindowAncestor(this), true).setVisible(true);
+        new PayemmentParMoin((Frame) SwingUtilities.getWindowAncestor(this), true).setVisible(true);
     }//GEN-LAST:event_buttonRounder3ActionPerformed
 
     private void buttonRounder4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRounder4ActionPerformed

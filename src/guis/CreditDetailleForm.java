@@ -27,45 +27,49 @@ import ui.table.TableCustom;
 public class CreditDetailleForm extends javax.swing.JDialog {
 
     Payement payement;
-    
+
     public CreditDetailleForm(java.awt.Frame parent, boolean modal, Payement payement) {
         super(parent, modal);
-        this.payement=payement; 
+        this.payement = payement;
         initComponents();
         setLocationRelativeTo(this);
-        
+
         setDesignTable(jTable2, jScrollPane2);
         setInfoPaymentCreditInTable(payement);
     }
 
-    public void setInfoPaymentCreditInTable(Payement payement){
-   DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
-   model.setRowCount(0);
-        try 
-        {
-            List<PayementDetaille> payementDetailles= new PayementDetailleDAOImp(ConnectionDB.getConnection()).getPayementDetailleCredit(payement.getId());
-            int nb_seance=payementDetailles.size();
-            int nb_seance_payee=0;
-            int nb_seance_no_payee=0;
+    public void setInfoPaymentCreditInTable(Payement payement) {
+        DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
+        model.setRowCount(0);
+        try {
+            List<PayementDetaille> payementDetailles = new PayementDetailleDAOImp(ConnectionDB.getConnection()).getPayementDetailleCredit(payement.getId());
+            int nb_seance = payementDetailles.size();
+            int nb_seance_payee = 0;
+            int nb_seance_no_payee = 0;
             for (PayementDetaille payementDetaille : payementDetailles) {
-               if(payementDetaille.getMontant()==0) nb_seance_no_payee=nb_seance_no_payee+1;
-               else nb_seance_payee=nb_seance_payee+1;
-                model.addRow(new Object[]{payementDetaille.getDate_payement(),payementDetaille.getMontant(),payementDetaille.getSeance().getId(),
-                    payementDetaille.getSeance().getMatiere().getMatiereEtdAr(),payementDetaille.getId(),payement.getId()});
+                if (payementDetaille.getMontant() == 0) {
+                    nb_seance_no_payee = nb_seance_no_payee + 1;
+                } else {
+                    nb_seance_payee = nb_seance_payee + 1;
+                }
+                model.addRow(new Object[]{
+                    "",
+                    payementDetaille.getDate_payement(),
+                    payementDetaille.getMontant(),
+                    payementDetaille.getSeance().getId(),
+                    payementDetaille.getSeance().getMatiere().getMatiereEtdAr(),
+                    payementDetaille.getId(), payement.getId()});
             }
-            lab_nb_seance.setText(nb_seance+"");
-            lab_nb_seance_payee.setText(nb_seance_payee+"");
-            lab_nb_seance_no_payee.setText(nb_seance_no_payee+"");
-            
+            lab_nb_seance.setText(nb_seance + "");
+            lab_nb_seance_payee.setText(nb_seance_payee + "");
+            lab_nb_seance_no_payee.setText(nb_seance_no_payee + "");
+
         } catch (DatabaseConnectionException ex) {
             Logger.getLogger(CreditDetailleForm.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-    
     }
-    
-    
-    
+
     public void setDesignTable(JTable tab, JScrollPane scrol) {
         TableCustom.apply(scrol, TableCustom.TableType.DEFAULT);
         //tab.getTableHeader().setFont(new Font("", Font.BOLD, 15));
@@ -79,6 +83,7 @@ public class CreditDetailleForm extends javax.swing.JDialog {
         p.setBackground(Color.WHITE);
         scrol.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -101,6 +106,7 @@ public class CreditDetailleForm extends javax.swing.JDialog {
         lab_nb_seance_no_payee = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -170,7 +176,7 @@ public class CreditDetailleForm extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 788, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
