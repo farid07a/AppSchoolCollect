@@ -5,6 +5,8 @@ import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -41,7 +43,10 @@ public class pan extends javax.swing.JPanel {
         btn_open.setVisible(false);
         setDesignTable(table_seance_to_day, jScrollPane11);
         table_seance_to_day.setRowHeight(35);
-  
+        
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        labDate_seance.setText(LocalDate.now().format(formatter));
+        lab_day.setText(LocalDate.now().getDayOfMonth()+"");
     }
     
     public JTable getTtable_seance_to_day(){

@@ -31,11 +31,10 @@ import main.java.com.school.model.config.DatabaseConnectionException;
  */
 public class MatiereService {
 
-    
-     int xMouse;
+    int xMouse;
     int yMouse;
     int timeRun = 0;
-    
+
     public List getListMatierByDay() {
         List<Seance> Listsceance = null;
         Map<Integer, Matiere> map_matiere = new HashMap<>();
@@ -71,18 +70,25 @@ public class MatiereService {
 
     public Matiere getMatier_Of_TimNow_Etud(List<Seance> seances) { // maitiere befor timeFin of matieres todey      
         boolean bool = true;
-        Seance seance_etud =null;
-        for (Seance seance : seances){
-          if(bool){
-            seance_etud= seances.get(0);
-            bool=false;
-          }
-            JOptionPane.showMessageDialog(null, seance.getTimeSeance()+"  : "+seance.getFinTime());
-            if(seance.getFinTime().isAfter(LocalTime.now())
-                    && seance.getTimeSeance().isBefore(seance_etud.getFinTime())){
-               seance_etud=seance;
-           }
+        Seance seance_etud = null;
+        for (Seance seance : seances) {
+            if (bool) {
+                seance_etud = seances.get(0);
+                bool = false;
+            }
+//            if(seance.getFinTime().isBefore(seance_etud.getFinTime())
+//                    && seance.getFinTime().isAfter(LocalTime.now() ) ){
+           if ((seance.getFinTime().isAfter(LocalTime.now())
+                    && seance_etud.getFinTime().isBefore(LocalTime.now()))
+                    || (seance.getFinTime().isAfter(LocalTime.now())
+                    && seance_etud.getFinTime().equals(LocalTime.now()))) {
+                seance_etud = seance;
+            }
         }
+        JOptionPane.showMessageDialog(null, "seance_etud :  "+seance_etud.getMatiere().getMatiereEtdAr()+"  :"
+        +seance_etud.getFinTime());
+        if(seance_etud.getFinTime().isBefore(LocalTime.now()))
+            return null;
         return seance_etud.getMatiere();
     }
 

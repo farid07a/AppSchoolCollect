@@ -23,11 +23,12 @@ public class Payement {
     Double prixPaye;
     Double prixTotal;
     LocalDate date;
+    int nb_seance;
 
     public Payement() {
     }
 
-    public Payement(int id, Etudiant etudiant, Matiere matiere, Seance seance, String typePayement, Double prix, Double prixPaye, Double prixTotal,LocalDate date) {
+    public Payement(int id, Etudiant etudiant, Matiere matiere, Seance seance, String typePayement, Double prix, Double prixPaye, Double prixTotal,LocalDate date,int nb_seance) {
         this.id = id;
         this.etudiant = etudiant;
         this.matiere = matiere;
@@ -39,6 +40,7 @@ public class Payement {
         this.prixPaye = prixPaye;
         this.prixTotal = prixTotal;
         this.date=date;
+        this.nb_seance =nb_seance;
     }
 
     public void setId(int id) {
@@ -120,6 +122,14 @@ public class Payement {
 //    public void setSeance_matiere(Seance_Matiere seance_matiere) {
 //        this.seance_matiere = seance_matiere;
 //    }
+
+    public int getNb_seance() {
+        return nb_seance;
+    }
+
+    public void setNb_seance(int nb_seance) {
+        this.nb_seance = nb_seance;
+    }
     
     
     

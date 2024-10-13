@@ -190,7 +190,25 @@ public class SeanceDAOImpl extends AbstractDAO<Seance> {
         return seances;
      
      }
+     public List<Seance> getListPrevieuxSceanceWithSemaineByMatiere(Matiere matiere){
+         
+         List<Seance> seances = new ArrayList<>();
+        try {
+            String query = " SELECT TOP "+matiere.getNum_sceance_semaine()+  " * FROM "+getTableName()+"  WHERE id_matiere =?  ORDER BY id DESC "; //delet id matiere 
+            
+           PreparedStatement statement = connection.prepareStatement(query);
+           statement.setInt(1,matiere.getId()); 
+           ResultSet resultSet = statement.executeQuery();
+            
+            while (resultSet.next()) {
+                seances.add(mapResultSetToEntity(resultSet));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return seances;
      
+     }
      public Seance getLastSeanceOfMatiere(Matiere matier ){
      Seance seance = null ;
      
@@ -231,6 +249,25 @@ public class SeanceDAOImpl extends AbstractDAO<Seance> {
       return seance;
      }
      
+      public Seance getSeancesOfTodayOfMatiere(LocalDate date, Matiere matiere) {
+        Seance seance = null;
+        try {
+            String query = " SELECT * From "+getTableName()+"  where date_sceance =? and id_matiere=? "; //delet id matiere 
+            
+           PreparedStatement statement = connection.prepareStatement(query);
+           statement.setDate(1,java.sql.Date.valueOf( date));
+           statement.setInt(2,matiere.getId());
+           ResultSet resultSet = statement.executeQuery();
+            
+            if (resultSet.next()) {
+                seance= mapResultSetToEntity(resultSet);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return seance;
+    }
+         
          
          
          public static void main(String[] args) {

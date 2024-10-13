@@ -4,6 +4,7 @@
  */
 package guis;
 
+import DialogFram.ValidationMessageDialog;
 import domaine.CategoreNiveau;
 import domaine.Etudiant;
 import domaine.Inscription;
@@ -12,7 +13,9 @@ import domaine.NiveauEtude;
 import domaine.Payement;
 import domaine.Seance;
 import domaine.Seance_Matiere;
+import java.awt.Color;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
@@ -61,9 +64,9 @@ public class PayemmentParMoin extends javax.swing.JDialog {
 
     public PayemmentParMoin(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        home = (home) parent;
+        this.home = (home) parent;
         initComponents();
-
+        setLocationRelativeTo(this);
         try {
             connection = new ConnectionDB().getConnection();
         } catch (DatabaseConnectionException ex) {
@@ -79,7 +82,9 @@ public class PayemmentParMoin extends javax.swing.JDialog {
         payementDAOImpl = new PayementDAOImpl(connection);
         sceanceDAOImpl = new SeanceDAOImpl(connection);
 
-        setLocationRelativeTo(this);
+        buttonGroup1.add(radio_payem_moin);
+        buttonGroup1.add(rad_payem_seance);
+
     }
 
     private static final Map<String, DayOfWeek> arabicDayToDayOfWeekMap = new HashMap<>();
@@ -107,6 +112,7 @@ public class PayemmentParMoin extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
@@ -119,10 +125,7 @@ public class PayemmentParMoin extends javax.swing.JDialog {
         lab_prenom = new javax.swing.JLabel();
         combobox1 = new material.design.Combobox();
         jLabel9 = new javax.swing.JLabel();
-        radioButtonCustom1 = new material.design.RadioButtonCustom();
-        radioButtonCustom2 = new material.design.RadioButtonCustom();
-        radioButtonCustom3 = new material.design.RadioButtonCustom();
-        la_montant_matier = new javax.swing.JLabel();
+        lab_prix_matiere = new javax.swing.JLabel();
         jCheckBoxCustomfr1 = new material.design.JCheckBoxCustomfr();
         buttonRounder19 = new material.design.buttonRounder();
         buttonRounder17 = new material.design.buttonRounder();
@@ -131,8 +134,6 @@ public class PayemmentParMoin extends javax.swing.JDialog {
         lab_catego = new javax.swing.JLabel();
         lab_id_categ = new javax.swing.JLabel();
         lab_id_niv = new javax.swing.JLabel();
-        textAreaScroll1 = new material.design.TextAreaScroll();
-        textArea1 = new material.design.TextArea();
         lab_prix_total = new javax.swing.JLabel();
         lab_nb_seance = new javax.swing.JLabel();
         lab_prix_seance = new javax.swing.JLabel();
@@ -140,36 +141,55 @@ public class PayemmentParMoin extends javax.swing.JDialog {
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
-        jLabel13 = new javax.swing.JLabel();
+        jButton3 = new javax.swing.JButton();
+        radio_payem_moin = new javax.swing.JRadioButton();
+        rad_payem_seance = new javax.swing.JRadioButton();
+        lab_prix_seance_m = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        buttonRounder1 = new material.design.buttonRounder();
+        buttonRounder2 = new material.design.buttonRounder();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new java.awt.CardLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
-        jLabel1.setText("الدفع الشهري ");
+        jLabel1.setFont(new java.awt.Font("Times New Roman", 0, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(153, 153, 153));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("دفع مستحقات التعليم");
 
+        jTextField1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
+
+        jTextField2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
         jTextField2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField2ActionPerformed(evt);
             }
         });
 
-        jLabel2.setText("Matriccule");
+        jLabel2.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(153, 153, 153));
+        jLabel2.setText("N°");
 
+        jLabel3.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(153, 153, 153));
         jLabel3.setText("BarCode");
 
+        jLabel4.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(153, 153, 153));
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel4.setText("الاسم");
 
+        jLabel5.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(153, 153, 153));
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel5.setText("اللقب");
 
-        lab_nom.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        lab_nom.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
 
-        lab_prenom.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        lab_prenom.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
 
         combobox1.setLabeText("المادة");
         combobox1.addItemListener(new java.awt.event.ItemListener() {
@@ -183,41 +203,19 @@ public class PayemmentParMoin extends javax.swing.JDialog {
             }
         });
 
-        jLabel9.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
+        jLabel9.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(153, 153, 153));
+        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel9.setText("المبلغ");
 
-        radioButtonCustom1.setText("دروس الدعم");
-        radioButtonCustom1.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        radioButtonCustom1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        radioButtonCustom1.setPreferredSize(null);
-        radioButtonCustom1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                radioButtonCustom1ActionPerformed(evt);
-            }
-        });
-
-        radioButtonCustom2.setText("دورات تكوينية");
-        radioButtonCustom2.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        radioButtonCustom2.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        radioButtonCustom2.setPreferredSize(null);
-        radioButtonCustom2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                radioButtonCustom2ActionPerformed(evt);
-            }
-        });
-
-        radioButtonCustom3.setText("radioButtonCustom3");
-        radioButtonCustom3.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        radioButtonCustom3.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        radioButtonCustom3.setPreferredSize(null);
-
-        la_montant_matier.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        la_montant_matier.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        la_montant_matier.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
+        lab_prix_matiere.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        lab_prix_matiere.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lab_prix_matiere.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
 
         jCheckBoxCustomfr1.setBackground(new java.awt.Color(0, 255, 0));
         jCheckBoxCustomfr1.setText("تأكيد الدفع");
         jCheckBoxCustomfr1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jCheckBoxCustomfr1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
 
         buttonRounder19.setBackground(new java.awt.Color(51, 153, 0));
         buttonRounder19.setForeground(new java.awt.Color(255, 255, 255));
@@ -248,27 +246,18 @@ public class PayemmentParMoin extends javax.swing.JDialog {
 
         lab_niveau.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
         lab_niveau.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lab_niveau.setText("القسم");
         lab_niveau.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
 
         lab_catego.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
         lab_catego.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lab_catego.setText("المستوى");
         lab_catego.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
 
         lab_id_categ.setText("id level");
 
         lab_id_niv.setText("id_class");
 
-        textArea1.setEditable(false);
-        textArea1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
-        textArea1.setColumns(20);
-        textArea1.setRows(5);
-        textArea1.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        textAreaScroll1.setViewportView(textArea1);
-
-        lab_prix_total.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
-        lab_prix_total.setForeground(new java.awt.Color(0, 255, 0));
+        lab_prix_total.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        lab_prix_total.setForeground(new java.awt.Color(0, 204, 0));
         lab_prix_total.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lab_prix_total.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
 
@@ -282,29 +271,81 @@ public class PayemmentParMoin extends javax.swing.JDialog {
         lab_prix_seance.setText("0");
         lab_prix_seance.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
 
-        jLabel6.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(153, 153, 153));
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel6.setText("المستوى");
 
-        jLabel7.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jLabel7.setText("عدد الحصص لهذا الشهر");
+        jLabel7.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(153, 153, 153));
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel7.setText("عدد حصص الشهر");
 
-        jLabel8.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(153, 153, 153));
+        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel8.setText("ثمن الحصة الواحدة");
 
         jLabel11.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(153, 153, 153));
         jLabel11.setText("المبلغ المستحق دفعه");
-
-        jLabel10.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jLabel10.setText("التوقيت :");
 
         jLabel12.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(255, 0, 51));
         jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 
-        jButton2.setText("payment");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        jButton3.setText("jButton3");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        radio_payem_moin.setFont(new java.awt.Font("Times New Roman", 1, 17)); // NOI18N
+        radio_payem_moin.setForeground(new java.awt.Color(255, 51, 51));
+        radio_payem_moin.setText("دفع شهري");
+        radio_payem_moin.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        radio_payem_moin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radio_payem_moinActionPerformed(evt);
+            }
+        });
+
+        rad_payem_seance.setFont(new java.awt.Font("Times New Roman", 1, 17)); // NOI18N
+        rad_payem_seance.setForeground(new java.awt.Color(255, 51, 51));
+        rad_payem_seance.setText("دفع بالحصة");
+        rad_payem_seance.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        rad_payem_seance.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rad_payem_seanceActionPerformed(evt);
+            }
+        });
+
+        lab_prix_seance_m.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        lab_prix_seance_m.setForeground(new java.awt.Color(0, 204, 0));
+        lab_prix_seance_m.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lab_prix_seance_m.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
+
+        jLabel10.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(153, 153, 153));
+        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel10.setText("القسم");
+
+        buttonRounder1.setBackground(new java.awt.Color(255, 0, 51));
+        buttonRounder1.setForeground(new java.awt.Color(255, 255, 255));
+        buttonRounder1.setText("ديون");
+        buttonRounder1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonRounder1ActionPerformed(evt);
+            }
+        });
+
+        buttonRounder2.setBackground(new java.awt.Color(153, 153, 255));
+        buttonRounder2.setForeground(new java.awt.Color(255, 255, 255));
+        buttonRounder2.setText("معاينة");
+        buttonRounder2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonRounder2ActionPerformed(evt);
             }
         });
 
@@ -313,174 +354,174 @@ public class PayemmentParMoin extends javax.swing.JDialog {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(51, 51, 51)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(42, 42, 42)
+                .addComponent(buttonRounder1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(buttonRounder2, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 426, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(textAreaScroll1, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton2)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel3)
+                        .addComponent(lab_prix_seance, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lab_nb_seance, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel7))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(lab_id_niv)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jButton1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(lab_prix_seance, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jLabel8)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(lab_nb_seance, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel7))
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addGroup(jPanel1Layout.createSequentialGroup()
-                                            .addComponent(lab_id_niv)
-                                            .addGap(18, 18, 18)
-                                            .addComponent(lab_id_categ)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                            .addComponent(lab_prenom, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(jPanel1Layout.createSequentialGroup()
-                                            .addComponent(lab_nom, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(jPanel1Layout.createSequentialGroup()
-                                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                .addComponent(la_montant_matier, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(lab_niveau, javax.swing.GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE))
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                .addComponent(lab_catego, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(combobox1, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE))
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(jLabel6)))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(radioButtonCustom3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(radioButtonCustom2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(radioButtonCustom1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(28, 28, 28))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel3)
+                                .addGap(18, 18, 18)
+                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 353, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField1)
-                                .addGap(41, 41, 41))))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(114, 114, 114)
-                        .addComponent(jCheckBoxCustomfr1, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jTextField1))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(buttonRounder19, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(30, 30, 30)
-                                .addComponent(buttonRounder17, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(180, 180, 180)))
-                .addComponent(lab_prix_total, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(59, 59, 59))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(lab_id_categ, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(lab_niveau, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lab_catego, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lab_prenom, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lab_nom, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jButton3)
+                                .addGap(529, 529, 529))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(lab_prix_matiere, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(12, 12, 12)))
+                        .addComponent(combobox1, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(612, 612, 612))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(rad_payem_seance)
+                                .addGap(67, 67, 67))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(lab_prix_seance_m, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(radio_payem_moin, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lab_prix_total, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jCheckBoxCustomfr1, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel11)
+                        .addGap(19, 19, 19))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(buttonRounder17, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(36, 36, 36)
+                        .addComponent(buttonRounder19, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(371, 371, 371))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(lab_nom, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jButton1))
-                        .addGap(12, 12, 12)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lab_prenom, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lab_id_niv, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(lab_id_categ))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(radioButtonCustom1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(radioButtonCustom2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(radioButtonCustom3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(41, 41, 41)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lab_catego, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lab_niveau, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(buttonRounder1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(buttonRounder2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(12, 12, 12))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(28, 28, 28)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(combobox1, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(la_montant_matier, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jLabel5)
+                                .addComponent(jLabel6)
+                                .addComponent(jLabel10))
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lab_nom, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                            .addComponent(lab_catego, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lab_prenom, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                            .addComponent(lab_niveau, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lab_prix_seance, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lab_nb_seance, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(26, 26, 26)
-                                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(18, 18, 18)
-                                .addComponent(lab_prix_total, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(lab_id_categ)
+                            .addComponent(lab_id_niv, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(21, 21, 21)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton3)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton2)
-                        .addGap(12, 12, 12)
-                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(textAreaScroll1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jCheckBoxCustomfr1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(lab_prix_matiere, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(combobox1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lab_nb_seance, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lab_prix_seance, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(buttonRounder19, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(buttonRounder17, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(12, Short.MAX_VALUE))
+                    .addComponent(radio_payem_moin, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(rad_payem_seance))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lab_prix_seance_m, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lab_prix_total, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jCheckBoxCustomfr1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(73, 73, 73)
+                        .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(7, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(buttonRounder19, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(buttonRounder17, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18))))
         );
 
         getContentPane().add(jPanel1, "card2");
@@ -488,92 +529,43 @@ public class PayemmentParMoin extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void radioButtonCustom2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioButtonCustom2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_radioButtonCustom2ActionPerformed
-
-    private void radioButtonCustom1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioButtonCustom1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_radioButtonCustom1ActionPerformed
-
     private void buttonRounder19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRounder19ActionPerformed
-
-        if (jCheckBoxCustomfr1.isSelected()) {
-            jLabel12.setText("");
-            for (Payement payement : payements) {
-                payementDAOImpl.save(payement);
-            }
-            payements.clear();
-            seance_Matieres_payee.clear();
-        } else {
-            jLabel12.setText("قم بتأكيد الدفع ...");
+         try {
+        String codbare = jTextField2.getText();
+        Etudiant etudiant = etudiantDAOImpl.getEtudiantByCodbar(codbare);
+        Matiere matiere = matiereDAOImpl.getMatiereNiveauOfCategory(combobox1.getSelectedItem().toString(), lab_niveau.getText(), lab_catego.getText());
+        //show check box if exist seance to day
+       // Seance seance = sceanceDAOImpl.getSeancesOfTodayOfMatiere(LocalDate.now(), matiere);        
+        //credit et mat nb=!0
+       List<Payement> payements_Credits =payementDAOImpl.getCreditEtudiantByMatiers_no_payéé(etudiant,matiere);
+       System.out.println("payements_Credit "+payements_Credits);
+       
+       if(payements_Credits.isEmpty()){
+       Payement payement;       
+       if (radio_payem_moin.isSelected()) {         
+                payement = new Payement(0, etudiant, matiere, null, "شهري", matiere.getPrix(), matiere.getPrix(), matiere.getPrix(), LocalDate.now(), matiere.getNum_sceance_moins());
+                if (payementDAOImpl.SavePayementParMoin(payement) > 0) {
+                    JOptionPane.showMessageDialog(null, "payemnt succes");
+                }    
         }
-
-        /*     //   if(isslastSeance){
-        Etudiant etudiant = etudiantDAOImpl.getEtudiantByCodbar(jTextField2.getText());
-        int id_niv = Integer.parseInt(lab_id_niv.getText());
-        int id_categ = Integer.parseInt(lab_id_categ.getText());
-        Matiere matiere = matiereDAOImpl.findMatiereByNiveau_Catego(combobox1.getSelectedItem().toString(), id_niv, id_categ);
-        JOptionPane.showMessageDialog(null, matiere.getId());
-        List<Seance> seances = sceanceDAOImpl.getSeanceOfMatiere(matiere.getId());
-       JOptionPane.showMessageDialog(null, " seance "+matiere.getMatiereEtdAr() +"  =nbr : "+seances.size() +"  id : "+  matiere.getId());
-
-       Payement payement = payementDAOImpl.getlasPayementEtudiantOfMatier(etudiant.getId(), matiere.getId());
-       if(payement == null)       JOptionPane.showMessageDialog(null, " null  . . ");
-
-       int nb_seance = seances.size();
-            List<Seance_Matiere> seance_Matiere_false = seanceMatiereDAOImpl.getSeances_Noterminate(matiere.getId(), LocalDate.now());
-         JOptionPane.showMessageDialog(null, " seance matiere  "+seance_Matiere_false.size()) ;
-         List <Seance_Matiere> seance_Matieres_payee = new ArrayList<>();
-         List <Payement >payements = new ArrayList<>();
-         String text="";
-        if(seance_Matiere_false !=null){ 
-         for( Seance_Matiere seance_Matiere1 :seance_Matiere_false ){                                            
-             double prix_seance=matiere.getPrix()/nb_seance;
-             if(!seance_Matiere1.isTermine() ){
-                  JOptionPane.showMessageDialog(null, " false ");
-                    Payement payement1 = new Payement(0, etudiant, matiere, seance_Matiere1.getId(), seance_Matiere1.getSeance(), "", matiere.getPrix(), matiere.getPrix(), matiere.getPrix(), LocalDate.now());
-                 //   payementDAOImpl.save(payement1);
-                    seance_Matieres_payee.add(seance_Matiere1);
-                    payements.add(payement1);
-                    text=text+"\n  "+ seance_Matiere1.getSeance().getNumSeance() + " : "+seance_Matiere1.getSeance().getDay_sceance() +"  "+ seance_Matiere1.getDate();
-                    System.out.println(""  + seance_Matiere1.getSeance().getNumSeance() + " : "+seance_Matiere1.getSeance().getDay_sceance() +"  "+ seance_Matiere1.getDate());
-                }else{
-                    
-                    if(seance_Matiere1.isTermine() && seance_Matiere1.getDate().isEqual(LocalDate.now())
-                            && seance_Matiere1.getSeance().getFinTime().after(Time.valueOf(LocalTime.now()))){ // time                        
-                        Payement payement1 = new Payement(0, etudiant, matiere, seance_Matiere1.getId(), seance_Matiere1.getSeance(), "", matiere.getPrix(), matiere.getPrix(), matiere.getPrix(), LocalDate.now());
-                       // payementDAOImpl.save(payement1);
-                        seance_Matieres_payee.add(seance_Matiere1);
-                        payements.add(payement1);
-                        text=text+"\n  "+ seance_Matiere1.getSeance().getNumSeance() + " : "+seance_Matiere1.getSeance().getDay_sceance() +"  "+ seance_Matiere1.getDate();
-                    System.out.println(""  + seance_Matiere1.getSeance().getNumSeance() + " : "+seance_Matiere1.getSeance().getDay_sceance() +"  "+ seance_Matiere1.getDate());
-
-                    }
-                }               
-            }
-       textArea1.setText(text);
-          if(payements.size()==nb_seance){
-             double  prix_matiere =matiere.getPrix();
-             double prix_seance = prix_matiere/nb_seance;
-              lab_prix_seance.setText(prix_seance+"");
-              lab_nb_seance.setText(nb_seance+"");
-             la_montant_matier.setText(matiere.getPrix()+"" );
-             
-          }else{
-          double
-            prix_matiere =matiere.getPrix();
-            double prix_seance = prix_matiere/nb_seance;
-            lab_prix_seance.setText(prix_seance +"");
-            lab_nb_seance.setText(nb_seance+"");
-            la_montant_matier.setText(prix_seance*payements.size()+"" );
-          }
+        if (rad_payem_seance.isSelected()) {
+         
+                double prix_seance_ =Double.parseDouble(lab_prix_seance_m.getText());
+                payement = new Payement(0, etudiant, matiere, null, "يومي", matiere.getPrix(), prix_seance_, prix_seance_, LocalDate.now(), 1);
+                if (payementDAOImpl.SavePayementParMoin(payement) > 0) {
+                    JOptionPane.showMessageDialog(null, "payement par seance ");
+                }
+         
+        }
+       }else{
+           this.dispose();
+       new ValidationMessageDialog(this, home).showMessagetoDialog("خـطـأ ", "لا يمكنك دفع حقوق شهر جديد لانه \n لديك ديون قم بتسدسديدها أولا ");
+//JOptionPane.showMessageDialog(null, "a des credite . ?! ");
+       }
+        } catch (SQLException ex) {
+                Logger.getLogger(PayemmentParMoin.class.getName()).log(Level.SEVERE, null, ex);
+       }
         
-        }else{
-        
-        JOptionPane.showMessageDialog(null," no seance created" );
-        }*/
-
     }//GEN-LAST:event_buttonRounder19ActionPerformed
 
     private void buttonRounder17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRounder17ActionPerformed
@@ -609,73 +601,22 @@ public class PayemmentParMoin extends javax.swing.JDialog {
             int id_category = Integer.parseInt(lab_id_categ.getText());
             int id_niv = Integer.parseInt(lab_id_niv.getText());
             Matiere matiere = matiereDAOImpl.findMatiereByNiveau_Catego(combobox1.getSelectedItem().toString(), id_niv, id_category);
-            la_montant_matier.setText(matiere.getPrix() + "");
-            //   if(isslastSeance){
-//            Etudiant etudiant = etudiantDAOImpl.getEtudiantByCodbar(jTextField2.getText());
-//            //  int id_niv = Integer.parseInt(lab_id_niv.getText());
-//            // int id_categ = Integer.parseInt(lab_id_categ.getText());
-//            //  Matiere matiere = matiereDAOImpl.findMatiereByNiveau_Catego(combobox1.getSelectedItem().toString(), id_niv, id_category);
-//            JOptionPane.showMessageDialog(null, matiere.getId());
-//            List<Seance> seances = sceanceDAOImpl.getSeanceOfMatiere(matiere.getId());
-//            JOptionPane.showMessageDialog(null, " seance " + matiere.getMatiereEtdAr() + "  =nbr : " + seances.size() + "  id : " + matiere.getId());
-//
-//            Payement payement = payementDAOImpl.getlasPayementEtudiantOfMatier(etudiant.getId(), matiere.getId());
-//            if (payement == null) {
-//                JOptionPane.showMessageDialog(null, " null  . . "); 
+            lab_prix_matiere.setText(matiere.getPrix() + "");
+            lab_nb_seance.setText(matiere.getNum_sceance_moins() + "");
 
+            double montant = Double.parseDouble(lab_prix_matiere.getText());
+            int nb_seance = Integer.parseInt(lab_nb_seance.getText());
+            double prix_seance = montant / nb_seance;
+            
+            lab_prix_seance.setText(prix_seance + "");
+            
+            radio_payem_moin.setSelected(true);
 
-//            }
-//
-//            int nb_seance = seances.size();
-//            List<Seance_Matiere> seance_Matiere_false = seanceMatiereDAOImpl.getSeances_Noterminate(matiere.getId(), LocalDate.now());
-//            JOptionPane.showMessageDialog(null, " seance matiere  " + seance_Matiere_false.size());
-//
-//            String text = "";
-//            if (seance_Matiere_false != null) {
-//                for (Seance_Matiere seance_Matiere1 : seance_Matiere_false) {
-//                    double prix_seance = matiere.getPrix() / nb_seance;
-//                    if (!seance_Matiere1.isTermine()) {
-//                        JOptionPane.showMessageDialog(null, " false ");
-//                        Payement payement1 = new Payement(0, etudiant, matiere, seance_Matiere1.getId(), seance_Matiere1.getSeance(), "", matiere.getPrix(), matiere.getPrix(), matiere.getPrix(), LocalDate.now());
-//                        //   payementDAOImpl.save(payement1);
-//                        seance_Matieres_payee.add(seance_Matiere1);
-//                        payements.add(payement1);
-//                        text = text + "\n  الحصة " + seance_Matiere1.getSeance().getNumSeance() + " : " + seance_Matiere1.getSeance().getDay_sceance() + "  في :  " + seance_Matiere1.getDate();
-//                        System.out.println("" + seance_Matiere1.getSeance().getNumSeance() + " : " + seance_Matiere1.getSeance().getDay_sceance() + "  " + seance_Matiere1.getDate());
-//                    } else {
-//
-//                        if (seance_Matiere1.isTermine() && seance_Matiere1.getDate().isEqual(LocalDate.now())
-//                                && seance_Matiere1.getSeance().getFinTime().after(Time.valueOf(LocalTime.now()))) { // time                        
-//                            Payement payement1 = new Payement(0, etudiant, matiere, seance_Matiere1.getId(), seance_Matiere1.getSeance(), "", matiere.getPrix(), matiere.getPrix(), matiere.getPrix(), LocalDate.now());
-//                            // payementDAOImpl.save(payement1);
-//                            seance_Matieres_payee.add(seance_Matiere1);
-//                            payements.add(payement1);
-//                            text = text + "\n  الحصة " + seance_Matiere1.getSeance().getNumSeance() + " : " + seance_Matiere1.getSeance().getDay_sceance() + " في :  " + seance_Matiere1.getDate();
-//                            System.out.println("" + seance_Matiere1.getSeance().getNumSeance() + " : " + seance_Matiere1.getSeance().getDay_sceance() + "  " + seance_Matiere1.getDate());
-//
-//                        }
-//                    }
-//                }
-//                textArea1.setText(text);
-//                if (payements.size() == nb_seance) {
-//                    double prix_matiere = matiere.getPrix();
-//                    double prix_seance = prix_matiere / nb_seance;
-//                    lab_prix_seance.setText(prix_seance + "");
-//                    lab_nb_seance.setText(nb_seance + "");
-//                    lab_prix_total.setText(matiere.getPrix() + "");
-//
-//                } else {
-//                    double prix_matiere = matiere.getPrix();
-//                    double prix_seance = prix_matiere / nb_seance;
-//                    lab_prix_seance.setText(prix_seance + "");
-//                    lab_nb_seance.setText(payements.size() + "");
-//                    lab_prix_total.setText(prix_seance * payements.size() + "");
-//                }
-//
-//            } else {
-//
-//                JOptionPane.showMessageDialog(null, " no seance created");
-//            }
+            lab_prix_total.setText(montant + "");
+            lab_prix_seance_m.setText(prix_seance + "");
+
+            lab_prix_total.setForeground(new Color(0,204,0));
+            lab_prix_seance_m.setForeground(Color.gray);
 
         }
     }//GEN-LAST:event_combobox1ActionPerformed
@@ -688,111 +629,49 @@ public class PayemmentParMoin extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField2ActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        //   if(isslastSeance){
-        int id_category = Integer.parseInt(lab_id_categ.getText());
-        int id_niv = Integer.parseInt(lab_id_niv.getText());
-        Matiere matiere = matiereDAOImpl.findMatiereByNiveau_Catego(combobox1.getSelectedItem().toString(), id_niv, id_category);
-        la_montant_matier.setText(matiere.getPrix() + "");
-    
-        Etudiant etudiant = etudiantDAOImpl.getEtudiantByCodbar(jTextField2.getText());
-        
-        JOptionPane.showMessageDialog(null, matiere.getId());
-        List<Seance> seances = sceanceDAOImpl.getSeanceOfMatiere(matiere.getId());
-        int nb_seance = seances.size();
-        JOptionPane.showMessageDialog(null, " seance " + matiere.getMatiereEtdAr() + "  =nbr : " + seances.size() + "  id : " + matiere.getId());
-        List<Seance_Matiere> seance_Matiere_false = seanceMatiereDAOImpl.getSeances_Noterminate(matiere.getId(), LocalDate.now());
-        //   List<Payement> payements=payementDAOImpl.getNOPayementOfMatier(etudiant.getId(), matiere.getId(),"No payee");
-
-    if( payements !=null){
-        if(payements.size()>=nb_seance){
-          for(Payement payement : payements){
-              payement.setTypePayement("payee");
-              payement.setPrix(payement.getMatiere().getPrix()/nb_seance);
-              payement.setPrixPaye(payement.getMatiere().getPrix());
-              
-          }  
-        }else{
-        
-        }
-        
-    }else{
-        
-        Payement last_payement = payementDAOImpl.getlasPayementEtudiantOfMatier(etudiant.getId(), matiere.getId());
-
-       Seance_Matiere last_seance_Matiere_payee =seanceMatiereDAOImpl.findById(last_payement.getId_seance_matiere()); 
-     
-        if(last_seance_Matiere_payee== null || last_seance_Matiere_payee.isTermine()){     
-        if (seance_Matiere_false != null) {
-            for (Seance_Matiere seance_Matiere1 : seance_Matiere_false) {
-                double prix_seance = matiere.getPrix() / nb_seance;
-                if (!seance_Matiere1.isTermine()) {
-                    JOptionPane.showMessageDialog(null, " false ");
-                    Payement payement1 = new Payement(0, etudiant, matiere, seance_Matiere1.getId(), seance_Matiere1.getSeance(), "", matiere.getPrix(), matiere.getPrix(), matiere.getPrix(), LocalDate.now());
-                    //   payementDAOImpl.save(payement1);
-                    seance_Matieres_payee.add(seance_Matiere1);
-                    payements.add(payement1);
-                    
-                } else {
-
-                    if (seance_Matiere1.isTermine() && seance_Matiere1.getDate().isEqual(LocalDate.now())
-                            && seance_Matiere1.getSeance().getFinTime().after(Time.valueOf(LocalTime.now()))) { // time                        
-                        Payement payement1 = new Payement(0, etudiant, matiere, seance_Matiere1.getId(), seance_Matiere1.getSeance(), "", matiere.getPrix(), matiere.getPrix(), matiere.getPrix(), LocalDate.now());
-                        // payementDAOImpl.save(payement1);
-                        seance_Matieres_payee.add(seance_Matiere1);
-                        payements.add(payement1);
-                    }
-                }
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        try {
+            String codbare = jTextField2.getText();
+            Etudiant etudiant = etudiantDAOImpl.getEtudiantByCodbar(codbare);
+            Matiere matiere = matiereDAOImpl.getMatiereNiveauOfCategory(combobox1.getSelectedItem().toString(), lab_niveau.getText(), lab_catego.getText());
+            //show check box if exist seance to day
+            Seance seance = sceanceDAOImpl.getSeancesOfTodayOfMatiere(LocalDate.now(), matiere);
+            Payement payement;       
+            payement = new Payement(0, etudiant, matiere, null, "par moin", matiere.getPrix(), matiere.getPrix(), matiere.getPrix(), LocalDate.now(), matiere.getNum_sceance_moins());
+            if (payementDAOImpl.SavePayementParMoin(payement) > 0) {
+                JOptionPane.showMessageDialog(null, "payemnt succes");
             }
+        } catch (SQLException ex) {
+            Logger.getLogger(PayemmentParMoin.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        if(nb_seance ==payements.size()){
-          //save
-        }else{
-        if(nb_seance> payements.size()){
-            JOptionPane.showMessageDialog(null, "nb_seance> payements.size()  "+ nb_seance+"  > "  +payements.size());
-          Seance_Matiere last_seance_matier = seanceMatiereDAOImpl.getlasSeanceOfMatier(matiere.getId());
-           JOptionPane.showMessageDialog(null,"last_seance_matier  " + last_seance_matier.getId());
-          LocalDate date = last_seance_matier.getDate();
-           // add new seance matier ;
-               for(Seance seance : seances){
-           LocalDate  new_date = date.with(TemporalAdjusters.next(getDayOfWeekFromArabic(seance.getDay_sceance())));
-           Seance_Matiere seance_Matiere = new Seance_Matiere(0, seance, matiere, false, new_date);           
-           seanceMatiereDAOImpl.save(seance_Matiere);
-           JOptionPane.showMessageDialog(null,"save matier seance ");
-            }
-               
-               // get id of seance matiere new to get 1 moin
-            int nbr_seance_get_moin= payements.size();
-           int id_seance= last_seance_matier.getId();
-           double prix_seance = matiere.getPrix()/nb_seance;
-            while(nbr_seance_get_moin !=nb_seance ){
-             id_seance=id_seance+1; // select *from tab where id > lastseance;
-            Seance_Matiere seance_Matiere_new =seanceMatiereDAOImpl.findById(id_seance);
-            JOptionPane.showMessageDialog(null,"seance_Matiere_new"+seance_Matiere_new.getId()+ "  nb :"+id_seance );
-            Payement payement = new Payement(0, etudiant, matiere, seance_Matiere_new.getId(), seance_Matiere_new.getSeance(), "cashe", prix_seance, matiere.getPrix(), matiere.getPrix(), LocalDate.now());
-            payements.add(payement);
-            seance_Matieres_payee.add(seance_Matiere_new);
-            //payementDAOImpl.save(payement);
-           
-            }          
-        }           
-        }
-        jLabel13.setText(matiere.getPrix()+"");
-       String text="";
-        for(Seance_Matiere seance_Matiere1 : seance_Matieres_payee){
-         text = text + "\n  الحصة "+ " "+ seance_Matiere1.getSeance().getNumSeance() + " : " + seance_Matiere1.getSeance().getDay_sceance() + "  في   " +" "+  seance_Matiere1.getDate() +" .";
-        }
-        textArea1.setText(text);
-     }else{
-            
-        if(!last_seance_Matiere_payee.isTermine())
-        JOptionPane.showMessageDialog(null, " لم يتم اكمال حصص الشهر الحالي \n اخر حصة مدفوعة في   : " + last_seance_Matiere_payee.getDate());
-        }
-    }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_jButton3ActionPerformed
 
-   
+    private void radio_payem_moinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radio_payem_moinActionPerformed
+        lab_prix_total.setText(lab_prix_matiere.getText());
+        double montant = Double.parseDouble(lab_prix_total.getText());
+        int nb_seance = Integer.parseInt(lab_nb_seance.getText());
+        double prix_seance = montant / nb_seance;
+        lab_prix_total.setForeground(new Color(0,204,0));
+        lab_prix_seance_m.setForeground(Color.gray);
+    }//GEN-LAST:event_radio_payem_moinActionPerformed
+
+    private void rad_payem_seanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rad_payem_seanceActionPerformed
+        lab_prix_total.setText(lab_prix_matiere.getText());
+        double montant = Double.parseDouble(lab_prix_total.getText());
+        int nb_seance = Integer.parseInt(lab_nb_seance.getText());
+        double prix_seance = montant / nb_seance;
+        lab_prix_total.setForeground(Color.gray);
+        lab_prix_seance_m.setForeground(new Color(0,204,0));
+    }//GEN-LAST:event_rad_payem_seanceActionPerformed
+
+    private void buttonRounder2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRounder2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_buttonRounder2ActionPerformed
+
+    private void buttonRounder1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRounder1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_buttonRounder1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -819,6 +698,7 @@ public class PayemmentParMoin extends javax.swing.JDialog {
             java.util.logging.Logger.getLogger(PayemmentParMoin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -836,17 +716,19 @@ public class PayemmentParMoin extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
+    private material.design.buttonRounder buttonRounder1;
     private material.design.buttonRounder buttonRounder17;
     private material.design.buttonRounder buttonRounder19;
+    private material.design.buttonRounder buttonRounder2;
     private material.design.Combobox combobox1;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private material.design.JCheckBoxCustomfr jCheckBoxCustomfr1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -858,7 +740,6 @@ public class PayemmentParMoin extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
-    private javax.swing.JLabel la_montant_matier;
     private javax.swing.JLabel lab_catego;
     private javax.swing.JLabel lab_id_categ;
     private javax.swing.JLabel lab_id_niv;
@@ -866,12 +747,11 @@ public class PayemmentParMoin extends javax.swing.JDialog {
     private javax.swing.JLabel lab_niveau;
     private javax.swing.JLabel lab_nom;
     private javax.swing.JLabel lab_prenom;
+    private javax.swing.JLabel lab_prix_matiere;
     private javax.swing.JLabel lab_prix_seance;
+    private javax.swing.JLabel lab_prix_seance_m;
     private javax.swing.JLabel lab_prix_total;
-    private material.design.RadioButtonCustom radioButtonCustom1;
-    private material.design.RadioButtonCustom radioButtonCustom2;
-    private material.design.RadioButtonCustom radioButtonCustom3;
-    private material.design.TextArea textArea1;
-    private material.design.TextAreaScroll textAreaScroll1;
+    private javax.swing.JRadioButton rad_payem_seance;
+    private javax.swing.JRadioButton radio_payem_moin;
     // End of variables declaration//GEN-END:variables
 }

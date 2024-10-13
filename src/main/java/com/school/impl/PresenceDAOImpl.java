@@ -36,12 +36,12 @@ public class PresenceDAOImpl extends AbstractDAO<Presence> {
 
     @Override
     protected String getInsertQuery() {
-        return "INSERT INTO presence (id_etudiant,id_matiere,id_seance,date_presence) VALUES (?,?,?,?)";
+        return "INSERT INTO presence (id_etudiant,id_matiere,id_seance,date_presence,etat) VALUES (?,?,?,?,?)";
     }
 
     @Override
     protected String getUpdateQuery() {
-        return "UPDATE presence SET id_etudiant=?,id_matiere=?,id_seance=?,date_presence=?, id=?";
+        return "UPDATE presence SET id_etudiant=?,id_matiere=?,id_seance=?,date_presence=?, etat=? WHERE id=?";
     }
 
     @Override
@@ -50,7 +50,7 @@ public class PresenceDAOImpl extends AbstractDAO<Presence> {
         statement.setInt(2, presence.getMatiere().getId());
         statement.setInt(3, presence.getSeance().getId());
         statement.setDate(4, java.sql.Date.valueOf(presence.getDatePresence()));
-
+        statement.setBoolean(5, presence.isEtat());
     }
 
     @Override
@@ -60,6 +60,8 @@ public class PresenceDAOImpl extends AbstractDAO<Presence> {
         statement.setInt(2, presence.getMatiere().getId());
         statement.setInt(3, presence.getSeance().getId());
         statement.setDate(4, java.sql.Date.valueOf(presence.getDatePresence()));
+        statement.setBoolean(5, presence.isEtat());
+        statement.setInt(6, presence.getId());
     }
 
     @Override
@@ -70,17 +72,19 @@ public class PresenceDAOImpl extends AbstractDAO<Presence> {
         presence.setMatiere(new MatiereDAOImpl(connection).findById(resultSet.getInt("id_matiere")));
         presence.setSeance(new SeanceDAOImpl(connection).findById(resultSet.getInt("id_seance")));
         presence.setDatePresence(resultSet.getDate("date_presence").toLocalDate());
+        presence.setEtat(resultSet.getBoolean("etat"));
         return presence;
     }
 
-    public Presence getPresenceOFetudiantInSeance(Etudiant etudiant, Seance seance) {
+    public Presence getPresenceOFetudiantInSeance(Etudiant etudiant, Seance seance, LocalDate date) {
         Presence presence = new Presence();
         try {
             String query = "SELECT * FROM " + getTableName()
-                    + "  WHERE id_etudiant=? AND id_seance=?";
+                    + "  WHERE id_etudiant=? AND id_seance=? AND date_presence=?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, etudiant.getId());
             statement.setInt(2, seance.getId());
+            statement.setDate(3, java.sql.Date.valueOf(date));
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 presence = mapResultSetToEntity(resultSet);

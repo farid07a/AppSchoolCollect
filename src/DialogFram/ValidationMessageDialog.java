@@ -168,7 +168,7 @@ public class ValidationMessageDialog extends javax.swing.JDialog {
         lbTitle.setText("Message Title");
 
         txt.setEditable(false);
-        txt.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        txt.setFont(new java.awt.Font("Times New Roman", 0, 16)); // NOI18N
         txt.setForeground(new java.awt.Color(76, 76, 76));
         txt.setText("Message Text\nSimple");
         txt.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -193,8 +193,8 @@ public class ValidationMessageDialog extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addComponent(lbTitle)
                 .addGap(5, 5, 5)
-                .addComponent(txt, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
+                .addComponent(txt, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cmdOK, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 

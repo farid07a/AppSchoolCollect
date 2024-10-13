@@ -17,17 +17,28 @@ public class Presence {
     private Matiere Matiere;
     private  Seance Seance;
     private LocalDate datePresence;
+    private boolean  etat;
 
     public Presence() {
     }
 
-    public Presence(int id, Etudiant Etudiant, Matiere Matiere, Seance Seance, LocalDate datePresence) {
+    public Presence(int id, Etudiant Etudiant, Matiere Matiere, Seance Seance, LocalDate datePresence, boolean etat) {
         this.id = id;
         this.Etudiant = Etudiant;
         this.Matiere = Matiere;
         this.Seance = Seance;
         this.datePresence = datePresence;
+        this.etat = etat;
     }
+
+    public boolean isEtat() {
+        return etat;
+    }
+
+    public void setEtat(boolean etat) {
+        this.etat = etat;
+    }
+
 
     public int getId() {
         return id;

@@ -105,6 +105,17 @@ public class SeanceService {
 
     }
 
+    public java.util.List<Seance> getListAllSeancePrevieuSemaine(Matiere matiere) throws DatabaseConnectionException {
+        List<Seance> Reverse_list_previeux_seances = new SeanceDAOImpl(ConnectionDB.getConnection()).getListPrevieuxSceanceWithSemaineByMatiere(matiere);
+        List list_previeux_seances = new ArrayList();
+        for (int i = Reverse_list_previeux_seances.size() - 1; i >= 0; i--) {
+            list_previeux_seances.add(Reverse_list_previeux_seances.get(i));
+        }
+
+        return list_previeux_seances;
+
+    }
+
     public void saveAllNextSeances(List<Seance> previeux_seances) throws DatabaseConnectionException, SQLException {
         System.out.println("********************************************");
         Connection cnx = ConnectionDB.getConnection();

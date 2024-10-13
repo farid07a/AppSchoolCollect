@@ -20,9 +20,10 @@ public class Table extends JTable{
             @Override
             public Component getTableCellRendererComponent(JTable table, Object ob, boolean isSelected, boolean hasFocus, int row, int column) {
                    TableHeader header = new TableHeader(ob+"");
-                   if(column == 4){
-                       header.setHorizontalAlignment(JLabel.CENTER);
-                   }
+                   
+//                   if(column == 4){
+//                       header.setHorizontalAlignment(JLabel.CENTER);
+//                   }
                    return header;
                 }
                 
@@ -32,7 +33,7 @@ public class Table extends JTable{
         setDefaultRenderer(Object.class, new DefaultTableCellRenderer(){
             @Override
             public Component getTableCellRendererComponent(JTable table, Object ob, boolean isSelected, boolean hasFocus, int row, int column) {
-                if (column !=4){
+              //  if (column !=4){
                     Component com=  super.getTableCellRendererComponent(table, ob, isSelected, hasFocus, row, column);
                     com.setBackground(Color.WHITE);
                     setBorder(noFocusBorder);
@@ -42,13 +43,13 @@ public class Table extends JTable{
                         com.setForeground(new Color(102,102,102));
                     }
                     return com;
-                }
+              //  }
                // return new  JLabel("Testing");status 
-                else{
-                    StatusType type= (StatusType) ob;
-                    CellStatus cell =new CellStatus(type);
-                    return cell;
-                }
+//                else{
+//                    StatusType type= (StatusType) ob;
+//                    CellStatus cell =new CellStatus(type);
+//                    return cell;
+//                }
             }
         });
            

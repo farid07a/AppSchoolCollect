@@ -98,7 +98,7 @@ public class EtudiantDAOImpl extends AbstractDAO<Etudiant> implements EtudiantDA
     }
     
     public Etudiant getEtudiantByCodbar(String code_bare){
-         Etudiant etudiant = new Etudiant();
+         Etudiant etudiant =null;
         try {
             String query = "SELECT * FROM " + getTableName() + " WHERE code_bare=?";
             PreparedStatement statement = connection.prepareStatement(query);

@@ -1,6 +1,5 @@
 package guis;
 
-import DialogFram.Exite;
 import DialogFram.MessageDialog;
 import DialogFram.ValidationMessageDialog;
 import Service.EnseignantMatiereService;
@@ -109,10 +108,10 @@ public class home extends javax.swing.JFrame {
     EnseignantMatiereService enseignant_matiere_service = new EnseignantMatiereService();
     SeanceService seance_service = new SeanceService();
     List<Seance> list_seance_about_all_matieres = new ArrayList<>();
-    EnseignantMatiereDAOImpl enseignantMatiereDAOImpl;   
+    EnseignantMatiereDAOImpl enseignantMatiereDAOImpl;
     GroupeImpl group_dao_imp;
     File imagefile = null;
-            
+
     public home() {
         initComponents();
         try {
@@ -129,9 +128,9 @@ public class home extends javax.swing.JFrame {
         inscriptionDAOImpl = new InscriptionDAOImpl(connection);
         payementDAOImpl = new PayementDAOImpl(connection);
         presenceDAOImpl = new PresenceDAOImpl(connection);
-        enseignantMatiereDAOImpl= new EnseignantMatiereDAOImpl(connection);
+        enseignantMatiereDAOImpl = new EnseignantMatiereDAOImpl(connection);
         group_dao_imp = new GroupeImpl(connection);
-        
+
         message_validation = new ValidationMessageDialog(this);
         setExtendedState(MAXIMIZED_BOTH);
         gbc.gridx = 0;
@@ -192,7 +191,7 @@ public class home extends javax.swing.JFrame {
                     case 4:
                         //pan_presence.setVisible(false);
                         //setForm(pan_center, pan_presence);
-                        Panel_PresenceUI pan_prsence = new Panel_PresenceUI();
+                        Panel_PresenceUI1 pan_prsence = new Panel_PresenceUI1();
                         setForm(pan_center, pan_prsence);
                         try {
                             prepareUIPresence();
@@ -202,7 +201,18 @@ public class home extends javax.swing.JFrame {
                         //getMatiereOfToDay2();
                         /// getMatiereOfToDay();
                         break;
-
+                    case 5:
+                        Pan_payement pan_payement = new Pan_payement();
+                        setForm(pan_center, pan_payement);
+                        //                        }
+                        try {
+                            prepareUIPresence();
+                        } catch (SQLException ex) {
+                            Logger.getLogger(home.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        //getMatiereOfToDay2();
+                        /// getMatiereOfToDay();
+                        break;
                     case 7:
                         setForm(pan_center, pan_config);
                         setInfoCategorNiveauInTab();
@@ -276,7 +286,7 @@ public class home extends javax.swing.JFrame {
     public void prepareUIPresence() throws SQLException {
 
         try {
-            CheckSeanceAndMatiereANDEnseignant();
+            checkSeancesAndSaveNewSeance();
             setSeanceInTable();
             // this.list_seance_about_all_matieres.clear();
         } catch (DatabaseConnectionException ex) {
@@ -284,76 +294,37 @@ public class home extends javax.swing.JFrame {
         }
     }
 
-    // TODO Delete Next Time 
-    // change Matiere By Enseignant Matiere
-//    
-//    public void checkSeancesAndSaveNewSeance() throws DatabaseConnectionException, SQLException {
-//        java.util.List<Matiere> list_matiere = matiere_service.getListMatierByDay();// get all Matiere for today 
-//        List list_previeux = null;
-//        // for test si seance exit update true= en cours sinon creation Number total of seance in month  
-//        Seance scence_obj = null;
-//        this.list_seance_about_all_matieres.clear();
-//        for (Matiere matiere : list_matiere) {
-//            // get seance of matiere today 
-//            scence_obj = seance_service.GetSeanceByTody(matiere);
-//
-//            if (scence_obj != null) {
-//                // 
-//                list_seance_about_all_matieres.add(scence_obj);
-//                System.out.println("Object != null success add ");
-//            } else {
-//                list_previeux = seance_service.getListAllSeancePrevieuSemaine(matiere); // list [sceance(1....30) ]
-//                System.out.println("Seance is Null AFter inser database change to :" + seance_service.GetSeanceByTody(matiere));
-//                //- get last seance si diference <=7
-//                JOptionPane.showMessageDialog(null, "null seance and matiere id ==" + matiere.getId());
-//                JOptionPane.showMessageDialog(null, "existe vacance  : " + seance_service.ExistVacances(matiere));
-//                if (!seance_service.ExistVacances(matiere)) {  //ExistVacances = false
-//                    seance_service.saveAllNextSeances(list_previeux);// save next seances about Matiere
-//                    list_seance_about_all_matieres.add(seance_service.GetSeanceByTody(matiere));
-////
-//                } else {    // disable all components and show add seance
-//                    JOptionPane.showMessageDialog(null, "existe vacance . . . " + list_previeux.size());
-//                    seance_service.saveAllNextSeancesSiExistVacance(list_previeux);
-//                    System.out.println("Seance is Null AFter inser database change to :" + seance_service.GetSeanceByTody(matiere));
-//                    list_seance_about_all_matieres.add(seance_service.GetSeanceByTody(matiere));
-//                }
-//            }
-//        }
-//
-//    }
-    public void CheckSeanceAndMatiereANDEnseignant() throws DatabaseConnectionException, SQLException {
-//        java.util.List<EnseignantMatiere> list_enseignant_matiere = enseignant_matiere_service.getListEnseignantAndMatiereEtudieeByDay();// get all Matiere for today 
-//        List list_previeux = null;
-//        // for test si seance exit update true= en cours sinon creation Number total of seance in month  
-//        Seance scence_obj = null;
-//        this.list_seance_about_all_matieres.clear();
-//        
-//        for (EnseignantMatiere enseignat_matiere : list_enseignant_matiere) {
-//            // get seance of matiere today 
-//            scence_obj = seance_service.GetSeanceByTody(enseignat_matiere);
-//
-//            if (scence_obj != null) {
-//                // 
-//                list_seance_about_all_matieres.add(scence_obj);
-//                System.out.println("Object != null success add ");
-//            } else {
-//                list_previeux = seance_service.getListAllSeancePrevieuSemaineByEnse_Matiere(enseignat_matiere); // list [sceance(1....30) ]
-//                System.out.println("Seance is Null AFter inser database change to :" + seance_service.GetSeanceByTody(enseignat_matiere));
-//                //- get last seance si diference <=7
-//                JOptionPane.showMessageDialog(null, "null seance and matiere id ==" + enseignat_matiere.getId());
-//                JOptionPane.showMessageDialog(null, "existe vacance  : " + seance_service.ExistVacances(enseignat_matiere));
-//                if (!seance_service.ExistVacances(enseignat_matiere)) {  //ExistVacances = false
-//                    seance_service.saveAllNextSeances(list_previeux);// save next seances about Matiere
-//                    list_seance_about_all_matieres.add(seance_service.GetSeanceByTody(enseignat_matiere));
-////
-//                } else {    // disable all components and show add seance
-//                    JOptionPane.showMessageDialog(null, "existe vacance . . . " + list_previeux.size());
-//                    seance_service.saveAllNextSeancesSiExistVacance(list_previeux);
-//                    System.out.println("Seance is Null AFter inser database change to :" + seance_service.GetSeanceByTody(enseignat_matiere));
-//                    list_seance_about_all_matieres.add(seance_service.GetSeanceByTody(enseignat_matiere));
-//                }
-//            }
-//        }
+    public void checkSeancesAndSaveNewSeance() throws DatabaseConnectionException, SQLException {
+        java.util.List<Matiere> list_matiere = matiere_service.getListMatierByDay();// get all Matiere for today 
+        List list_previeux = null;
+        // for test si seance exit update true= en cours sinon creation Number total of seance in month  
+        Seance scence_obj = null;
+        this.list_seance_about_all_matieres.clear();
+        for (Matiere matiere : list_matiere) {
+            // get seance of matiere today 
+            scence_obj = seance_service.GetSeanceByTody(matiere);
+            if (scence_obj != null) {
+                // 
+                list_seance_about_all_matieres.add(scence_obj);
+                System.out.println("Object != null success add ");
+            } else {
+                list_previeux = seance_service.getListAllSeancePrevieuSemaine(matiere); // list [sceance(1....30) ]
+                System.out.println("Seance is Null AFter inser database change to :" + seance_service.GetSeanceByTody(matiere));
+                //- get last seance si diference <=7
+                JOptionPane.showMessageDialog(null, "null seance and matiere id ==" + matiere.getId());
+                JOptionPane.showMessageDialog(null, "existe vacance  : " + seance_service.ExistVacances(matiere));
+                if (!seance_service.ExistVacances(matiere)) {  //ExistVacances = false
+                    seance_service.saveAllNextSeances(list_previeux);// save next seances about Matiere
+                    list_seance_about_all_matieres.add(seance_service.GetSeanceByTody(matiere));
+
+                } else {    // disable all components and show add seance
+                    JOptionPane.showMessageDialog(null, "existe vacance . . . " + list_previeux.size());
+                    seance_service.saveAllNextSeancesSiExistVacance(list_previeux);
+                    System.out.println("Seance is Null AFter inser database change to :" + seance_service.GetSeanceByTody(matiere));
+                    list_seance_about_all_matieres.add(seance_service.GetSeanceByTody(matiere));
+                }
+            }
+        }
 
     }
 
@@ -385,7 +356,7 @@ public class home extends javax.swing.JFrame {
             for (CategoreNiveau categoreNiveau_obj : categoreNiveaus) {
                 comb_catego.addItem(categoreNiveau_obj.getCategore_niveau_ar());
             }
-          //  setInfoNiveauEtudeInCom(comb_catego, comb_niveau);
+            //  setInfoNiveauEtudeInCom(comb_catego, comb_niveau);
         }
     }
 
@@ -1361,7 +1332,6 @@ public class home extends javax.swing.JFrame {
         );
 
         pan_saise.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 20, 680, 60));
-        jPanel5.getAccessibleContext().setAccessibleName("");
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(204, 204, 204)), "تسجيل الدروس", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(153, 153, 153))); // NOI18N
@@ -2730,9 +2700,9 @@ public class home extends javax.swing.JFrame {
                 .addGap(80, 80, 80))
             .addGroup(pan_ensignLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pan_ensignLayout.createSequentialGroup()
-                    .addContainerGap(20, Short.MAX_VALUE)
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(pan_prof, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(20, Short.MAX_VALUE)))
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         pan_ensignLayout.setVerticalGroup(
             pan_ensignLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2839,7 +2809,7 @@ public class home extends javax.swing.JFrame {
     }//GEN-LAST:event_buttonRounder13ActionPerformed
 
     private void buttonRounder14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRounder14ActionPerformed
-     
+
     }//GEN-LAST:event_buttonRounder14ActionPerformed
 
     private void buttonRounder15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRounder15ActionPerformed
@@ -3235,8 +3205,8 @@ public class home extends javax.swing.JFrame {
         List<NiveauEtude> niveauEtudes = niveauEtudeDAOImpl.findAll();
         NiveauEtude niveau = null;
         for (NiveauEtude nivea_etud : niveauEtudes) {
-            if (nivea_etud.getCategore_niveau_id() == ctegore_niveau.getId() && 
-                    nivea_etud.getNiveauInitialAr().equals(com_niveau_1.getSelectedItem().toString())) {
+            if (nivea_etud.getCategore_niveau_id() == ctegore_niveau.getId()
+                    && nivea_etud.getNiveauInitialAr().equals(com_niveau_1.getSelectedItem().toString())) {
                 niveau = nivea_etud;
             }
         }
@@ -3251,28 +3221,29 @@ public class home extends javax.swing.JFrame {
                 }
                 byte[] imag = arrayOutputStream.toByteArray();
 
-                Etudiant etudiant = new Etudiant(0, matricule, codeBare, nom ,prenom, date_birth, adress, tel, email, renseignementPe, ctegore_niveau, niveau, imag);
-                if (etudiantDAOImpl.save(etudiant)>0){
-                    
+                Etudiant etudiant = new Etudiant(0, matricule, codeBare, nom, prenom, date_birth, adress, tel, email, renseignementPe, ctegore_niveau, niveau, imag);
+                if (etudiantDAOImpl.save(etudiant) > 0) {
+
                     Etudiant newEtudiant = etudiantDAOImpl.getlast();
-                imagefile = null;
-                // save inscription  //
-                JOptionPane.showMessageDialog(null, "  befor iscripton ");
-                Matiere matiere = matiereDAOImpl.findByName(com_matiere_1.getSelectedItem().toString(), "matiere_etd_ar");                
-                Inscription inscription = new Inscription(0, newEtudiant, matiere, LocalDate.now());
-                if(inscriptionDAOImpl.save(inscription)>0)
-                         message_validation.showMessage("تأكـيد", "تم التسجيل بنجاح");
-                JOptionPane.showMessageDialog(null, "  after iscripton ");
+                    imagefile = null;
+                    // save inscription  //
+                    JOptionPane.showMessageDialog(null, "  befor iscripton ");
+                    Matiere matiere = matiereDAOImpl.findByName(com_matiere_1.getSelectedItem().toString(), "matiere_etd_ar");
+                    Inscription inscription = new Inscription(0, newEtudiant, matiere, LocalDate.now());
+                    if (inscriptionDAOImpl.save(inscription) > 0) {
+                        message_validation.showMessage("تأكـيد", "تم التسجيل بنجاح");
+                    }
+                    JOptionPane.showMessageDialog(null, "  after iscripton ");
                     InitialiseFields();
-                }           
+                }
             } else {
                 Etudiant etudiant = new Etudiant(0, matricule, codeBare, prenom, nom, date_birth, adress, tel, email, renseignementPe, ctegore_niveau, niveau, null);
-                if (etudiantDAOImpl.save(etudiant)>0){
+                if (etudiantDAOImpl.save(etudiant) > 0) {
                     InitialiseFields();
-                  setInfoEtudiantInTab();
-                  JOptionPane.showMessageDialog(null, "تم التسجيل بنجاح");
-                  message_validation.showMessage("تأكـيد", "تم التسجيل بنجاح");
-                    
+                    setInfoEtudiantInTab();
+                    JOptionPane.showMessageDialog(null, "تم التسجيل بنجاح");
+                    message_validation.showMessage("تأكـيد", "تم التسجيل بنجاح");
+
                 }
             }
 
@@ -3288,42 +3259,42 @@ public class home extends javax.swing.JFrame {
     }//GEN-LAST:event_com_niveau_1ActionPerformed
 
     private void com_matiere_1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_com_matiere_1ActionPerformed
-          if (com_matiere_1.getSelectedIndex() != -1 && com_niveau_1.getSelectedIndex() != -1
-                && com_catego_niveau_1 .getSelectedIndex() != -1) {
-            
+        if (com_matiere_1.getSelectedIndex() != -1 && com_niveau_1.getSelectedIndex() != -1
+                && com_catego_niveau_1.getSelectedIndex() != -1) {
+
             Matiere matiere = matiereDAOImpl.getMatiereNiveauOfCategory(com_matiere_1.getSelectedItem().toString(),
                     com_niveau_1.getSelectedItem().toString(), com_catego_niveau_1.getSelectedItem().toString());
 
             lab_prix_matiere_1.setText(matiere.getPrix() + "");
-            
-            setInfoEnseignantByMatiere();            
+
+            setInfoEnseignantByMatiere();
         } else {
             lab_prix_matiere_1.setText("0.00");
             com_prof_1.removeAllItems();
-           com_group1.removeAllItems();
+            com_group1.removeAllItems();
         }
-      
+
     }//GEN-LAST:event_com_matiere_1ActionPerformed
 
     private void com_prof_1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_com_prof_1ActionPerformed
         if (com_matiere_1.getSelectedIndex() != -1 && com_niveau_1.getSelectedIndex() != -1
-            && com_catego_niveau_1.getSelectedIndex() != -1 && com_prof_1.getSelectedIndex()!=-1) {
+                && com_catego_niveau_1.getSelectedIndex() != -1 && com_prof_1.getSelectedIndex() != -1) {
             try {
                 Matiere matiere = matiereDAOImpl.getMatiereNiveauOfCategory(com_matiere_1.getSelectedItem().toString(),
-                    com_niveau_1.getSelectedItem().toString(), com_catego_niveau_1.getSelectedItem().toString());
-                String FullName= (String) com_prof_1.getSelectedItem();
-                String Nom=FullName.split("-")[0];
-                String Prenom=FullName.split("-")[1];
+                        com_niveau_1.getSelectedItem().toString(), com_catego_niveau_1.getSelectedItem().toString());
+                String FullName = (String) com_prof_1.getSelectedItem();
+                String Nom = FullName.split("-")[0];
+                String Prenom = FullName.split("-")[1];
 
-                System.out.println(Nom +"  -- "+Prenom );
+                System.out.println(Nom + "  -- " + Prenom);
 
                 Enseignant enseignat = enseignantDAOImpl.findByFullName(Nom, Prenom);
 
                 System.out.println(enseignat);
 
-                if (enseignat!=null){
-                    List<Groupe> list_group_etude=group_dao_imp.findGroupsByMatiereAndEnseignat(new EnseignantMatiere(0, enseignat, matiere, LocalDate.MAX,0,0),CheckAllGroups.isSelected());
-                    System.out.println("List Groups :"+list_group_etude);
+                if (enseignat != null) {
+                    List<Groupe> list_group_etude = group_dao_imp.findGroupsByMatiereAndEnseignat(new EnseignantMatiere(0, enseignat, matiere, LocalDate.MAX, 0, 0), CheckAllGroups.isSelected());
+                    System.out.println("List Groups :" + list_group_etude);
 
                     com_group1.removeAllItems();
 
@@ -3342,46 +3313,46 @@ public class home extends javax.swing.JFrame {
     }//GEN-LAST:event_buttonRounder9ActionPerformed
 
     private void buttonRounder40ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRounder40ActionPerformed
-        if(tab_prof.getSelectedRow()!=-1){
-        int row =tab_prof.getSelectedRow();
-        int id_enseig= (int)tab_prof.getValueAt(row, 10);
-        Enseignant enseignant = enseignantDAOImpl.findById(id_enseig);
-        new ModifyEnseignant(this, true, enseignant).setVisible(true);
+        if (tab_prof.getSelectedRow() != -1) {
+            int row = tab_prof.getSelectedRow();
+            int id_enseig = (int) tab_prof.getValueAt(row, 10);
+            Enseignant enseignant = enseignantDAOImpl.findById(id_enseig);
+            new ModifyEnseignant(this, true, enseignant).setVisible(true);
         }
     }//GEN-LAST:event_buttonRounder40ActionPerformed
 
     private void buttonRounder6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRounder6ActionPerformed
- if(tab_prof.getSelectedRow()!=-1){
-        int row =tab_prof.getSelectedRow();
-        int id_enseig= (int)tab_prof.getValueAt(row, 10);
-        Enseignant enseignant = enseignantDAOImpl.findById(id_enseig);
-        new ViewEnseignant(this, true, enseignant).setVisible(true);
+        if (tab_prof.getSelectedRow() != -1) {
+            int row = tab_prof.getSelectedRow();
+            int id_enseig = (int) tab_prof.getValueAt(row, 10);
+            Enseignant enseignant = enseignantDAOImpl.findById(id_enseig);
+            new ViewEnseignant(this, true, enseignant).setVisible(true);
         }
     }//GEN-LAST:event_buttonRounder6ActionPerformed
 
     private void buttonRounder41ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRounder41ActionPerformed
- if (tab_prof.getSelectedRow() != -1) {
+        if (tab_prof.getSelectedRow() != -1) {
             int id = (int) tab_prof.getValueAt(tab_prof.getSelectedRow(), 10);
-            Enseignant enseignant= enseignantDAOImpl.findById(id);
+            Enseignant enseignant = enseignantDAOImpl.findById(id);
             List<Matiere> matieres;
-     try {
-         matieres = enseignantMatiereDAOImpl.findMatiereByEnseignantId(enseignant);
-          MessageDialog messageDialog = new MessageDialog(this);
-            messageDialog.showMessage("عملية حذف  طالب", "هل أنت متأكد من عملية حذف الطالب ؟");
-            if (messageDialog.getMessageType() == MessageDialog.MessageType.OK) {
-                if (!matieres.isEmpty()) {
-                    message_validation.showMessage("تنبيه", "لا يمكنك  الحذف");
-                } else {
-                    if (etudiantDAOImpl.delete(enseignant.getId()) > 0) {
-                        setInfoEnsignInTab();
-                        message_validation.showMessage("تأكيد", "تم الحذف  بنجاح");
+            try {
+                matieres = enseignantMatiereDAOImpl.findMatiereByEnseignantId(enseignant);
+                MessageDialog messageDialog = new MessageDialog(this);
+                messageDialog.showMessage("عملية حذف  طالب", "هل أنت متأكد من عملية حذف الطالب ؟");
+                if (messageDialog.getMessageType() == MessageDialog.MessageType.OK) {
+                    if (!matieres.isEmpty()) {
+                        message_validation.showMessage("تنبيه", "لا يمكنك  الحذف");
+                    } else {
+                        if (etudiantDAOImpl.delete(enseignant.getId()) > 0) {
+                            setInfoEnsignInTab();
+                            message_validation.showMessage("تأكيد", "تم الحذف  بنجاح");
+                        }
                     }
                 }
+            } catch (SQLException ex) {
+                Logger.getLogger(home.class.getName()).log(Level.SEVERE, null, ex);
             }
-     } catch (SQLException ex) {
-         Logger.getLogger(home.class.getName()).log(Level.SEVERE, null, ex);
-     }
-           
+
         }
     }//GEN-LAST:event_buttonRounder41ActionPerformed
 
@@ -3506,6 +3477,8 @@ public class home extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(home.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
@@ -3751,57 +3724,56 @@ public class home extends javax.swing.JFrame {
         lab_imag_1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/diplome (4).png")));
         setForm(pan_catego, pan_cour_1);
     }
-    
-     public void setInfoMatiereInCom(JComboBox com_catego_niv, JComboBox com_niv, JComboBox com_matier) {      
-        if (com_catego_niv.getSelectedIndex()!=-1 && com_niv.getSelectedIndex()!= -1){        
-        com_matier.removeAllItems();
-        CategoreNiveau category = categoreNiveauDAOImpl.findByName(com_catego_niv.getSelectedItem().toString(), "categore_niveau_ar");
-        NiveauEtude niveauEtude = new NiveauEtude();// = niveauEtudeDAOImpl.findByName(comb_niveau.getSelectedItem().toString(), "niveau_initial_ar");
-        List<NiveauEtude> niveauEtudes = niveauEtudeDAOImpl.findAll();
-       
-        if (com_niv.getSelectedIndex() != -1) {
-            for (NiveauEtude obj : niveauEtudes) {
-                if (obj.getCategore_niveau_id() == category.getId()
-                        && obj.getNiveauInitialAr().equals(com_niv.getSelectedItem().toString())) {
-                    niveauEtude = obj;
-                }
-            }
-            List<Matiere> matieres = matiereDAOImpl.findAll();
-            for (Matiere matiere_obj : matieres) {
-                if (matiere_obj.getNiveau().getId() == niveauEtude.getId()
-                        && matiere_obj.getCategoreNiveau().getId() == category.getId()) {
-                    com_matier.addItem(matiere_obj.getMatiereEtdAr());
 
-                }
-            }
+    public void setInfoMatiereInCom(JComboBox com_catego_niv, JComboBox com_niv, JComboBox com_matier) {
+        if (com_catego_niv.getSelectedIndex() != -1 && com_niv.getSelectedIndex() != -1) {
+            com_matier.removeAllItems();
+            CategoreNiveau category = categoreNiveauDAOImpl.findByName(com_catego_niv.getSelectedItem().toString(), "categore_niveau_ar");
+            NiveauEtude niveauEtude = new NiveauEtude();// = niveauEtudeDAOImpl.findByName(comb_niveau.getSelectedItem().toString(), "niveau_initial_ar");
+            List<NiveauEtude> niveauEtudes = niveauEtudeDAOImpl.findAll();
 
-             // setInfoEnsignInCom();
-        }
+            if (com_niv.getSelectedIndex() != -1) {
+                for (NiveauEtude obj : niveauEtudes) {
+                    if (obj.getCategore_niveau_id() == category.getId()
+                            && obj.getNiveauInitialAr().equals(com_niv.getSelectedItem().toString())) {
+                        niveauEtude = obj;
+                    }
+                }
+                List<Matiere> matieres = matiereDAOImpl.findAll();
+                for (Matiere matiere_obj : matieres) {
+                    if (matiere_obj.getNiveau().getId() == niveauEtude.getId()
+                            && matiere_obj.getCategoreNiveau().getId() == category.getId()) {
+                        com_matier.addItem(matiere_obj.getMatiereEtdAr());
+
+                    }
+                }
+
+                // setInfoEnsignInCom();
+            }
         }
     }
- public void setInfoEnseignantByMatiere(){
-       
+
+    public void setInfoEnseignantByMatiere() {
+
         try {
             Matiere matiere = matiereDAOImpl.getMatiereNiveauOfCategory(com_matiere_1.getSelectedItem().toString(),
                     com_niveau_1.getSelectedItem().toString(), com_catego_niveau_1.getSelectedItem().toString());
-            
-                
+
             System.out.println(matiere);
-            
-            List<Enseignant> list_enseignat= enseignantMatiereDAOImpl.findEnseignantByMatiereId(matiere);
-            
-            System.out.println("list enseignat:"+list_enseignat);          
+
+            List<Enseignant> list_enseignat = enseignantMatiereDAOImpl.findEnseignantByMatiereId(matiere);
+
+            System.out.println("list enseignat:" + list_enseignat);
             com_prof_1.removeAllItems();
 
             for (Enseignant enseignat : list_enseignat) {
-                com_prof_1.addItem(enseignat.getNomAr()+"-"+enseignat.getPrenomAr());
+                com_prof_1.addItem(enseignat.getNomAr() + "-" + enseignat.getPrenomAr());
             }
-            
+
         } catch (SQLException ex) {
             ex.printStackTrace();
             Logger.getLogger(AddEtudiantForm.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-    
+
     }
 }

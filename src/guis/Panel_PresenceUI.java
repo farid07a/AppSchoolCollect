@@ -606,7 +606,7 @@ public class Panel_PresenceUI extends javax.swing.JPanel {
                     lab_matiere_presence.setText(matier.getMatiereEtdAr());
                     Seance seance = getSeanceFromTab(matier);
                     if (!PresenceService.checkPresebceOfEtudiantToday(etudiant, seance)) {
-                        Presence presence = new Presence(0, etudiant, matier, seance, LocalDate.now());
+                        Presence presence = new Presence(0, etudiant, matier, seance, LocalDate.now(),false);
                         if (presenceDAOImpl.save(presence) > 0) {
                         JOptionPane.showMessageDialog(null, "save presence ");
                       

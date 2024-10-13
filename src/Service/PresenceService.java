@@ -5,6 +5,7 @@
 package Service;
 
 import domaine.Etudiant;
+import domaine.Inscription;
 import domaine.Presence;
 import domaine.Seance;
 import java.time.LocalDate;
@@ -34,13 +35,36 @@ public class PresenceService {
         return presenceOfTOday;
     }
 
-    public boolean checkPresebceOfEtudiantToday(Etudiant etudiant, Seance seance) throws DatabaseConnectionException {
-        Presence presence = new PresenceDAOImpl(ConnectionDB.getConnection()).getPresenceOFetudiantInSeance(etudiant, seance);
-         if(presence!=null){
-         return true;
-         }else{
-         return false;
-         }
+//    public Presence checkPreseceOfEtudiantToday(Etudiant etudiant, Seance seance) throws DatabaseConnectionException {
+//        Presence presence = new PresenceDAOImpl(ConnectionDB.getConnection()).getPresenceOFetudiantInSeance(etudiant, seance);
+//        
+//         return presence;
+//         
+//    }
+    
+     public  List<Presence> getAllPrsenceOfEtdiantWithSeanceOfTOday(List<Seance> seances) throws DatabaseConnectionException {
+        List<Inscription> inscriptions = new InscriptionService().getAllInscriptionOFToday(seances);
+        List<Presence> presences = new ArrayList<>();
+        for (Inscription inscription : inscriptions) {
+            Seance seance_presence = new Seance();
+            for (Seance seance : seances) {
+                if (seance.getMatiere().getId() == inscription.getMatiere().getId()) {
+                    seance_presence = seance;
+                }
+            }
+
+           Presence presence = new Presence(0, inscription.getEtudiant(), inscription.getMatiere(), seance_presence, LocalDate.now(),false);
+           presences.add(presence);       
+        }
+         System.out.println("   presences : "+presences);
+        Presence lastPresence= new PresenceDAOImpl(ConnectionDB.getConnection()).getlast();
+        if(lastPresence == null  || !lastPresence.getDatePresence().isEqual(LocalDate.now()) ){
+            for(Presence presenceObj :presences){
+            new PresenceDAOImpl(ConnectionDB.getConnection()).save(presenceObj);
+            }
+        }
+        return presences;
     }
+
 
 }
