@@ -8,7 +8,7 @@ package main.java.com.school.impl;
 import domaine.Etudiant;
 import domaine.Groupe;
 import domaine.Inscription;
-import domaine.MatiereEnseignant;
+import domaine.EnseignantMatiere;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -64,7 +64,7 @@ public class GroupeImpl extends AbstractDAO<Groupe> implements GroupeDAO {
     }
 
     
-    public List<Groupe> findGroupsByMatiereAndEnseignat(MatiereEnseignant matiere_enseignat,boolean all ) {
+    public List<Groupe> findGroupsByMatiereAndEnseignat(EnseignantMatiere matiere_enseignat,boolean all ) {
         List<Groupe> list_groups = new ArrayList<>();
 
         try {

@@ -38,7 +38,7 @@ import javax.swing.table.JTableHeader;
 import main.java.com.school.impl.CategoreNiveauDAOImpl;
 import main.java.com.school.impl.EnseignantDAOImpl;
 import main.java.com.school.impl.MatiereDAOImpl;
-import main.java.com.school.impl.MatiereEnseignantDAOImpl;
+import main.java.com.school.impl.EnseignantMatiereDAOImpl;
 import main.java.com.school.impl.NiveauEtudeDAOImpl;
 import main.java.com.school.impl.SeanceDAOImpl;
 import main.java.com.school.model.config.ConnectionDB;
@@ -58,7 +58,7 @@ public class AddSeanceForm extends javax.swing.JDialog {
     NiveauEtudeDAOImpl niveauEtudeDAOImpl;
     MatiereDAOImpl matiereDAOImpl;
     EnseignantDAOImpl enseignantDAOImpl;
-    MatiereEnseignantDAOImpl MatiereEnseignat_dao_impl;
+    EnseignantMatiereDAOImpl MatiereEnseignat_dao_impl;
     int nomber_seance = 0;
 
     public AddSeanceForm(java.awt.Frame parent, boolean modal) {
@@ -75,7 +75,7 @@ public class AddSeanceForm extends javax.swing.JDialog {
         niveauEtudeDAOImpl = new NiveauEtudeDAOImpl(connection);
         matiereDAOImpl = new MatiereDAOImpl(connection);
         enseignantDAOImpl = new EnseignantDAOImpl(connection);
-        MatiereEnseignat_dao_impl = new MatiereEnseignantDAOImpl(connection);
+        MatiereEnseignat_dao_impl = new EnseignantMatiereDAOImpl(connection);
         setLocationRelativeTo(this);
 
         PrepareUI();

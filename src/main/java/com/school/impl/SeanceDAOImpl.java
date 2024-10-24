@@ -5,6 +5,8 @@
  */
 package main.java.com.school.impl;
 
+import domaine.Enseignant;
+import domaine.EnseignantMatiere;
 import domaine.Matiere;
 import domaine.NiveauEtude;
 import domaine.Seance;
@@ -127,7 +129,7 @@ public class SeanceDAOImpl extends AbstractDAO<Seance> {
         return seances;
     }
          
-     public List<Seance> getListPrevieuxSceanceWithMonthByMatiereY(Matiere matiere){
+     public List<Seance> getListPrevieuxSceanceWithMonthByMatiere(Matiere matiere){
          
          List<Seance> seances = new ArrayList<>();
         try {
@@ -146,7 +148,30 @@ public class SeanceDAOImpl extends AbstractDAO<Seance> {
         return seances;
      
      }
-     public List<Seance> getListPrevieuxSceanceWithSemaineByMatiere(Matiere matiere){
+     
+     public List<Seance> getListPrevieuxSceanceWithSemaineByEnseignantMatiere(EnseignantMatiere enseignant_matiere){
+         
+         List<Seance> seances = new ArrayList<>();
+        try {
+            String query = " SELECT TOP "+enseignant_matiere.getNum_sceance_semaine()+  " * FROM "+getTableName()+"  WHERE id_matiere =? AND id_enseignant=? ORDER BY id DESC "; //delet id matiere 
+            
+           PreparedStatement statement = connection.prepareStatement(query);
+           statement.setInt(1,enseignant_matiere.getMatiere().getId()); 
+           statement.setInt(2,enseignant_matiere.getEnseignant().getId()); 
+           ResultSet resultSet = statement.executeQuery();
+            
+            while (resultSet.next()) {
+                seances.add(mapResultSetToEntity(resultSet));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return seances;
+     
+     }
+     
+     
+     public List<Seance> getListPrevieuxSceanceWithSemaineByEnseignant(Matiere matiere){
          
          List<Seance> seances = new ArrayList<>();
         try {
@@ -174,9 +199,31 @@ public class SeanceDAOImpl extends AbstractDAO<Seance> {
             
            PreparedStatement statement = connection.prepareStatement(query);
            statement.setInt(1,matier.getId()); 
+
            ResultSet resultSet = statement.executeQuery();    
             if (resultSet.next()) {
                seance= mapResultSetToEntity(resultSet);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+      return seance;
+     }
+     
+     public Seance getLastSeanceOfEnseignant_Matiere(EnseignantMatiere enseignant_matiere ){
+     Seance seance = null ;
+     
+      try {
+          System.out.println("I ame In last SeanceOfMatiere enseignant_matiere :"+enseignant_matiere);
+            String query ="SELECT TOP 1 * FROM " + getTableName() + " WHERE id_matiere =? AND id_enseignant = ? ORDER BY id DESC ";
+            
+           PreparedStatement statement = connection.prepareStatement(query);
+           statement.setInt(1,enseignant_matiere.getMatiere().getId()); 
+           statement.setInt(2, enseignant_matiere.getEnseignant().getId());
+           ResultSet resultSet = statement.executeQuery();    
+            if (resultSet.next()) {
+               seance= mapResultSetToEntity(resultSet);
+                System.out.println("Seance After Mapping in getLastSeanceOfEnseignant_Matiere:"+seance);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -188,23 +235,25 @@ public class SeanceDAOImpl extends AbstractDAO<Seance> {
          
          public static void main(String[] args) {
    
-//        
-//        try {
-//            Connection conx=ConnectionDB.getConnection();
-//            Matiere mat=new MatiereDAOImpl(conx).findById(2);
-//            System.out.println(mat);
-//            System.out.println("--------------");
-//            List<Seance>  lst=  new SeanceDAOImpl(conx).getListPrevieuxSceanceWithMonthByMatiere(mat);
-//            System.out.println(lst);
-//            
+             
+        
+        try {
+            Connection conx=ConnectionDB.getConnection();
+            
+            EnseignantMatiere mat=new EnseignantMatiereDAOImpl(conx).findById(1);
+            System.out.println(mat);
+            System.out.println("--------------");
+            Seance  seance=  new SeanceDAOImpl(conx).getLastSeanceOfEnseignant_Matiere(mat);
+            System.out.println(seance);
+            
 //            for (Seance seance : lst) {
 //                System.out.println(seance);
 //            }
-//            
-//        } catch (DatabaseConnectionException ex) {
-//            Logger.getLogger(SeanceDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//             
+            
+        } catch (DatabaseConnectionException ex) {
+            Logger.getLogger(SeanceDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+             
     }
          
     

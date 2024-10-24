@@ -10,7 +10,7 @@ import domaine.Groupe;
 import domaine.GroupeMatiere;
 import domaine.Inscription;
 import domaine.Matiere;
-import domaine.MatiereEnseignant;
+import domaine.EnseignantMatiere;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

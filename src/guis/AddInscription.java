@@ -11,7 +11,7 @@ import domaine.Etudiant;
 import domaine.Groupe;
 import domaine.Inscription;
 import domaine.Matiere;
-import domaine.MatiereEnseignant;
+import domaine.EnseignantMatiere;
 import domaine.NiveauEtude;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -28,7 +28,7 @@ import main.java.com.school.impl.GroupeImpl;
 import main.java.com.school.impl.GroupeMatiereDAOImpl;
 import main.java.com.school.impl.InscriptionDAOImpl;
 import main.java.com.school.impl.MatiereDAOImpl;
-import main.java.com.school.impl.MatiereEnseignantDAOImpl;
+import main.java.com.school.impl.EnseignantMatiereDAOImpl;
 import main.java.com.school.impl.NiveauEtudeDAOImpl;
 import main.java.com.school.model.config.ConnectionDB;
 import main.java.com.school.model.config.DatabaseConnectionException;
@@ -46,7 +46,7 @@ public class AddInscription extends javax.swing.JDialog {
     Etudiant etudiant;
     EtudiantDAOImpl etudiantDAOImpl;
     MatiereDAOImpl matiereDAOImpl;
-    MatiereEnseignantDAOImpl matiereEnseignantDAOImpl;
+    EnseignantMatiereDAOImpl matiereEnseignantDAOImpl;
     EnseignantDAOImpl enseignantDAOImpl;
     InscriptionDAOImpl inscriptionDAOImpl;
     GroupeImpl groupeImpl;
@@ -55,7 +55,8 @@ public class AddInscription extends javax.swing.JDialog {
 
     public AddInscription(java.awt.Frame parent, boolean modal, Etudiant etudiant) {
         super(parent, modal);
-
+        initComponents();
+        
         this.home = (home) parent;
         this.etudiant = etudiant;
         try {
@@ -66,13 +67,12 @@ public class AddInscription extends javax.swing.JDialog {
         categoreNiveauDAOImpl = new CategoreNiveauDAOImpl(connection);
         niveauEtudeDAOImpl = new NiveauEtudeDAOImpl(connection);
         etudiantDAOImpl = new EtudiantDAOImpl(connection);
-        matiereEnseignantDAOImpl = new MatiereEnseignantDAOImpl(connection);
+        matiereEnseignantDAOImpl = new EnseignantMatiereDAOImpl(connection);
         inscriptionDAOImpl = new InscriptionDAOImpl(connection);
         matiereDAOImpl = new MatiereDAOImpl(connection);
         message_validation = new ValidationMessageDialog(this, home);
         enseignantDAOImpl = new EnseignantDAOImpl(connection);
         groupeImpl = new GroupeImpl(connection);
-        initComponents();
 
         lab_codbar.setText(etudiant.getCodeBare());
         lab_mtr.setText(etudiant.getMatricule());
@@ -80,7 +80,7 @@ public class AddInscription extends javax.swing.JDialog {
         lab_prenom_mod.setText(etudiant.getPrenom());
         lab_catego_niv.setText(etudiant.getCtegore_niveau().getCategore_niveau_ar());
         lab_niv.setText(etudiant.getNiveau().getNiveauInitialAr());
-        JOptionPane.showMessageDialog(null, etudiant.getCtegore_niveau().getId() + "*****" + etudiant.getNiveau().getId());
+        //JOptionPane.showMessageDialog(null, etudiant.getCtegore_niveau().getId() + "*****" + etudiant.getNiveau().getId());
         getMatieres_Niveau(etudiant.getCtegore_niveau(), etudiant.getNiveau());
     
     
@@ -88,6 +88,8 @@ public class AddInscription extends javax.swing.JDialog {
 
     public void getMatieres_Niveau(CategoreNiveau categoreNiveau, NiveauEtude niveauEtude) {
         List<Matiere> matieres = matiereDAOImpl.getMatieresNiveauOfCategory(categoreNiveau, niveauEtude);
+        
+        System.out.println("List Matiers :"+matieres);
         for (Matiere matiere : matieres) {
            JOptionPane.showMessageDialog(null, "add matiere niveau"+matiere.getId());
             matiere_comb.addItem(matiere.getMatiereEtdAr());
@@ -314,7 +316,7 @@ JOptionPane.showMessageDialog(null, "nULL");
                 Enseignant enseignat = enseignantDAOImpl.findByFullName(Nom, Prenom);
 
                 if (enseignat != null) {
-                    List<Groupe> list_group_etude = groupeImpl.findGroupsByMatiereAndEnseignat(new MatiereEnseignant(0, enseignat, matiere, LocalDate.now()), CheckAllGroups.isSelected());
+                    List<Groupe> list_group_etude = groupeImpl.findGroupsByMatiereAndEnseignat(new EnseignantMatiere(0, enseignat, matiere, LocalDate.now()), CheckAllGroups.isSelected());
 
                     ComboGroup.removeAllItems();
                     for (Groupe groupe : list_group_etude) {

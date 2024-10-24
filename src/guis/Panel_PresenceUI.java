@@ -6,9 +6,11 @@
 package guis;
 
 import DialogFram.ValidationMessageDialog;
+import Service.EnseignantMatiereService;
 import Service.MatiereService;
 import Service.PresenceService;
 import Service.SeanceService;
+import domaine.EnseignantMatiere;
 import domaine.Etudiant;
 import domaine.Inscription;
 import domaine.Matiere;
@@ -20,8 +22,12 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -37,6 +43,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import main.java.com.school.impl.EnseignantMatiereDAOImpl;
 import main.java.com.school.impl.EtudiantDAOImpl;
 import main.java.com.school.impl.InscriptionDAOImpl;
 import main.java.com.school.impl.PresenceDAOImpl;
@@ -65,7 +72,8 @@ public class Panel_PresenceUI extends javax.swing.JPanel {
     SeanceDAOImpl seanceDAOImpl;
     PresenceDAOImpl presenceDAOImpl;
     PresenceService PresenceService = new PresenceService();
-
+    EnseignantMatiereService enseignant_matiere_service =new EnseignantMatiereService();
+    
     public Panel_PresenceUI() {
         initComponents();
 
@@ -85,7 +93,7 @@ public class Panel_PresenceUI extends javax.swing.JPanel {
        table_seance_to_day.setRowHeight(35);
         SearchTable(tab_presence, searchText6);
         try {
-            prepareUI();
+            prepareUIPresence();
         } catch (SQLException ex) {
             Logger.getLogger(Panel_PresenceUI.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -95,50 +103,124 @@ public class Panel_PresenceUI extends javax.swing.JPanel {
         
     }
 
-    public void prepareUI() throws SQLException {
+    public void prepareUIPresence() throws SQLException {
+
         try {
-            checkSeancesAndSaveNewSeance();
+            CheckSeanceAndMatiereANDEnseignant();
             setSeanceInTable();
-            // this.list_seance_about_all_matieres.clear();
+            this.list_seance_about_all_matieres.clear();
         } catch (DatabaseConnectionException ex) {
             Logger.getLogger(Panel_PresenceUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
-    public void checkSeancesAndSaveNewSeance() throws DatabaseConnectionException, SQLException {
-        java.util.List<Matiere> list_matiere = matiere_service.getListMatierByDay();// get all Matiere for today 
+    
+    public void CheckSeanceAndMatiereANDEnseignant() throws DatabaseConnectionException, SQLException{
+        //java.util.List<EnseignantMatiere> list_enseignant_matiere = enseignant_matiere_service.getListEnseignantAndMatiereEtudieeByDay();// get all Matiere for today 
+        java.util.List<EnseignantMatiere> list_enseignant_matiere = Collections.emptyList();
+        LocalDate today = LocalDate.now();
+        DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("EEEE",new Locale("ar"));
+        String dayName = today.format(dayFormatter);
+       list_enseignant_matiere= new EnseignantMatiereDAOImpl(ConnectionDB.getConnection()).findEnseignantMatiereByDate(dayName);
+        
+        System.out.println("List EnsMatiere:"+list_enseignant_matiere );
         List list_previeux = null;
         // for test si seance exit update true= en cours sinon creation Number total of seance in month  
         Seance scence_obj = null;
         this.list_seance_about_all_matieres.clear();
-        for (Matiere matiere : list_matiere) {
+        
+        for (EnseignantMatiere enseignat_matiere : list_enseignant_matiere) {
+            
+            System.out.println("enseignat_matiere : "+enseignat_matiere);
             // get seance of matiere today 
-            scence_obj = seance_service.GetSeanceByTody(matiere);
+            scence_obj = seance_service.GetSeanceByTody(enseignat_matiere);
 
             if (scence_obj != null) {
                 // 
                 list_seance_about_all_matieres.add(scence_obj);
                 System.out.println("Object != null success add ");
             } else {
-                list_previeux = seance_service.getListAllSeancePrevieuSemaine(matiere); // list [sceance(1....30) ]
-                System.out.println("Seance is Null AFter inser database change to :" + seance_service.GetSeanceByTody(matiere));
+                
+                list_previeux = seance_service.getListAllSeancePrevieuSemaineByEnse_Matiere(enseignat_matiere); // list [sceance(1....30) ] or empty when n'exist pas seance id mat and id ense
+                
+                System.out.println(" List getListAllSeancePrevieuSemaineByEnse_Matiere :"+list_previeux);
+                System.out.println("Seance is Null AFter inser database change to :" + seance_service.GetSeanceByTody(enseignat_matiere));
                 //- get last seance si diference <=7
-                JOptionPane.showMessageDialog(null, "null seance and matiere id ==" + matiere.getId());
-                JOptionPane.showMessageDialog(null, "existe vacance  : " + seance_service.ExistVacances(matiere));
-                if (!seance_service.ExistVacances(matiere)) {  //ExistVacances = false
+                JOptionPane.showMessageDialog(null, "null seance and matiere id ==" + enseignat_matiere.getId());
+                JOptionPane.showMessageDialog(null, "Last Seance  : " + seance_service.ExistVacances(enseignat_matiere));
+                
+                System.out.println("enseignat_matiere before test Vacance : "+enseignat_matiere);
+                
+                Seance LastSeanceTemp = seance_service.ExistVacances(enseignat_matiere);
+                System.out.println("Senace Temp:"+LastSeanceTemp);
+                
+                if (LastSeanceTemp==null){
+                    
+                    continue;
+                }else   System.out.println("Senace Temp Not Null:"+LastSeanceTemp); 
+                
+                int nb_day = (int) ChronoUnit.DAYS.between(LastSeanceTemp.getDate_sceance(), LocalDate.now());
+//        if (nb_day > 7) {
+//            return true;
+//        } else {
+//            return false;
+//        }
+                
+                System.out.println("Nbr_Day:"+nb_day);
+                
+                if (nb_day < 7 ) {  //ExistVacances = false
                     seance_service.saveAllNextSeances(list_previeux);// save next seances about Matiere
-                    list_seance_about_all_matieres.add(seance_service.GetSeanceByTody(matiere));
-
+                    Seance lastSeanceTemp1=seance_service.GetSeanceByTody(enseignat_matiere);
+                    list_seance_about_all_matieres.add(lastSeanceTemp1);
+                    System.out.println("Successful add LatSeanceTemp1 When No Vacance:"+lastSeanceTemp1);
+//
                 } else {    // disable all components and show add seance
                     JOptionPane.showMessageDialog(null, "existe vacance . . . " + list_previeux.size());
                     seance_service.saveAllNextSeancesSiExistVacance(list_previeux);
-                    System.out.println("Seance is Null AFter inser database change to :" + seance_service.GetSeanceByTody(matiere));
-                    list_seance_about_all_matieres.add(seance_service.GetSeanceByTody(matiere));
+                    System.out.println("Seance is Null AFter inser database change to :" + seance_service.GetSeanceByTody(enseignat_matiere));
+                    Seance lastSeanceTemp1=seance_service.GetSeanceByTody(enseignat_matiere);
+                    list_seance_about_all_matieres.add(lastSeanceTemp1);
+                    System.out.println("Successful add LatSeanceTemp1 When Vacance exist :"+lastSeanceTemp1);
                 }
             }
         }
-
+        
+        System.out.println("List Sea");
     }
+
+//    public void checkSeancesAndSaveNewSeance() throws DatabaseConnectionException, SQLException {
+//        java.util.List<Matiere> list_matiere = matiere_service.getListMatierByDay();// get all Matiere for today 
+//        List list_previeux = null;
+//        // for test si seance exit update true= en cours sinon creation Number total of seance in month  
+//        Seance scence_obj = null;
+//        this.list_seance_about_all_matieres.clear();
+//        for (Matiere matiere : list_matiere) {
+//            // get seance of matiere today 
+//            scence_obj = seance_service.GetSeanceByTody(matiere);
+//
+//            if (scence_obj != null) {
+//                // 
+//                list_seance_about_all_matieres.add(scence_obj);
+//                System.out.println("Object != null success add ");
+//            } else {
+//                list_previeux = seance_service.getListAllSeancePrevieuSemaine(matiere); // list [sceance(1....30) ]
+//                System.out.println("Seance is Null AFter inser database change to :" + seance_service.GetSeanceByTody(matiere));
+//                //- get last seance si diference <=7
+//                JOptionPane.showMessageDialog(null, "null seance and matiere id ==" + matiere.getId());
+//                JOptionPane.showMessageDialog(null, "existe vacance  : " + seance_service.ExistVacances(matiere));
+//                if (!seance_service.ExistVacances(matiere)) {  //ExistVacances = false
+//                    seance_service.saveAllNextSeances(list_previeux);// save next seances about Matiere
+//                    list_seance_about_all_matieres.add(seance_service.GetSeanceByTody(matiere));
+//
+//                } else {    // disable all components and show add seance
+//                    JOptionPane.showMessageDialog(null, "existe vacance . . . " + list_previeux.size());
+//                    seance_service.saveAllNextSeancesSiExistVacance(list_previeux);
+//                    System.out.println("Seance is Null AFter inser database change to :" + seance_service.GetSeanceByTody(matiere));
+//                    list_seance_about_all_matieres.add(seance_service.GetSeanceByTody(matiere));
+//                }
+//            }
+//        }
+//
+//    }
 
     public void setSeanceInTable() {
         DefaultTableModel df = (DefaultTableModel) pan1.getTtable_seance_to_day().getModel();

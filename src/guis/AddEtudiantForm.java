@@ -13,7 +13,7 @@ import domaine.Groupe;
 import domaine.GroupeMatiere;
 import domaine.Inscription;
 import domaine.Matiere;
-import domaine.MatiereEnseignant;
+import domaine.EnseignantMatiere;
 import domaine.NiveauEtude;
 import domaine.Payement;
 import domaine.Seance_Matiere;
@@ -51,7 +51,7 @@ import main.java.com.school.impl.GroupeImpl;
 import main.java.com.school.impl.GroupeMatiereDAOImpl;
 import main.java.com.school.impl.InscriptionDAOImpl;
 import main.java.com.school.impl.MatiereDAOImpl;
-import main.java.com.school.impl.MatiereEnseignantDAOImpl;
+import main.java.com.school.impl.EnseignantMatiereDAOImpl;
 import main.java.com.school.impl.NiveauEtudeDAOImpl;
 import main.java.com.school.impl.PayementDAOImpl;
 import main.java.com.school.impl.SeanceDAOImpl;
@@ -78,7 +78,7 @@ public class AddEtudiantForm extends javax.swing.JDialog {
     EtudiantDAOImpl etudiantDAOImpl;
     CategoreNiveauDAOImpl categoreNiveauDAOImpl;
     GroupeMatiereDAOImpl GroupeMatiere_imp_dao;
-    MatiereEnseignantDAOImpl MatiereEnseignat_dao_impl;
+    EnseignantMatiereDAOImpl MatiereEnseignat_dao_impl;
     NiveauEtudeDAOImpl niveauEtudeDAOImpl;
     MatiereDAOImpl matiereDAOImpl;
     EnseignantDAOImpl enseignantDAOImpl;
@@ -105,7 +105,7 @@ public class AddEtudiantForm extends javax.swing.JDialog {
         seanceMatiereDAOImpl = new SeanceMatiereDAOImpl(connection);
         payementDAOImpl = new PayementDAOImpl(connection);
         inscriptionDAOImpl= new InscriptionDAOImpl(connection);
-        MatiereEnseignat_dao_impl=new MatiereEnseignantDAOImpl(connection);
+        MatiereEnseignat_dao_impl=new EnseignantMatiereDAOImpl(connection);
         GroupeMatiere_imp_dao=new GroupeMatiereDAOImpl(connection);
         group_dao_imp=new GroupeImpl(connection);
         
@@ -254,9 +254,9 @@ public class AddEtudiantForm extends javax.swing.JDialog {
         if (matiere_comb.getSelectedIndex() != -1 && com_niv.getSelectedIndex() != -1 && Enseignantcombo.getSelectedIndex() != -1) {
             
             
-            List <MatiereEnseignant> listMatiereByEnseignat=MatiereEnseignat_dao_impl.findAll();
+            List <EnseignantMatiere> listMatiereByEnseignat=MatiereEnseignat_dao_impl.findAll();
             
-            for (MatiereEnseignant matiereEnseignant : listMatiereByEnseignat) {
+            for (EnseignantMatiere matiereEnseignant : listMatiereByEnseignat) {
                 if (matiereEnseignant.getMatiere().getMatiereEtdAr().equals(matiere_comb.getSelectedItem().toString())){
                     Enseignantcombo.addItem(matiereEnseignant.getEnseignant().getNomAr());
                 }
@@ -1471,7 +1471,7 @@ public class AddEtudiantForm extends javax.swing.JDialog {
             PrenomEnseignant.setText(enseignat.getPrenomAr());
             
             
-            List<Groupe> list_group_etude=group_dao_imp.findGroupsByMatiereAndEnseignat(new MatiereEnseignant(0, enseignat, matiere, LocalDate.MAX),CheckAllGroups.isSelected());
+            List<Groupe> list_group_etude=group_dao_imp.findGroupsByMatiereAndEnseignat(new EnseignantMatiere(0, enseignat, matiere, LocalDate.MAX),CheckAllGroups.isSelected());
                 System.out.println("List Groups :"+list_group_etude);
             
             ComboGroup.removeAllItems();

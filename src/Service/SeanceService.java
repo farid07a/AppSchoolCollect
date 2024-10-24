@@ -5,6 +5,8 @@
  */
 package Service;
 
+import domaine.Enseignant;
+import domaine.EnseignantMatiere;
 import domaine.Matiere;
 import domaine.Seance;
 import java.sql.Connection;
@@ -38,6 +40,34 @@ public class SeanceService {
         }
         return null;
     }
+    
+    public Seance GetSeanceByTody(Enseignant enseignant) throws DatabaseConnectionException {
+        java.util.List<Seance> listSeance = new SeanceDAOImpl(ConnectionDB.getConnection()).findAll();
+        LocalDate tody = LocalDate.now();
+        for (Seance seance : listSeance) {
+
+            if (seance.getEnseignant().getId() == enseignant.getId() && seance.getDate_sceance().isEqual(tody)) {
+                return seance;
+            }
+        }
+        return null;
+    }
+    public Seance GetSeanceByTody(EnseignantMatiere enseignant_matiere) throws DatabaseConnectionException {
+        java.util.List<Seance> listSeance = new SeanceDAOImpl(ConnectionDB.getConnection()).findAll();
+        LocalDate tody = LocalDate.now();
+        for (Seance seance : listSeance) {
+
+            if (seance.getEnseignant().getId() == enseignant_matiere.getEnseignant().getId() 
+                    && seance.getMatiere().getId() == enseignant_matiere.getMatiere().getId() 
+                    && seance.getDate_sceance().isEqual(tody)) {
+                return seance;
+            }
+        }
+        return null;
+    }
+    //EnseignantMatiere
+    
+    
 
     public java.util.List<Seance> getListAllSeancePrevieuMonth(Matiere matiere) throws DatabaseConnectionException {
         List<Seance> Reverse_list_previeux_seances = new SeanceDAOImpl(ConnectionDB.getConnection()).getListPrevieuxSceanceWithMonthByMatiere(matiere);
@@ -51,8 +81,21 @@ public class SeanceService {
 
     }
 
-    public java.util.List<Seance> getListAllSeancePrevieuSemaineT(Matiere matiere) throws DatabaseConnectionException {
-        List<Seance> Reverse_list_previeux_seances = new SeanceDAOImpl(ConnectionDB.getConnection()).getListPrevieuxSceanceWithSemaineByMatiere(matiere);
+//    public java.util.List<Seance> getListAllSeancePrevieuSemaineT(Matiere matiere) throws DatabaseConnectionException {
+//        List<Seance> Reverse_list_previeux_seances = new SeanceDAOImpl(ConnectionDB.getConnection()).getListPrevieuxSceanceWithSemaineByMatiere(matiere);
+//        List list_previeux_seances = new ArrayList();
+//        for (int i = Reverse_list_previeux_seances.size() - 1; i >= 0; i--) {
+//            list_previeux_seances.add(Reverse_list_previeux_seances.get(i));
+//        }
+//
+//        return list_previeux_seances;
+//
+//    }
+    
+    public java.util.List<Seance> getListAllSeancePrevieuSemaineByEnse_Matiere
+        (EnseignantMatiere enseignant_matiere) throws DatabaseConnectionException {
+        List<Seance> Reverse_list_previeux_seances = 
+                new SeanceDAOImpl(ConnectionDB.getConnection()).getListPrevieuxSceanceWithSemaineByEnseignantMatiere(enseignant_matiere);
         List list_previeux_seances = new ArrayList();
         for (int i = Reverse_list_previeux_seances.size() - 1; i >= 0; i--) {
             list_previeux_seances.add(Reverse_list_previeux_seances.get(i));
@@ -95,6 +138,15 @@ public class SeanceService {
         } else {
             return false;
         }
+    }
+    
+    public Seance ExistVacances(EnseignantMatiere enseignant_matiere) throws DatabaseConnectionException {
+        Connection cnx = ConnectionDB.getConnection();
+        seance_dao = new SeanceDAOImpl(cnx);
+        Seance seance = seance_dao.getLastSeanceOfEnseignant_Matiere(enseignant_matiere);
+        return seance;
+        
+        
     }
 
     public void saveAllNextSeancesSiExistVacance(List<Seance> previeux_seances) throws DatabaseConnectionException, SQLException {

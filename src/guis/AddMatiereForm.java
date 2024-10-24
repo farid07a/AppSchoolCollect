@@ -8,7 +8,7 @@ import DialogFram.ValidationMessageDialog;
 import domaine.CategoreNiveau;
 import domaine.Enseignant;
 import domaine.Matiere;
-import domaine.MatiereEnseignant;
+import domaine.EnseignantMatiere;
 import domaine.NiveauEtude;
 import java.awt.Color;
 import java.awt.Font;

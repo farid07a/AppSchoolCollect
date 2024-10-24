@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author farid
  */
-public interface MatiereEnseignantDAO {
+public interface EnseignantMatiereDAO {
     List<Enseignant> findEnseignantByMatiereId(Matiere MatiereId)throws SQLException;
     List<Matiere> findMatiereByEnseignantId(Enseignant EnseignantId)throws SQLException;
     
