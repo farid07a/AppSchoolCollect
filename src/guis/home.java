@@ -260,7 +260,7 @@ public class home extends javax.swing.JFrame {
     
         try {
             checkSeancesAndSaveNewSeance();
-            setSeanceInTable();
+           // setSeanceInTable();
             this.list_seance_about_all_matieres.clear();
         } catch (DatabaseConnectionException ex) {
             Logger.getLogger(Panel_PresenceUI.class.getName()).log(Level.SEVERE, null, ex);
@@ -281,18 +281,23 @@ public class home extends javax.swing.JFrame {
                 // 
                 list_seance_about_all_matieres.add(scence_obj);
                 System.out.println("Object != null success add ");
-                
             }else{
-                
-                //- get last seance si diference <=7
-                // if (exist_vacance(matiere) != True)
                 list_previeux=seance_service.getListAllSeancePrevieuSemaine(matiere); // list [sceance(1....30) ]
+                 System.out.println("Seance is Null AFter inser database change to :"+seance_service.GetSeanceByTody(matiere));
+                 //- get last seance si diference <=7
+                 JOptionPane.showMessageDialog(null, "null seance and matiere id =="  +matiere.getId());
+               JOptionPane.showMessageDialog(null, "existe vacance  : "+seance_service.ExistVacances(matiere) );
+                if (!seance_service.ExistVacances(matiere)){  //ExistVacances = false
                 seance_service.saveAllNextSeances(list_previeux);// save next seances about Matiere
+                list_seance_about_all_matieres.add(seance_service.GetSeanceByTody(matiere));   
+                 
+                }else
+                {    // disable all components and show add seance
+                 JOptionPane.showMessageDialog(null, "existe vacance . . . "+list_previeux.size());
+                seance_service.saveAllNextSeancesSiExistVacance(list_previeux);
                 System.out.println("Seance is Null AFter inser database change to :"+seance_service.GetSeanceByTody(matiere));
                 list_seance_about_all_matieres.add(seance_service.GetSeanceByTody(matiere));
-                
-                // else 
-                // disable all components and show add seance
+                 } 
             }
         }
         
@@ -300,11 +305,9 @@ public class home extends javax.swing.JFrame {
     }
     
     
-    public void setSeanceInTable(){
-        
+    public void setSeanceInTable(){       
         DefaultTableModel df=(DefaultTableModel)table_seance_to_day.getModel();
-        df.setRowCount(0);
-        
+        df.setRowCount(0);      
         System.out.println("List Befor Insert Data in Table "+list_seance_about_all_matieres);
         for (Seance seance_obj : list_seance_about_all_matieres) {
             System.out.println(seance_obj);
@@ -437,10 +440,12 @@ public class home extends javax.swing.JFrame {
                 String matiere_ar = matier.getMatiereEtdAr();
                 String catego_niveau = categoreNiveauDAOImpl.findById(matier.getCategoreNiveau().getId()).getCategore_niveau_ar();
                 String niveau = niveauEtudeDAOImpl.findById(matier.getNiveau().getId()).getNiveauInitialAr();
-                Enseignant ensignat = enseignantDAOImpl.findById(matier.getEnseignant().getId());
-                String enseignant_name = ensignat.getNomAr() + "  " + ensignat.getPrenomAr();
+                String enseignant_name="/";
+///                Enseignant ensignat = enseignantDAOImpl.findById(matier.getEnseignant().getId());
+              //  if(ensignat !=null)
+              //  enseignant_name = ensignat.getNomAr() + "  " + ensignat.getPrenomAr();
 
-                model.addRow(new Object[]{1, enseignant_name, "/", catego_niveau, niveau, matiere_ar, matier.getId()});
+                model.addRow(new Object[]{1, "/", "/", catego_niveau, niveau, matiere_ar, matier.getId()});
 
             }
         }

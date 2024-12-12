@@ -162,32 +162,45 @@ public class SeanceDAOImpl extends AbstractDAO<Seance> {
      
      }
      
+     public Seance getLastSeanceOfMatiere(Matiere matier ){
+     Seance seance = null ;
+     
+      try {
+            String query ="SELECT TOP 1 * From " + getTableName() + " WHERE id_matiere =? ORDER BY id DESC ";
+            
+           PreparedStatement statement = connection.prepareStatement(query);
+           statement.setInt(1,matier.getId()); 
+           ResultSet resultSet = statement.executeQuery();    
+            if (resultSet.next()) {
+               seance= mapResultSetToEntity(resultSet);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+      return seance;
+     }
+     
          
          
          public static void main(String[] args) {
-        try {
-            Seance sc=  new SeanceDAOImpl(ConnectionDB.getConnection()).findById(1);
-            System.out.println(sc);
-        } catch (DatabaseConnectionException ex) {
-            Logger.getLogger(SeanceDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        try {
-            Connection conx=ConnectionDB.getConnection();
-            Matiere mat=new MatiereDAOImpl(conx).findById(2);
-            System.out.println(mat);
-            System.out.println("--------------");
-            List<Seance>  lst=  new SeanceDAOImpl(conx).getListPrevieuxSceanceWithMonthByMatiere(mat);
-            System.out.println(lst);
-            
-            for (Seance seance : lst) {
-                System.out.println(seance);
-            }
-            
-        } catch (DatabaseConnectionException ex) {
-            Logger.getLogger(SeanceDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-             
+   
+//        
+//        try {
+//            Connection conx=ConnectionDB.getConnection();
+//            Matiere mat=new MatiereDAOImpl(conx).findById(2);
+//            System.out.println(mat);
+//            System.out.println("--------------");
+//            List<Seance>  lst=  new SeanceDAOImpl(conx).getListPrevieuxSceanceWithMonthByMatiere(mat);
+//            System.out.println(lst);
+//            
+//            for (Seance seance : lst) {
+//                System.out.println(seance);
+//            }
+//            
+//        } catch (DatabaseConnectionException ex) {
+//            Logger.getLogger(SeanceDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//             
     }
          
     
